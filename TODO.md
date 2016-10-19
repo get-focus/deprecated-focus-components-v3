@@ -1,11 +1,6 @@
-# TODO v3.x.x
+# TODO v3.0.0
 
 ## Components
-
-### Global tests
-- [ ] add tests on all components
-
-### New components
 - [x] ajouter chips
 - [x] ajouter select material
 - [x] remplacer dropdown
@@ -15,6 +10,9 @@
 - [x] Popin
 - [x] Confirmation-popin
 - [x] Menu
+
+### Tests
+- [ ] add tests on all components
 
 ## List ?
 - [ ] add component table

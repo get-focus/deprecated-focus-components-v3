@@ -25,6 +25,7 @@ $menu-sub-width: 200px;
     position: fixed;
     top:0;
     bottom: 0;
+    z-index: 1001;
     &[data-size="small"] {
         width: $menu-small-size;
     }

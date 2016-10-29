@@ -35,10 +35,10 @@ class MenuItem extends Component {
     }
     render() {
         const {menu, isActive, LinkComponent, onClick, showLabels, showPanel} = this.props;
-        const {route, label, icon, subMenus} = menu;
+        const {route, label, icon, iconLibrary, subMenus} = menu;
         const {displaySubMenu} = this.state;
         const hasRoute = LinkComponent && route;
-        const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), shape: (showLabels ? null : 'icon')};
+        const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), iconLibrary, shape: (showLabels ? null : 'icon')};
         const hasSubMenus = subMenus && subMenus.length > 0;
         if(hasSubMenus) {
             return (

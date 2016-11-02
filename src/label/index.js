@@ -1,11 +1,11 @@
 // Dependencies
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes} from 'react';
 import i18next from 'i18next';
 
 function Label({name, text}) {
     const content = text || name;
     return (
-        <label data-focus="label" htmlFor={name}>
+        <label data-focus='label' htmlFor={name}>
             {i18next.t(content)}
         </label>
     );
@@ -14,5 +14,5 @@ function Label({name, text}) {
 Label.propTypes = {
     name: PropTypes.string.isRequired,
     text: PropTypes.string
-}
-module.exports = Label;
+};
+export default Label;

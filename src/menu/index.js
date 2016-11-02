@@ -26,6 +26,7 @@ class MenuItem extends Component {
         this.state = {
             displaySubMenu: false
         };
+        this._toggleSubMenuVisibility = this._toggleSubMenuVisibility.bind(this);
     }
     _toggleSubMenuVisibility() {
         const {showLabels, showPanel} = this.props;
@@ -43,7 +44,7 @@ class MenuItem extends Component {
         if(hasSubMenus) {
             return (
                 <li data-deployed={isActive}>
-                    <Button {...buttonProps} onClick={showPanel ? onClick : ::this._toggleSubMenuVisibility} />
+                    <Button {...buttonProps} onClick={showPanel ? onClick : this._toggleSubMenuVisibility} />
                     {displaySubMenu &&
                         <ul data-focus='menu-sub-items'>
                             {subMenus.map((menu, idx) => (
@@ -128,6 +129,8 @@ class Menu extends Component {
             subMenus,
             yPosition: 0
         };
+        this._onSelectMenu = this._onSelectMenu.bind(this);
+        this._onSubPanelClose = this._onSubPanelClose.bind(this);
     }
     _onSelectMenu(evt, menuId) {
         const targetPosition = evt.target.getBoundingClientRect();
@@ -151,10 +154,10 @@ class Menu extends Component {
             <nav data-focus='menu' data-size={size}>
                 <div>
                     <div data-focus='menu-brand' data-click={!!handleBrandClick} onClick={() => handleBrandClick && handleBrandClick()} />
-                    <MenuList activeMenuId={activeMenuId} menus={menus} showLabels={showLabels} showPanel={showPanel} onClick={::this._onSelectMenu} />
+                    <MenuList activeMenuId={activeMenuId} menus={menus} showLabels={showLabels} showPanel={showPanel} onClick={this._onSelectMenu} />
                     {children}
                     {showPanel && subMenuItems &&
-                        <MenuPanel onClose={::this._onSubPanelClose}>
+                        <MenuPanel onClose={this._onSubPanelClose}>
                             <MenuList offset={yPosition} menus={subMenuItems} showLabels={true} showPanel={false} />
                         </MenuPanel>
                     }

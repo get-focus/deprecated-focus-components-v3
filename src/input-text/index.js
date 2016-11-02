@@ -61,7 +61,7 @@ class InputText extends PureComponent {
 
 //Static props.
 InputText.displayName = 'InputText';
-InputText.propTypes = propTypes = {
+InputText.propTypes = {
     disabled: PropTypes.bool,
     error: PropTypes.string,
     name: PropTypes.string.isRequired,

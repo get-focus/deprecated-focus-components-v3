@@ -1,47 +1,15 @@
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes, PureComponent} from 'react';
 import ReactDOM from 'react-dom';
 import identity from 'lodash/identity';
 import i18next from 'i18next';
 import MDBehaviour from '../behaviours/material';
-
-const propTypes = {
-    cols: PropTypes.number,
-    error: PropTypes.string,
-    formatter: PropTypes.func,
-    minLength: PropTypes.number,
-    maxLength: PropTypes.number,
-    name: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    onKeyPress: PropTypes.func,
-    placeholder: PropTypes.string,
-    //required: PropTypes.bool,
-    rows: PropTypes.number,
-    type: PropTypes.string,
-    unformatter: PropTypes.func,
-    value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-    ]),
-    wrap: PropTypes.string
-};
-
-const defaultProps = {
-    type: 'text',
-    formatter: identity,
-    unformatter: identity,
-    minLength: 0,
-    wrap: 'soft',
-    //required: false,
-    rows: 6,
-    cols: 50
-};
 
 
 /**
 * Component standing for an HTML input.
 */
 @MDBehaviour('inputTextarea')
-class InputTextarea extends Component {
+class InputTextarea extends PureComponent {
 
     /**
     * Get the dom value of the component.
@@ -67,8 +35,8 @@ class InputTextarea extends Component {
     * @override
     */
     render() {
-        const { autoFocus, disabled, formatter, maxLength, onFocus, onClick, onKeyPress, error, name, placeholder, style, value: rawValue, size, type} = this.props;
-        const value = formatter(rawValue);
+        const { autoFocus, disabled, formatter, maxLength, onFocus, onClick, onKeyPress, error, name, placeholder, style, rawInputValue, size, type} = this.props;
+        const value = formatter(rawInputValue);
         const pattern = error ? 'hasError' : null; //add pattern to overide mdl error style when displaying an focus error.
         const inputProps =  { autoFocus, disabled, onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange, pattern, size, type, value };
         const mdlClasses = `mdl-textfield mdl-js-textfield${error ? ' is-invalid' : ''}`;
@@ -86,7 +54,32 @@ class InputTextarea extends Component {
 
 //Static props.
 InputTextarea.displayName = 'InputTextarea';
-InputTextarea.defaultProps = defaultProps;
-InputTextarea.propTypes = propTypes;
-
+InputTextarea.defaultProps = {
+    type: 'text',
+    formatter: identity,
+    unformatter: identity,
+    minLength: 0,
+    //required: false,
+    rows: 6,
+    cols: 50
+};
+InputTextarea.propTypes = {
+    cols: PropTypes.number,
+    error: PropTypes.string,
+    formatter: PropTypes.func,
+    minLength: PropTypes.number,
+    maxLength: PropTypes.number,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onKeyPress: PropTypes.func,
+    placeholder: PropTypes.string,
+    //required: PropTypes.bool,
+    rawInputValue: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]),
+    rows: PropTypes.number,
+    type: PropTypes.string,
+    unformatter: PropTypes.func
+};
 export default InputTextarea;

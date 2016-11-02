@@ -1,39 +1,16 @@
 //dependencies
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes, PureComponent} from 'react';
 import ReactDOM from 'react-dom';
 import identity from 'lodash/identity';
 import i18next from 'i18next';
 import MDBehaviour from '../behaviours/material';
 const MODE = {isEdit: true};
 
-const propTypes = {
-    disabled: PropTypes.bool,
-    error: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    onKeyPress: PropTypes.func,
-    placeholder: PropTypes.string,
-    unformatter: PropTypes.func,
-    formatter: PropTypes.func,
-    type: PropTypes.string,
-    value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-    ])
-};
-
-const defaultProps = {
-    disabled: false,
-    formatter: identity,
-    unformatter: identity,
-    type: 'text'
-};
-
 /**
  * Component standing for an HTML input.
  */
 @MDBehaviour('inputText')
-class InputText extends Component {
+class InputText extends PureComponent {
 
     /**
      * Get the dom value of the component.
@@ -67,8 +44,8 @@ class InputText extends Component {
      * @override
     */
     render() {
-        const { autoFocus, disabled, formatter, maxLength, onFocus, onClick, onKeyDown, onKeyPress, error, name, placeholder, style, value: rawValue, size, type} = this.props;
-        const value = formatter(rawValue, MODE);
+        const { autoFocus, disabled, formatter, maxLength, onFocus, onClick, onKeyDown, onKeyPress, error, name, placeholder, style, rawInputValue, size, type} = this.props;
+        const value = formatter(rawInputValue, MODE);
         const pattern = error ? 'hasError' : null; //add pattern to overide mdl error style when displaying an focus error.
         const inputProps =  { autoFocus, disabled, onKeyDown,onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange, pattern, size, type, value };
         const cssClass = `mdl-textfield mdl-js-textfield${error ? ' is-invalid' : ''}`;
@@ -84,7 +61,25 @@ class InputText extends Component {
 
 //Static props.
 InputText.displayName = 'InputText';
-InputText.defaultProps = defaultProps;
-InputText.propTypes = propTypes;
-
+InputText.propTypes = propTypes = {
+    disabled: PropTypes.bool,
+    error: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onKeyPress: PropTypes.func,
+    placeholder: PropTypes.string,
+    unformatter: PropTypes.func,
+    formatter: PropTypes.func,
+    type: PropTypes.string,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ])
+};
+InputText.defaultProps = {
+    disabled: false,
+    formatter: identity,
+    unformatter: identity,
+    type: 'text'
+};
 export default InputText;

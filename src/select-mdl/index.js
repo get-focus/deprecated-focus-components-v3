@@ -1,5 +1,5 @@
 //dependencies
-import React, {PureComponent, PropTypes} from 'react';
+import React, {PropTypes, PureComponent} from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import find from 'lodash/find';
@@ -30,8 +30,8 @@ function _valueParser(propsValue, rawValue) {
 class Select extends PureComponent {
     constructor(props) {
         super(props);
-        const {hasUndefined, isRequired, labelKey, value, values = [], valueKey, unSelectedLabel} = props;
-        const isRequiredAndNoValue = isRequired && (isUndefined(value) || isNull(value));
+        const {hasUndefined, isRequired, labelKey, rawInputValue, values = [], valueKey, unSelectedLabel} = props;
+        const isRequiredAndNoValue = isRequired && (isUndefined(rawInputValue) || isNull(rawInputValue));
         this.allValues = hasUndefined || isRequiredAndNoValue ? union([{[labelKey]: i18next.t(unSelectedLabel), [valueKey]: UNSELECTED_KEY}], values) : values;
     };
 
@@ -45,9 +45,9 @@ class Select extends PureComponent {
     * @return {object} - The unformated dom value.
     */
     getValue = () => {
-        const {type, value} = this.props;
-        if (isNull(value) || isUndefined(value) || UNSELECTED_KEY === value) return null;
-        return type === 'number' ? +value : value;
+        const {type, rawInputValue} = this.props;
+        if (isNull(rawInputValue) || isUndefined(rawInputValue) || UNSELECTED_KEY === rawInputValue) return null;
+        return type === 'number' ? +rawInputValue : rawInputValue;
     };
 
     /**
@@ -56,18 +56,18 @@ class Select extends PureComponent {
     * @return {object} - The function onChange from the props, called.
     */
     _handleSelectChange = (value) => {
-        const {onChange, valueParser, value: propsValue} = this.props;
-        return onChange(valueParser.call(this, propsValue, value));
+        const {onChange, valueParser, rawInputValue} = this.props;
+        return onChange(valueParser.call(this, rawInputValue, value));
     };
 
     /** inheritdoc */
-    _renderOptions({hasUndefined, labelKey, isRequired, value, values = [], valueKey, isActiveProperty, unSelectedLabel}) {
+    _renderOptions({hasUndefined, labelKey, isRequired, rawInputValue, values = [], valueKey, isActiveProperty, unSelectedLabel}) {
         return this.allValues.filter(v => isUndefined(v[isActiveProperty]) || v[isActiveProperty] === true) // Filter on the active value only
         .map((val, idx) => {
             const optVal = `${val[valueKey]}`;
             const elementValue = val[labelKey];
             const optLabel = isUndefined(elementValue) || isNull(elementValue) ? i18next.t('input.select.noLabel') : elementValue;
-            const isSelected = optVal === value;
+            const isSelected = optVal === rawInputValue;
             return (
                 <li key={idx} className='mdl-menu__item' data-selected={isSelected} data-val={optVal} onClick={() => this._handleSelectChange(optVal)}>{optLabel}</li>
             );
@@ -79,13 +79,13 @@ class Select extends PureComponent {
     * @override
     */
     render() {
-        const { autoFocus, error, labelKey, name, placeholder, style, value, valueKey, disabled, onChange, size } = this.props;
+        const { autoFocus, error, labelKey, name, placeholder, style, rawInputValue, valueKey, disabled, onChange, size } = this.props;
         const selectProps = { autoFocus, disabled, size };
-        const currentValue = find(this.allValues, (o) => o[valueKey] === value);
+        const currentValue = find(this.allValues, (o) => o[valueKey] === rawInputValue);
         const currentLabel = isUndefined(currentValue) || isNull(currentValue) ? i18next.t('input.select.noLabel') : currentValue[labelKey];
         return (
             <div data-focus='select-mdl' ref='select' className='mdl-textfield mdl-js-textfield getmdl-select' data-valid={!error} style={style}>
-                <input placeholder={placeholder} className='mdl-textfield__input' value={currentLabel} type='text' id={name} name={name} readOnly tabIndex='-1' data-val={value} ref='htmlSelect' {...selectProps} />
+                <input placeholder={placeholder} className='mdl-textfield__input' value={currentLabel} type='text' id={name} name={name} readOnly tabIndex='-1' data-val={rawInputValue} ref='htmlSelect' {...selectProps} />
                 {!disabled &&
                     <label htmlFor={name}>
                         <i className='mdl-icon-toggle__label material-icons'>keyboard_arrow_down</i>
@@ -126,7 +126,7 @@ Select.propTypes = {
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string,
     unSelectedLabel: PropTypes.string,
-    value: PropTypes.oneOfType([
+    rawInputValue: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number
     ]),

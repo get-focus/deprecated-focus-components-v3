@@ -7,13 +7,13 @@ class SelectCheckbox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedValues: this.props.value
+            selectedValues: this.props.rawInputValue
         };
     }
 
     componentWillReceiveProps(newProps) {
         if(newProps) {
-            this.setState({selectedValues: newProps.value});
+            this.setState({selectedValues: newProps.rawInputValue});
         }
     }
 
@@ -60,12 +60,12 @@ class SelectCheckbox extends Component {
      * @return {ReactDOMNode} list of ReactDomNode
      */
     renderCheckboxes() {
-        return this.props.values.map((val, idx) => {
+        return this.props.rawInputValue.map((val, idx) => {
             const value = val[this.props.valueKey];
             const label = val[this.props.labelKey];
             const isChecked = 0 <= this.state.selectedValues.indexOf(value);
             return (
-                <Checkbox key={idx} label={i18next.t(label)} onChange={this._getCheckboxChangeHandler(value)} value={isChecked} />
+                <Checkbox key={idx} label={i18next.t(label)} onChange={this._getCheckboxChangeHandler(value)} rawInputValue={isChecked} />
             );
         });
     }
@@ -82,13 +82,13 @@ class SelectCheckbox extends Component {
 SelectCheckbox.displayName = 'SelectCheckbox';
 SelectCheckbox.defaultProps = {
     values: [], // all values
-    value: [], // selected values list
+    rawInputValue: [], // selected values list
     valueKey: 'value', // key for the displayed value
     labelKey: 'label' // key for the displayed label
 };
 SelectCheckbox.propTypes = {
     values: PropTypes.array,
-    value: PropTypes.array,
+    rawInputValue: PropTypes.array,
     valueKey: PropTypes.string,
     labelKey: PropTypes.string,
     onChange: PropTypes.func

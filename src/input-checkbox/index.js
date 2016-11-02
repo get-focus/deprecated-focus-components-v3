@@ -1,18 +1,23 @@
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes, PureComponent} from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import Material from '../behaviours/material';
 
 
 @Material('mdlHolder')
-class InputCheckBox extends Component {
+class InputCheckBox extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.handleOnChange = this.handleOnChange.bind(this);
+    };
+
     getValue = () => {
         const domElement = ReactDOM.findDOMNode(this.refs.checkbox);
         return domElement.checked;
     };
 
     componentDidUpdate() {
-        const {value} = this.props;
+        const {rawInputValue} = this.props;
         const method = value ? 'add' : 'remove';
         const node = ReactDOM.findDOMNode(this.refs.mdlHolder);
         if (node) {
@@ -26,11 +31,11 @@ class InputCheckBox extends Component {
     };
 
     render() {
-        const {label, value, disabled} = this.props;
+        const {label, rawInputValue, disabled} = this.props;
         return (
           <div data-focus='input-checkbox-container'>
             <label className={'mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect'} data-focus='input-checkbox' ref='mdlHolder'>
-                <input checked={value} className='mdl-checkbox__input' disabled={disabled} onChange={::this.handleOnChange} ref='checkbox' type='checkbox'/>
+                <input checked={rawInputValue} className='mdl-checkbox__input' disabled={disabled} onChange={this.handleOnChange} ref='checkbox' type='checkbox'/>
                 {label && <span className='mdl-checkbox__label'>{i18next.t(label)}</span>}
             </label>
           </div>
@@ -44,10 +49,10 @@ InputCheckBox.propTypes = {
     label: PropTypes.string,
     disabled: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
-    value: PropTypes.bool.isRequired
+    rawInputValue: PropTypes.bool.isRequired
 };
 InputCheckBox.defaultProps = {
-    value: false,
+    rawInputValue: false,
     disabled: false
 };
 export default InputCheckBox;

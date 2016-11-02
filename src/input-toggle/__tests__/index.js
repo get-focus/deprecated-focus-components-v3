@@ -10,7 +10,7 @@ describe('The input toggle', () => {
         let renderedTest;
         const onChangeSpy = sinon.spy();
         before(() => {
-            renderedTest = TestUtils.renderIntoDocument(<InputToggle onChange={onChangeSpy} value />);
+            renderedTest = TestUtils.renderIntoDocument(<InputToggle onChange={onChangeSpy} rawInputValue />);
         });
 
         it('should hold the provided initial value', () => {
@@ -22,7 +22,7 @@ describe('The input toggle', () => {
         let toggle;
         const onChangeSpy = sinon.spy();
         before(() => {
-            renderedTest = TestUtils.renderIntoDocument(<InputToggle onChange={onChangeSpy} value={false} />);
+            renderedTest = TestUtils.renderIntoDocument(<InputToggle onChange={onChangeSpy} rawInputValue={false} />);
             toggle = ReactDOM.findDOMNode(renderedTest.refs.toggle);
             TestUtils.Simulate.change(toggle, {target: {checked: true}});
         });

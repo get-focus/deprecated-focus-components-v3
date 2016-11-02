@@ -13,10 +13,10 @@ describe('Select Checkbox Component', () => {
         describe('When a default select-checkbox is rendered', () => {
             let renderedSelectCheckbox;
             before(() => {
-                renderedSelectCheckbox = renderIntoDocument(<SelectCheckbox value={['B','C']} values={possibleValues} />);
+                renderedSelectCheckbox = renderIntoDocument(<SelectCheckbox rawInputValue={['B','C']} values={possibleValues} />);
             });
             it('should have its default state selectedValues equals to the props value', () => {
-                expect(renderedSelectCheckbox.props.value).to.equal(renderedSelectCheckbox.state.selectedValues);
+                expect(renderedSelectCheckbox.props.rawInputValue).to.equal(renderedSelectCheckbox.state.selectedValues);
             });
         });
     });

@@ -1,6 +1,6 @@
 {
   "name": "focus-components",
-  "version": "3.0.0-rc18",
+  "version": "3.0.0-rc22",
   "description": "Focus web components to build applications (based on Material Design)",
   "main": "index.js",
   "scripts": {
@@ -90,6 +90,7 @@
     "material-design-icons-iconfont": ">= 2.0.4",
     "react": ">= 15.3.1",
     "react-dom": ">= 15.3.1",
+    "react-router": ">= 2.8.1",
     "moment": ">= 2.14.1"
   },
   "devDependencies": {
@@ -124,6 +125,7 @@
     "react-dom": "15.3.1",
     "react-addons-test-utils": "^15.3.0",
     "react-hot-loader": "^1.3.0",
+    "react-router": "^2.8.1",
     "sass-loader": "^2.0.1",
     "jsdom": "^9.5.0",
     "sinon": "^1.16.1",

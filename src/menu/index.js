@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import i18next from 'i18next';
 import Button from '../button';
+import {Link} from 'react-router';
 
 const defaultButtonProps = {icon: 'link', shape: 'icon', type: 'button'};
 
@@ -25,6 +26,7 @@ class MenuItem extends Component {
         this.state = {
             displaySubMenu: false
         };
+        this._toggleSubMenuVisibility = this._toggleSubMenuVisibility.bind(this);
     }
     _toggleSubMenuVisibility() {
         const {showLabels, showPanel} = this.props;
@@ -34,20 +36,19 @@ class MenuItem extends Component {
         }
     }
     render() {
-        const {menu, isActive, LinkComponent, onClick, showLabels, showPanel} = this.props;
-        const {route, label, icon, subMenus} = menu;
+        const {menu, isActive, onClick, showLabels, showPanel} = this.props;
+        const {route, label, icon, iconLibrary, subMenus} = menu;
         const {displaySubMenu} = this.state;
-        const hasRoute = LinkComponent && route;
-        const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), shape: (showLabels ? null : 'icon')};
+        const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), iconLibrary, shape: (showLabels ? null : 'icon')};
         const hasSubMenus = subMenus && subMenus.length > 0;
         if(hasSubMenus) {
             return (
                 <li data-deployed={isActive}>
-                    <Button {...buttonProps} onClick={showPanel ? onClick : ::this._toggleSubMenuVisibility} />
+                    <Button {...buttonProps} onClick={showPanel ? onClick : this._toggleSubMenuVisibility} />
                     {displaySubMenu &&
                         <ul data-focus='menu-sub-items'>
                             {subMenus.map((menu, idx) => (
-                                <MenuItem key={idx} menu={menu} LinkComponent={LinkComponent} showLabels={showLabels} />
+                                <MenuItem key={idx} menu={menu} showLabels={showLabels} />
                             ))}
                         </ul>
                     }
@@ -56,8 +57,8 @@ class MenuItem extends Component {
         } else {
             return (
                 <li>
-                    {hasRoute && <LinkComponent to={route}><Button {...buttonProps} /></LinkComponent>}
-                    {!hasRoute && <Button {...buttonProps} />}
+                    {route && <Link to={route}><Button {...buttonProps} /></Link>}
+                    {!route && <Button {...buttonProps} />}
                 </li>
             );
         }
@@ -65,13 +66,12 @@ class MenuItem extends Component {
 };
 MenuItem.displayName = 'MenuItem';
 MenuItem.PropTypes = {
-    LinkComponent: PropTypes.func,
     menu: PropTypes.object.isRequired,
     showLabels: PropTypes.bool.isRequired
 };
 
 
-const MenuList = ({activeMenuId, menus, offset = 0, LinkComponent, onClick, showLabels, showPanel}) => {
+const MenuList = ({activeMenuId, menus, offset = 0, onClick, showLabels, showPanel}) => {
     const style = {'position': 'relative', 'top': offset };
     return (
         <ul data-focus='menu-items' style={style}>
@@ -80,7 +80,7 @@ const MenuList = ({activeMenuId, menus, offset = 0, LinkComponent, onClick, show
                 const {route, label, icon, subMenus} = menu;
                 const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), shape: (showLabels ? null : 'icon')};
                 return (
-                    <MenuItem key={idx} menu={menu} LinkComponent={LinkComponent} onClick={(evt) => onClick && onClick(evt, idx)} isActive={isActive} showLabels={showLabels} showPanel={showPanel} />
+                    <MenuItem key={idx} menu={menu} onClick={(evt) => onClick && onClick(evt, idx)} isActive={isActive} showLabels={showLabels} showPanel={showPanel} />
                 );
             })}
         </ul>
@@ -89,7 +89,6 @@ const MenuList = ({activeMenuId, menus, offset = 0, LinkComponent, onClick, show
 MenuList.displayName = 'MenuList';
 MenuList.PropTypes = {
     activeMenuId: PropTypes.number,
-    LinkComponent: PropTypes.func,
     menus: PropTypes.array.isRequired,
     onClick: PropTypes.func,
     showLabels: PropTypes.bool.isRequired,
@@ -130,6 +129,8 @@ class Menu extends Component {
             subMenus,
             yPosition: 0
         };
+        this._onSelectMenu = this._onSelectMenu.bind(this);
+        this._onSubPanelClose = this._onSubPanelClose.bind(this);
     }
     _onSelectMenu(evt, menuId) {
         const targetPosition = evt.target.getBoundingClientRect();
@@ -144,7 +145,7 @@ class Menu extends Component {
         })
     }
     render() {
-        const { children, handleBrandClick, menus, LinkComponent, showLabels, showPanel } = this.props;
+        const { children, handleBrandClick, menus, showLabels, showPanel } = this.props;
         const size = showLabels ? 'large' : 'small';
         const {activeMenuId, subMenus, yPosition} = this.state;
         const displayPanel = activeMenuId && subMenus[activeMenuId];
@@ -153,11 +154,11 @@ class Menu extends Component {
             <nav data-focus='menu' data-size={size}>
                 <div>
                     <div data-focus='menu-brand' data-click={!!handleBrandClick} onClick={() => handleBrandClick && handleBrandClick()} />
-                    <MenuList activeMenuId={activeMenuId} menus={menus} LinkComponent={LinkComponent} showLabels={showLabels} showPanel={showPanel} onClick={::this._onSelectMenu} />
+                    <MenuList activeMenuId={activeMenuId} menus={menus} showLabels={showLabels} showPanel={showPanel} onClick={this._onSelectMenu} />
                     {children}
                     {showPanel && subMenuItems &&
-                        <MenuPanel onClose={::this._onSubPanelClose}>
-                            <MenuList offset={yPosition} menus={subMenuItems} LinkComponent={LinkComponent} showLabels={true} showPanel={false} />
+                        <MenuPanel onClose={this._onSubPanelClose}>
+                            <MenuList offset={yPosition} menus={subMenuItems} showLabels={true} showPanel={false} />
                         </MenuPanel>
                     }
                 </div>
@@ -168,7 +169,6 @@ class Menu extends Component {
 Menu.displayName = 'Menu';
 Menu.propTypes = {
     handleBrandClick: PropTypes.func,
-    LinkComponent: PropTypes.func.isRequired,
     menus: PropTypes.array.isRequired,
     showPanel: PropTypes.bool,
     showLabels: PropTypes.bool

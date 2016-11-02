@@ -18,7 +18,7 @@ class InputCheckBox extends PureComponent {
 
     componentDidUpdate() {
         const {rawInputValue} = this.props;
-        const method = value ? 'add' : 'remove';
+        const method = rawInputValue ? 'add' : 'remove';
         const node = ReactDOM.findDOMNode(this.refs.mdlHolder);
         if (node) {
             node.classList[method]('is-checked');

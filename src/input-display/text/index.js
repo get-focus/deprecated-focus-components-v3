@@ -2,15 +2,13 @@ import React, {PropTypes} from 'react';
 import i18next from 'i18next';
 
 
-function DisplayText({className, formattedInputValue}) {
-    return(
-        <span className={className}>{i18next.t(formattedInputValue)}</span>
-    );
+function InputDisplayText({className, formattedInputValue}) {
+    return <div data-focus='input-display-text' className={className}>{i18next.t(formattedInputValue)}</div>
 }
 
-DisplayText.displayName = 'DisplayText';
-DisplayText.propTypes = {
+InputDisplayText.displayName = 'InputDisplayText';
+InputDisplayText.propTypes = {
     className: PropTypes.string,
     formattedInputValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
-export default DisplayText;
+export default InputDisplayText;

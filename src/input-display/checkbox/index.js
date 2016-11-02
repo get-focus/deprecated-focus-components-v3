@@ -2,15 +2,15 @@ import React, {PropTypes} from 'react';
 import i18next from 'i18next';
 
 
-function DisplayCheckbox({className, name, rawInputValue}) {
+function InputDisplayCheckbox({className, name, rawInputValue}) {
     const stringValue = rawInputValue ? 'true' : 'false';
-    return <span className={className} id={name} name={name}>{i18next.t(`display.checkbox.${stringValue}`)}</span>
+    return <div data-focus='input-display-checkbox' className={className} id={name} name={name}>{i18next.t(`input.display.checkbox.${stringValue}`)}</div>
 }
 
-DisplayCheckbox.displayName = 'DisplayCheckbox';
-DisplayCheckbox.propTypes = {
+InputDisplayCheckbox.displayName = 'InputDisplayCheckbox';
+InputDisplayCheckbox.propTypes = {
     className: PropTypes.string,
     name: PropTypes.string,
     rawInputValue: PropTypes.bool
 };
-export default DisplayCheckbox;
+export default InputDisplayCheckbox;

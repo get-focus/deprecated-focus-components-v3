@@ -45,8 +45,7 @@ class InputText extends PureComponent {
     */
     render() {
         const { autoFocus, disabled, formatter, maxLength, onFocus, onClick, onKeyDown, onKeyPress, error, name, placeholder, style, rawInputValue, size, type} = this.props;
-        const value = formatter(rawInputValue, MODE);
-        console.log('input-text', rawInputValue, value);
+        const value = formatter(rawInputValue, MODE); //TODO : what about formattedInputValue ?
         const pattern = error ? 'hasError' : null; //add pattern to overide mdl error style when displaying an focus error.
         const inputProps =  { autoFocus, disabled, onKeyDown,onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange, pattern, size, type, value };
         const cssClass = `mdl-textfield mdl-js-textfield${error ? ' is-invalid' : ''}`;

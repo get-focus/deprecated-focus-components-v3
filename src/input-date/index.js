@@ -11,6 +11,39 @@ import closest from 'closest';
 
 const isISOString = value => moment(value, moment.ISO_8601).isValid();
 
+const propTypes = {
+    drops: PropTypes.oneOf(['up', 'down']).isRequired,
+    error: PropTypes.string,
+    locale: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    beforeValueGetter: PropTypes.func.isRequired,
+    placeholder: PropTypes.string,
+    showDropdowns: PropTypes.bool.isRequired,
+    validate: PropTypes.func,
+    value: (props, propName, componentName) => {
+        const prop = props[propName];
+        if (prop && !isISOString(prop)) {
+            throw new Error(`The date ${prop} provided to the component ${componentName} is not an ISO date. Please provide a valid date string.`);
+        }
+    }
+};
+
+const defaultProps = {
+    drops: 'down',
+    locale: 'en',
+    format: 'MM/DD/YYYY',
+    beforeValueGetter: value => value,
+    /**
+    * Default onChange prop, that will log an error.
+    */
+    onChange() {
+        console.error('You did not give an onChange method to an input date, please check your code.');
+    },
+    showDropdowns: true,
+    validate: isISOString
+};
+
 class InputDate extends Component {
     constructor(props) {
         super(props);
@@ -65,29 +98,28 @@ class InputDate extends Component {
         }
     };
 
-    _onInputChange = inputDate => {
+    _onInputChange = (inputDate, fromBlur) => {
         if (this._isInputFormatCorrect(inputDate)) {
             const dropDownDate = this._parseInputDate(inputDate);
             this.setState({dropDownDate, inputDate});
         } else {
             this.setState({inputDate});
         }
+        if(fromBlur !== true) {
+            this.props.onChange(inputDate);
+        }
     };
 
     _onInputBlur = () => {
         const {inputDate} = this.state;
-        if (this._isInputFormatCorrect(inputDate)) {
-            this.props.onChange(this._parseInputDate(inputDate).toISOString());
-        } else {
-            this.props.onChange(inputDate);
-        }
+        this._onInputChange(inputDate, true);
     };
 
     _onDropDownChange = (text, date) => {
         if (date._isValid) {
             this.setState({displayPicker: false}, () => {
                 this.props.onChange(date.toISOString());
-                this._onInputChange(this._formatDate(date.toISOString())); // Add 12 hours to avoid skipping a day due to different locales
+                this._onInputChange(this._formatDate(date.toISOString()), true) // Add 12 hours to avoid skipping a day due to different locales
             });
         }
     };
@@ -130,7 +162,7 @@ class InputDate extends Component {
         } else {
             return ({
                 isValid: this._isInputFormatCorrect(inputDate),
-                message: i18next.t('input.date.error.invalid', {date: inputDate})
+                message: i18next.t('input.date.invalid', {date: inputDate})
             });
         }
     };
@@ -159,36 +191,8 @@ class InputDate extends Component {
     }
 }
 
+InputDate.propTypes = propTypes;
+InputDate.defaultProps = defaultProps;
 InputDate.displayName = 'InputDate';
-InputDate.propTypes = {
-    drops: PropTypes.oneOf(['up', 'down']).isRequired,
-    error: PropTypes.string,
-    locale: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    beforeValueGetter: PropTypes.func.isRequired,
-    placeholder: PropTypes.string,
-    showDropdowns: PropTypes.bool.isRequired,
-    validate: PropTypes.func,
-    value: (props, propName, componentName) => {
-        const prop = props[propName];
-        if (prop && !isISOString(prop)) {
-            throw new Error(`The date ${prop} provided to the component ${componentName} is not an ISO date. Please provide a valid date string.`);
-        }
-    }
-};
-InputDate.defaultProps = {
-    drops: 'down',
-    locale: 'en',
-    format: 'MM/DD/YYYY',
-    beforeValueGetter: value => value,
-    /**
-    * Default onChange prop, that will log an error.
-    */
-    onChange() {
-        console.error('You did not give an onChange method to an input date, please check your code.');
-    },
-    showDropdowns: true,
-    validate: isISOString
-};
+
 export default InputDate;

@@ -10,23 +10,23 @@ class AutocompleteSelectConsult extends Component {
     }
 
     componentDidMount() {
-        this._callKeyResolver(this.props.value);
+        this._callKeyResolver(this.props.formattedInputValue);
     }
 
-    componentWillReceiveProps({value}) {
-        if (value !== this.props.value) this._callKeyResolver(value);
+    componentWillReceiveProps({formattedInputValue}) {
+        if (formattedInputValue !== this.props.formattedInputValue) this._callKeyResolver(formattedInputValue);
     }
 
-    _callKeyResolver(value) {
+    _callKeyResolver(formattedInputValue) {
         const {keyResolver} = this.props;
-        keyResolver(value).then(label => {
+        keyResolver(formattedInputValue).then(label => {
             this.setState({resolvedLabel: label});
         }).catch(err => {console.error(err.message);});
     }
 
     render() {
-        const {label, name, type, value} = this.props;
-        const {resolvedLabel = value} = this.state;
+        const {label, name, type, formattedInputValue} = this.props;
+        const {resolvedLabel = formattedInputValue} = this.state;
         return (
             <div label={label} name={name} type={type}>
                 {i18next.t(resolvedLabel)}
@@ -37,10 +37,10 @@ class AutocompleteSelectConsult extends Component {
 
 AutocompleteSelectConsult.displayName = 'AutocompleteSelectConsult';
 AutocompleteSelectConsult.propTypes = {
+    formattedInputValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     keyResolver: PropTypes.func.isRequired,
     label: PropTypes.string,
     name: PropTypes.string,
-    type: PropTypes.string,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    type: PropTypes.string
 };
 export default AutocompleteSelectConsult;

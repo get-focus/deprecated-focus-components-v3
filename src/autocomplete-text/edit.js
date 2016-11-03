@@ -8,7 +8,7 @@ class AutocompleteTextEdit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            inputValue: this.props.value,
+            inputValue: this.props.rawInputValue,
             suggestions: [],
             hasSuggestions: false,
             error: this.props.error,
@@ -130,13 +130,13 @@ AutocompleteTextEdit.defaultProps = {
     emptyShowAll: false
 };
 AutocompleteTextEdit.propTypes = {
-    querySearcher: PropTypes.func.isRequired, //Returns a promise which is connected to the web service.
-    value: PropTypes.string, //Field value.
-    onChange: PropTypes.func, //Launches the querySearcher.
+    emptyShowAll: PropTypes.bool, //Defines if it shows suggestions on focus when the input is empty.
     error: PropTypes.string, //Error showed message.
+    onChange: PropTypes.func, //Launches the querySearcher.
     placeholder: PropTypes.string, //Placeholder field.
-    showAtFocus: PropTypes.bool, //Defines it shows suggestions on focus.
-    emptyShowAll: PropTypes.bool //Defines if it shows suggestions on focus when the input is empty.
+    querySearcher: PropTypes.func.isRequired, //Returns a promise which is connected to the web service.
+    rawInputValue: PropTypes.string, //Field value.
+    showAtFocus: PropTypes.bool //Defines it shows suggestions on focus.
 };
 export default AutocompleteTextEdit;
 

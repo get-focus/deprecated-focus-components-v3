@@ -30,7 +30,7 @@ describe('AutocompleteTextEdit', () => {
         let autocompleteTextEdit;
         const _value = 'hello';
         before(() => {
-            autocompleteTextEdit = renderIntoDocument(<AutocompleteTextEdit value={_value}/>);
+            autocompleteTextEdit = renderIntoDocument(<AutocompleteTextEdit rawInputValue={_value}/>);
         });
         it('should render the given value', () => {
             expect(autocompleteTextEdit.getValue()).to.equal('hello');

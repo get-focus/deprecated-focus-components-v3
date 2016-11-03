@@ -13,7 +13,7 @@ import '../draggable-iframe/style/draggable-iframe.scss';
 import '../dropdown/index.scss';
 import '../header-actions/index.scss';
 import '../input-checkbox/style/checkbox.scss';
-import '../input-date/style/index.scss';
+import '../input-date/index.scss';
 import '../input-radio/style/radio.scss';
 import '../input-textarea/style/textarea.scss';
 import '../label/style/label.scss';

@@ -2,8 +2,8 @@ import 'react-date-picker/index.css';
 import 'material-design-lite/src/material-design-lite.scss';
 import 'material-design-icons-iconfont/dist/material-design-icons.scss';
 //---
-import '../autocomplete-select/style.scss';
-import '../autocomplete-text/style.scss';
+import '../autocomplete-select/index.scss';
+import '../autocomplete-text/index.scss';
 import '../button/style/button.scss';
 import '../button-back/style/back.scss';
 import '../button-back-to-top/style/back-to-top.scss';

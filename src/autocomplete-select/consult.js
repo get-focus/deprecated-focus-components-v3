@@ -1,9 +1,13 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import i18next from 'i18next';
 
-// TODO : add PropTypes
 class AutocompleteSelectConsult extends Component {
-    state = {};
+    constructor(props) {
+        super(props);
+        this.state = {
+            resolvedLabel: undefined
+        };
+    }
 
     componentDidMount() {
         this._callKeyResolver(this.props.value);
@@ -31,4 +35,12 @@ class AutocompleteSelectConsult extends Component {
     }
 }
 
+AutocompleteSelectConsult.displayName = 'AutocompleteSelectConsult';
+AutocompleteSelectConsult.propTypes = {
+    keyResolver: PropTypes.func.isRequired,
+    label: PropTypes.string,
+    name: PropTypes.string,
+    type: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+};
 export default AutocompleteSelectConsult;

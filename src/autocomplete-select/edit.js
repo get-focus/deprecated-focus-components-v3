@@ -12,26 +12,6 @@ const TAB_KEY_CODE = 27;
 const UP_ARROW_KEY_CODE = 38;
 const DOWN_ARROW_KEY_CODE = 40;
 
-const propTypes = {
-    customError: PropTypes.string,
-    inputTimeout: PropTypes.number.isRequired,
-    keyName: PropTypes.string.isRequired,
-    keyResolver: PropTypes.func.isRequired,
-    labelName: PropTypes.string.isRequired,
-    onBadInput: PropTypes.func,
-    onChange: PropTypes.func.isRequired,
-    placeholder: PropTypes.string,
-    querySearcher: PropTypes.func.isRequired,
-    renderOptions: PropTypes.func,
-    value: PropTypes.string
-};
-
-const defaultProps = {
-    keyName: 'key',
-    labelName: 'label',
-    inputTimeout: 200
-};
-
 @MDBehaviour('inputText')
 class Autocomplete extends Component {
     constructor(props) {
@@ -238,7 +218,22 @@ class Autocomplete extends Component {
 }
 
 Autocomplete.displayName = 'Autocomplete';
-Autocomplete.defaultProps = defaultProps;
-Autocomplete.propTypes = propTypes;
-
+Autocomplete.propTypes = {
+    customError: PropTypes.string,
+    inputTimeout: PropTypes.number.isRequired,
+    keyName: PropTypes.string.isRequired,
+    keyResolver: PropTypes.func.isRequired,
+    labelName: PropTypes.string.isRequired,
+    onBadInput: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
+    placeholder: PropTypes.string,
+    querySearcher: PropTypes.func.isRequired,
+    renderOptions: PropTypes.func,
+    value: PropTypes.string
+};
+Autocomplete.defaultProps = {
+    keyName: 'key',
+    labelName: 'label',
+    inputTimeout: 200
+};
 export default Autocomplete;

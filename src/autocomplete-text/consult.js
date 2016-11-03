@@ -7,5 +7,10 @@ function AutocompleteTextConsult({label, name, type, value}) {
         </div>
     );
 }
-
+AutocompleteTextConsult.propTypes = {
+    label: PropTypes.string,
+    name: PropTypes.string,
+    type: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+}
 export default AutocompleteTextConsult;

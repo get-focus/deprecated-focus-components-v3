@@ -1,15 +1,8 @@
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes, PureComponent} from 'react';
 import AutocompleteTextEdit from './edit';
 import AutocompleteTextConsult from './consult';
 
-class AutocompleteTextField extends Component {
-    state = {};
-
-    static propTypes = {
-        isEdit: PropTypes.bool.isRequired,
-        onChange: PropTypes.func,
-        querySearcher: PropTypes.func.isRequired
-    };
+class AutocompleteTextField extends PureComponent {
 
     getValue = () => {
         const {isEdit, value} = this.props;
@@ -25,23 +18,13 @@ class AutocompleteTextField extends Component {
         if(onchange) onChange(value);
     };
 
-    _renderEdit = () => {
-        return (
-            <AutocompleteTextEdit
-                onChange={this._handleAutocompleteChange}
-                ref='autocomplete'
-                {...this.props}
-            />
-        );
-    };
+    _renderEdit = () => (
+        <AutocompleteTextEdit onChange={this._handleAutocompleteChange} ref='autocomplete' {...this.props} />
+    );
 
-    _renderConsult = () => {
-        return (
-            <AutocompleteTextConsult
-                {...this.props}
-            />
-        );
-    };
+    _renderConsult = () => (
+        <AutocompleteTextConsult {...this.props} />
+    );
 
     render() {
         const {isEdit} = this.props;
@@ -49,4 +32,10 @@ class AutocompleteTextField extends Component {
     }
 }
 
+AutocompleteTextField.displayName = 'AutocompleteTextField';
+AutocompleteTextField.propTypes = {
+    isEdit: PropTypes.bool.isRequired,
+    onChange: PropTypes.func,
+    querySearcher: PropTypes.func.isRequired
+};
 export default AutocompleteTextField;

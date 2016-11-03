@@ -5,14 +5,12 @@ import i18next from 'i18next';
 
 
 class AutocompleteSelectField extends Component {
-    state = {};
-
-    static propTypes = {
-        isEdit: PropTypes.bool.isRequired,
-        keyResolver: PropTypes.func.isRequired,
-        onChange: PropTypes.func.isRequired,
-        querySearcher: PropTypes.func.isRequired
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            customError: null
+        };
+    }
 
     componentWillReceiveProps({error}) {
         this.setState({customError: error});
@@ -47,16 +45,12 @@ class AutocompleteSelectField extends Component {
                 onChange={this._handleAutocompleteChange}
                 ref='autocomplete'
                 {...this.props}
-            />
+                />
         );
     };
 
     _renderConsult = () => {
-        return (
-            <AutocompleteSelectConsult
-              {...this.props}
-            />
-        );
+        return <AutocompleteSelectConsult {...this.props} />
     };
 
     render() {
@@ -65,4 +59,11 @@ class AutocompleteSelectField extends Component {
     }
 }
 
+AutocompleteSelectField.displayName = 'AutocompleteSelectField';
+AutocompleteSelectField.propTypes = {
+    isEdit: PropTypes.bool.isRequired,
+    keyResolver: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    querySearcher: PropTypes.func.isRequired
+};
 export default AutocompleteSelectField;

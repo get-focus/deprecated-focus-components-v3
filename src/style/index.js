@@ -24,7 +24,7 @@ import '../progress-bar/style/progress-bar.scss';
 import '../scrollspy-container/style/scrollspy-container.scss';
 import '../scrollspy-container/style/sticky-menu.scss';
 import '../select-mdl/index.scss';
-import '../select/style/select.scss';
+import '../select/index.scss';
 import '../select-radio/style/select-radio.scss';
 import '../snackbar/index.scss';
 

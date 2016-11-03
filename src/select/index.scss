@@ -6,6 +6,7 @@ $select-label-error-font-size:12px;
 /****************************************************/
 /* TO REMOVE when mdl will be integrated for select */
 [data-focus='select'] {
+    display: inline-block;
     select {
         border-top:0;
         border-left:0;

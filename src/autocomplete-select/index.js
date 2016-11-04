@@ -62,10 +62,10 @@ class AutocompleteSelectField extends Component {
 AutocompleteSelectField.displayName = 'AutocompleteSelectField';
 AutocompleteSelectField.propTypes = {
     editing: PropTypes.bool.isRequired,
-    formattedInputValue: PropTypes.oneOfType([Proptypes.string, Proptypes.number]),
+    formattedInputValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     keyResolver: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     querySearcher: PropTypes.func.isRequired,
-    rawInputValue: PropTypes.oneOfType([Proptypes.string, Proptypes.number])
+    rawInputValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 export default AutocompleteSelectField;

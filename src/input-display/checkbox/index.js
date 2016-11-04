@@ -1,35 +1,16 @@
 import React, {PropTypes} from 'react';
 import i18next from 'i18next';
 
-/**
-* Render the boolean value.
-*/
-function renderValue(value) {
-    var stringValue = value ? 'true' : 'false';
-    return i18next.t(`display.checkbox.${stringValue}`);
+
+function InputDisplayCheckbox({className, name, rawInputValue}) {
+    const stringValue = rawInputValue ? 'true' : 'false';
+    return <div data-focus='input-display-checkbox' className={className} id={name} name={name}>{i18next.t(`input.display.checkbox.${stringValue}`)}</div>
 }
 
-function displayCheckbox({name, value}) {
-    return(
-        <div id={name} name={name}>
-            {renderValue(value)}
-        </div>
-    );
-}
-
-displayCheckbox.defaultProps = {
-    value: undefined,
-    name: undefined,
-    style: {}
-};
-
-displayCheckbox.propTypes = {
-    type: PropTypes.string,
-    value: PropTypes.bool,
+InputDisplayCheckbox.displayName = 'InputDisplayCheckbox';
+InputDisplayCheckbox.propTypes = {
+    className: PropTypes.string,
     name: PropTypes.string,
-    style: PropTypes.object
+    rawInputValue: PropTypes.bool
 };
-
-displayCheckbox.displayName = 'DisplayCheckbox';
-
-module.exports = displayCheckbox;
+export default InputDisplayCheckbox;

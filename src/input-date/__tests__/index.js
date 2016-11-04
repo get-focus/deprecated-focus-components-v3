@@ -13,7 +13,7 @@ describe('The input date', () => {
         let reactComponent, domNode, inputNode;
         const onChangeSpy = sinon.spy();
         before(() => {
-            reactComponent = TestUtils.renderIntoDocument(<InputDate onChange={onChangeSpy} value={now} />);
+            reactComponent = TestUtils.renderIntoDocument(<InputDate onChange={onChangeSpy} rawInputValue={now} />);
             domNode = ReactDOM.findDOMNode(reactComponent);
         });
         it('should render a node with data-focus attribute', () => {
@@ -37,7 +37,7 @@ describe('The input date', () => {
         let reactComponent, inputNode;
         const onChangeSpy = sinon.spy();
         before(() => {
-            reactComponent = TestUtils.renderIntoDocument(<InputDate onChange={onChangeSpy} value={now} disabled={true} />);
+            reactComponent = TestUtils.renderIntoDocument(<InputDate onChange={onChangeSpy} rawInputValue={now} disabled={true} />);
             inputNode = ReactDOM.findDOMNode(reactComponent.refs.input.refs.htmlInput);
         });
         it('should render a node with disabled attribute', () => {
@@ -49,7 +49,7 @@ describe('The input date', () => {
         let renderedTest;
         const onChangeSpy = sinon.spy();
         before(() => {
-            renderedTest = TestUtils.renderIntoDocument(<InputDate onChange={onChangeSpy} value={null} />);
+            renderedTest = TestUtils.renderIntoDocument(<InputDate onChange={onChangeSpy} rawInputValue={null} />);
         });
 
         it('should give a null value', () => {
@@ -71,7 +71,7 @@ describe('The input date', () => {
         const onChangeSpy = sinon.spy();
         const invalidDateString = 'invalid date';
         before(() => {
-            renderedTest = TestUtils.renderIntoDocument(<InputDate onChange={onChangeSpy} value={invalidDateString} />);
+            renderedTest = TestUtils.renderIntoDocument(<InputDate onChange={onChangeSpy} rawInputValue={invalidDateString} />);
         });
 
         it('should display the invalid value in the input', () => {
@@ -101,7 +101,7 @@ describe('The input date', () => {
             }
 
             render() {
-                return <InputDate onChange={onChangeSpy} ref='date' value={this.state.value} />;
+                return <InputDate onChange={onChangeSpy} ref='date' rawInputValue={this.state.value} />;
             }
         }
 
@@ -120,7 +120,7 @@ describe('The input date', () => {
         let renderedTest;
         const onChangeSpy = sinon.spy();
         before(() => {
-            renderedTest = TestUtils.renderIntoDocument(<InputDate onChange={onChangeSpy} value={now} />);
+            renderedTest = TestUtils.renderIntoDocument(<InputDate onChange={onChangeSpy} rawInputValue={now} />);
             const input = ReactDOM.findDOMNode(renderedTest.refs.input.refs.htmlInput);
             TestUtils.Simulate.change(input, {target: {value: ''}});
         });
@@ -145,7 +145,7 @@ describe('The input date', () => {
             };
 
             render() {
-                return <InputDate onChange={this.onDateChange} ref='date' value={this.state.value} />;
+                return <InputDate onChange={this.onDateChange} ref='date' rawInputValue={this.state.value} />;
             }
         }
         before(() => {
@@ -175,7 +175,7 @@ describe('The input date', () => {
             };
 
             render() {
-                return <InputDate onChange={this.onDateChange} ref='date' value={this.state.value} />;
+                return <InputDate onChange={this.onDateChange} ref='date' rawInputValue={this.state.value} />;
             }
         }
         before(() => {
@@ -195,7 +195,7 @@ describe('The input date', () => {
         const onChangeSpy = sinon.spy();
         class TestComponent extends Component {
             render() {
-                return <InputDate onChange={onChangeSpy} ref='date' value={validDate} />;
+                return <InputDate onChange={onChangeSpy} ref='date' rawInputValue={validDate} />;
             }
         }
         let renderedTest;
@@ -221,7 +221,7 @@ describe('The input date', () => {
             };
             class TestComponent extends Component {
                 render() {
-                    return <InputDate onChange={onChange(done)} ref='date' value={validDate} />;
+                    return <InputDate onChange={onChange(done)} ref='date' rawInputValue={validDate} />;
                 }
             }
             renderedTest = TestUtils.renderIntoDocument(<TestComponent />);

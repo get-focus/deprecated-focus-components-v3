@@ -9,7 +9,7 @@ describe('Input Radio Component', () => {
                 renderedRadio = renderIntoDocument(<Radio label="My value"/>);
             });
             it('should have its default props', () => {
-                expect(renderedRadio.props.value).to.equal.false;
+                expect(renderedRadio.props.rawInputValue).to.equal.false;
             });
             it('should have its default state', () => {
                 expect(renderedRadio.state.isChecked).to.equal.false;

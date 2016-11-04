@@ -10,12 +10,13 @@ class Radio extends Component {
     constructor(props){
         super(props)
         this.state = {
-            isChecked: isUndefined(this.props.value) ? false : this.props.value
+            isChecked: isUndefined(this.props.rawInputValue) ? false : this.props.rawInputValue
         };
+        this._onChange = this._onChange.bind(this);
     }
-    
+
     componentWillReceiveProps(newProps) {
-        this.setState({isChecked: newProps.value});
+        this.setState({isChecked: newProps.rawInputValue});
     }
 
     componentDidUpdate() {
@@ -54,13 +55,13 @@ class Radio extends Component {
     */
     render() {
         const {isChecked} = this.state;
-        const {label, name, ...otherProps} = this.props;
+        const {label, name, rawInputValue} = this.props;
         // we use inputProps to be able to display 'checked' property. it is required to be able to use MDL.
         const checkedProps = isChecked ? {checked: 'checked'} : {};
 
         return (
             <label className='mdl-radio mdl-js-radio mdl-js-ripple-effect' data-focus="input-radio" ref='inputMdl'>
-                <input className='mdl-radio__button' name={name} onChange={::this._onChange} type='radio' {...checkedProps} {...otherProps} ref='inputRadio'/>
+                <input className='mdl-radio__button' name={name} onChange={this._onChange} type='radio' {...checkedProps} value={rawInputValue} ref='inputRadio'/>
                 <span className='mdl-radio__label'>{i18next.t(label)}</span>
             </label>
         );
@@ -69,12 +70,12 @@ class Radio extends Component {
 
 Radio.displayName = 'InputRadio';
 Radio.defaultProps = {
-    value: false
+    rawInputValue: false
 };
 Radio.propTypes = {
     label: PropTypes.string.isRequired,
     name: PropTypes.string,
-    value: PropTypes.bool,
+    rawInputValue: PropTypes.bool,
     onChange: PropTypes.func
 };
 export default Radio;

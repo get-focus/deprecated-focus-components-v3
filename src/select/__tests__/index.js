@@ -57,7 +57,7 @@ describe('The select ', () => {
         const {VALUE, VALUES} = fixture;
         let component, domNode;
         before(() => {
-            component = renderIntoDocument(<Select name='selectName' onChange={identity} value={VALUE} values={VALUES} />);
+            component = renderIntoDocument(<Select name='selectName' onChange={identity} rawInputValue={VALUE} values={VALUES} />);
         });
         it('should return the value when provided as a props', () => {
             expect(component.getValue()).to.equal(VALUE);
@@ -70,7 +70,7 @@ describe('The select ', () => {
         const {VALUES, VALUE} = fixture;
         let component;
         before(() => {
-            component = renderIntoDocument(<Select isRequired hasUndefined={false} name='selectName' onChange={identity} value={VALUE} values={VALUES} />);
+            component = renderIntoDocument(<Select isRequired hasUndefined={false} name='selectName' onChange={identity} rawInputValue={VALUE} values={VALUES} />);
         });
         describe('when there is list without isActive present', () => {
             it('shoud not filter the select list', () => {
@@ -81,7 +81,7 @@ describe('The select ', () => {
             const {VALUES_ACTIVE, VALUE} = fixture;
             let component;
             before(() => {
-                component = renderIntoDocument(<Select isRequired hasUndefined={false} name='selectName' onChange={identity} value={VALUE} values={VALUES_ACTIVE} />);
+                component = renderIntoDocument(<Select isRequired hasUndefined={false} name='selectName' onChange={identity} rawInputValue={VALUE} values={VALUES_ACTIVE} />);
             });
             it('shoud filter the select list', () => {
                 expect(ReactDOM.findDOMNode(component.refs.htmlSelect).options.length).to.equal(2);
@@ -91,7 +91,7 @@ describe('The select ', () => {
             const {VALUES_CUSTOM_ACTIVE, VALUE} = fixture;
             let component;
             before(() => {
-                component = renderIntoDocument(<Select isRequired hasUndefined={false} isActiveProperty='isActiveCustom' name='selectName' onChange={identity} value={VALUE} values={VALUES_CUSTOM_ACTIVE} />);
+                component = renderIntoDocument(<Select isRequired hasUndefined={false} isActiveProperty='isActiveCustom' name='selectName' onChange={identity} rawInputValue={VALUE} values={VALUES_CUSTOM_ACTIVE} />);
             });
             it('shoud filter the select list according to the custom value', () => {
                 expect(ReactDOM.findDOMNode(component.refs.htmlSelect).options.length).to.equal(2);
@@ -101,7 +101,7 @@ describe('The select ', () => {
             const {VALUES_CUSTOM_ACTIVE, VALUE} = fixture;
             let component;
             before(() => {
-                component = renderIntoDocument(<Select isActiveProperty='isActiveCustomPAPA' isRequired hasUndefined={false} name='selectName' onChange={identity} value={VALUE} values={VALUES_CUSTOM_ACTIVE} />);
+                component = renderIntoDocument(<Select isActiveProperty='isActiveCustomPAPA' isRequired hasUndefined={false} name='selectName' onChange={identity} rawInputValue={VALUE} values={VALUES_CUSTOM_ACTIVE} />);
             });
             it('shoud not filter the select list', () => {
                 expect(ReactDOM.findDOMNode(component.refs.htmlSelect).options.length).to.equal(VALUES_CUSTOM_ACTIVE.length);
@@ -114,7 +114,7 @@ describe('The select ', () => {
         before(
             () => {
                 onChangeSpy = sinon.spy();
-                component = renderIntoDocument(<Select name='selectName' onChange={onChangeSpy} value={VALUE} values={VALUES} />);
+                component = renderIntoDocument(<Select name='selectName' onChange={onChangeSpy} rawInputValue={VALUE} values={VALUES} />);
             }
         );
         it('should call onChange with the new value', () => {
@@ -129,7 +129,7 @@ describe('The select ', () => {
         let component;
         before(
             () => {
-                component = renderIntoDocument(<Select error={error} name='selectName' onChange={identity} value={VALUE} values={VALUES} />);
+                component = renderIntoDocument(<Select error={error} name='selectName' onChange={identity} rawInputValue={VALUE} values={VALUES} />);
             }
         );
         it('it should be displayed', () => {

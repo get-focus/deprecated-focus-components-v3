@@ -69,7 +69,7 @@ describe('<SelectMdl />', () => {
     });
     describe('when a value is provided', () => {
         const selectedValue = 'VALUE1';
-        const wrapper = mount(<Select name='component' onChange={sinon.spy()} values={VALUES} value={selectedValue} />)
+        const wrapper = mount(<Select name='component' onChange={sinon.spy()} values={VALUES} rawInputValue={selectedValue} />)
         const selectComponent = wrapper.find('[data-focus="select-mdl"]');
         it('should return the value when provided as a props', () => {
             expect(wrapper.instance().getValue()).to.equal(selectedValue);

@@ -5,36 +5,34 @@ import i18next from 'i18next';
 
 
 class AutocompleteSelectField extends Component {
-    state = {};
-
-    static propTypes = {
-        isEdit: PropTypes.bool.isRequired,
-        keyResolver: PropTypes.func.isRequired,
-        onChange: PropTypes.func.isRequired,
-        querySearcher: PropTypes.func.isRequired
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            customError: null
+        };
+    }
 
     componentWillReceiveProps({error}) {
         this.setState({customError: error});
     }
 
     getValue = () => {
-        const {isEdit, value} = this.props;
-        if (isEdit) {
+        const {editing, formattedInputValue} = this.props;
+        if (editing) {
             return this.refs.autocomplete.getValue();
         } else {
-            return value;
+            return formattedInputValue;
         }
     };
 
-    _handleAutocompleteBadInput = value => {
-        this.setState({customError: i18next.t('input.autocomplete.error.invalid', {value})})
+    _handleAutocompleteBadInput = formattedInputValue => {
+        this.setState({customError: i18next.t('input.autocomplete.error.invalid', {formattedInputValue})})
     };
 
-    _handleAutocompleteChange = value => {
+    _handleAutocompleteChange = rawInputValue => {
         const {onChange} = this.props;
         this.setState({customError: null}, () => {
-            if (onChange) onChange(value);
+            if (onChange) onChange(rawInputValue);
         });
     };
 
@@ -47,22 +45,27 @@ class AutocompleteSelectField extends Component {
                 onChange={this._handleAutocompleteChange}
                 ref='autocomplete'
                 {...this.props}
-            />
+                />
         );
     };
 
     _renderConsult = () => {
-        return (
-            <AutocompleteSelectConsult
-              {...this.props}
-            />
-        );
+        return <AutocompleteSelectConsult {...this.props} />
     };
 
     render() {
-        const {isEdit} = this.props;
-        return isEdit ? this._renderEdit() : this._renderConsult();
+        const {editing} = this.props;
+        return editing ? this._renderEdit() : this._renderConsult();
     }
 }
 
+AutocompleteSelectField.displayName = 'AutocompleteSelectField';
+AutocompleteSelectField.propTypes = {
+    editing: PropTypes.bool.isRequired,
+    formattedInputValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    keyResolver: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    querySearcher: PropTypes.func.isRequired,
+    rawInputValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+};
 export default AutocompleteSelectField;

@@ -10,16 +10,16 @@ describe('Select Radio Component', () => {
         describe('When a default select-radio is rendered', () => {
             let renderedSelectRadio;
             before(() => {
-                renderedSelectRadio = renderIntoDocument(<SelectRadio value='B' values={values} />);
+                renderedSelectRadio = renderIntoDocument(<SelectRadio rawInputValue='B' values={values} />);
             });
             it('should have its default state value equals to the props value', () => {
-                expect(renderedSelectRadio.state.value).to.equal(renderedSelectRadio.props.value)
+                expect(renderedSelectRadio.state.value).to.equal(renderedSelectRadio.props.rawInputValue)
             });
         });
         describe('When a radio is selected', () => {
             let renderedSelectRadio, arr, initalValueState;
             before(() => {
-                renderedSelectRadio = renderIntoDocument(<SelectRadio value='B' values={values} />);
+                renderedSelectRadio = renderIntoDocument(<SelectRadio rawInputValue='B' values={values} />);
                 arr = scryRenderedDOMComponentsWithTag(renderedSelectRadio, 'input')
                 initalValueState = renderedSelectRadio.state.value;
                 Simulate.change(arr[2]);

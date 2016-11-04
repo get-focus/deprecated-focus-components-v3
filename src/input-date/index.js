@@ -21,7 +21,7 @@ const propTypes = {
     placeholder: PropTypes.string,
     showDropdowns: PropTypes.bool.isRequired,
     validate: PropTypes.func,
-    value: (props, propName, componentName) => {
+    rawInputValue: (props, propName, componentName) => {
         const prop = props[propName];
         if (prop && !isISOString(prop)) {
             throw new Error(`The date ${prop} provided to the component ${componentName} is not an ISO date. Please provide a valid date string.`);
@@ -47,10 +47,10 @@ const defaultProps = {
 class InputDate extends Component {
     constructor(props) {
         super(props);
-        const {value} = props;
+        const {rawInputValue} = props;
         const state = {
-            dropDownDate: isISOString(value) ? moment(value, moment.ISO_8601) : moment(),
-            inputDate: this._formatDate(value),
+            dropDownDate: isISOString(rawInputValue) ? moment(rawInputValue, moment.ISO_8601) : moment(),
+            inputDate: this._formatDate(rawInputValue),
             displayPicker: false
         };
         this.state = state;
@@ -68,10 +68,10 @@ class InputDate extends Component {
         const {inputDate: startDate} = this.state;
     }
 
-    componentWillReceiveProps({value}) {
+    componentWillReceiveProps({rawInputValue}) {
         this.setState({
-            dropDownDate: isISOString(value) ? moment(value, moment.ISO_8601) : moment(),
-            inputDate: this._formatDate(value)
+            dropDownDate: isISOString(rawInputValue) ? moment(rawInputValue, moment.ISO_8601) : moment(),
+            inputDate: this._formatDate(rawInputValue)
         });
     }
 
@@ -174,7 +174,7 @@ class InputDate extends Component {
         const inputProps = { disabled };
         return (
             <div data-focus='input-date' data-id={this._inputDateId}>
-                <InputText error={error} name={name} onChange={_onInputChange} onKeyDown={_handleKeyDown} onFocus={_onInputFocus} placeholder={placeholder} ref='input' value={inputDate} {...inputProps} />
+                <InputText error={error} name={name} onChange={_onInputChange} onKeyDown={_handleKeyDown} onFocus={_onInputFocus} placeholder={placeholder} ref='input' rawInputValue={inputDate} {...inputProps} />
                 {displayPicker &&
                     <div data-focus='picker-zone'>
                         <DatePicker

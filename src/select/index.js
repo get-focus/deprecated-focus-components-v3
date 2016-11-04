@@ -1,5 +1,5 @@
 //dependencies
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes, PureComponent} from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import {isUndefined, isNull, isNumber} from 'lodash/lang';
@@ -18,52 +18,21 @@ function _valueParser(propsValue, rawValue) {
     const {type} = this.props;
     return type === 'number' ? +rawValue : rawValue;
 }
-const propTypes = {
-    disabled: PropTypes.bool,
-    error: PropTypes.string,
-    hasUndefined: PropTypes.bool,
-    isActiveProperty: PropTypes.string,
-    isRequired: PropTypes.bool,
-    labelKey: PropTypes.string,
-    multiple: PropTypes.bool,
-    name: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    placeholder: PropTypes.string,
-    unSelectedLabel: PropTypes.string,
-    value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-    ]),
-    valueKey: PropTypes.string,
-    values: PropTypes.array.isRequired
-};
 
-const defaultProps = {
-    disabled: false,
-    hasUndefined: true,
-    isActiveProperty: 'isActive',
-    isRequired: false,
-    labelKey: 'label',
-    multiple: false,
-    unSelectedLabel: 'select.unSelected',
-    values: [],
-    valueKey: 'code',
-    valueParser: _valueParser
-};
 
 /**
 * Component standing for an HTML input.
 */
-class Select extends Component {
+class Select extends PureComponent {
 
     /**
     * Get the dom value of the component.
     * @return {object} - The unformated dom value.
     */
     getValue = () => {
-        const {type, value} = this.props;
-        if (isNull(value) || isUndefined(value) || UNSELECTED_KEY === value) return null;
-        return type === 'number' ? +value : value;
+        const {type, rawInputValue} = this.props;
+        if (isNull(rawInputValue) || isUndefined(rawInputValue) || UNSELECTED_KEY === rawInputValue) return null;
+        return type === 'number' ? +rawInputValue : rawInputValue;
     };
 
     /**
@@ -72,14 +41,14 @@ class Select extends Component {
     * @return {object} - The function onChange from the props, called.
     */
     _handleSelectChange = (evt) => {
-        const {onChange, valueParser, value: propsValue} = this.props;
+        const {onChange, valueParser, rawInputValue} = this.props;
         const {value} = evt.target;
-        return onChange(valueParser.call(this, propsValue, value));
+        return onChange(valueParser.call(this, rawInputValue, value));
     };
 
     /** inheritdoc */
-    _renderOptions({hasUndefined, labelKey, isRequired, value, values = [], valueKey, isActiveProperty, unSelectedLabel}) {
-        const isRequiredAndNoValue = isRequired && (isUndefined(value) || isNull(value));
+    _renderOptions({hasUndefined, labelKey, isRequired, rawInputValue, values = [], valueKey, isActiveProperty, unSelectedLabel}) {
+        const isRequiredAndNoValue = isRequired && (isUndefined(rawInputValue) || isNull(rawInputValue));
         if(hasUndefined || isRequiredAndNoValue) {
             values = union(
                 [{[labelKey]: i18next.t(unSelectedLabel), [valueKey]: UNSELECTED_KEY}],
@@ -101,11 +70,11 @@ class Select extends Component {
     * @override
     */
     render() {
-        const { autoFocus, error, multiple, name, placeholder, style, value, values, disabled, onChange, size } = this.props;
+        const { autoFocus, error, multiple, name, placeholder, style, rawInputValue, values, disabled, onChange, size } = this.props;
         const selectProps = { autoFocus, disabled, multiple, size };
         return (
             <div data-focus='select' ref='select' data-valid={!error} style={style}>
-                <select name={name} onChange={this._handleSelectChange} ref='htmlSelect' value={value} {...selectProps}>
+                <select name={name} onChange={this._handleSelectChange} ref='htmlSelect' value={rawInputValue} {...selectProps}>
                     {this._renderOptions(this.props)}
                 </select>
                 {error && <div className='label-error' ref='error'>{error}</div>}
@@ -116,7 +85,35 @@ class Select extends Component {
 
 //Static props.
 Select.displayName = 'Select';
-Select.defaultProps = defaultProps;
-Select.propTypes = propTypes;
-
+Select.propTypes = {
+    disabled: PropTypes.bool,
+    error: PropTypes.string,
+    hasUndefined: PropTypes.bool,
+    isActiveProperty: PropTypes.string,
+    isRequired: PropTypes.bool,
+    labelKey: PropTypes.string,
+    multiple: PropTypes.bool,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    placeholder: PropTypes.string,
+    unSelectedLabel: PropTypes.string,
+    rawInputValue: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]),
+    valueKey: PropTypes.string,
+    values: PropTypes.array.isRequired
+};
+Select.defaultProps = {
+    disabled: false,
+    hasUndefined: true,
+    isActiveProperty: 'isActive',
+    isRequired: false,
+    labelKey: 'label',
+    multiple: false,
+    unSelectedLabel: 'select.unSelected',
+    values: [],
+    valueKey: 'code',
+    valueParser: _valueParser
+};
 export default Select;

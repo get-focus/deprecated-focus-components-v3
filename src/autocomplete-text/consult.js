@@ -1,11 +1,16 @@
 import React from 'react';
 
-function AutocompleteTextConsult({label, name, type, value}) {
+function AutocompleteTextConsult({label, name, type, formattedInputValue}) {
     return (
         <div label={label} name={name} type={type}>
-            {value}
+            {formattedInputValue}
         </div>
     );
 }
-
+AutocompleteTextConsult.propTypes = {
+    formattedInputValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    label: PropTypes.string,
+    name: PropTypes.string,
+    type: PropTypes.string
+}
 export default AutocompleteTextConsult;

@@ -1,6 +1,6 @@
 {
   "name": "focus-components",
-  "version": "3.0.0-rc22",
+  "version": "3.0.0-rc41",
   "description": "Focus web components to build applications (based on Material Design)",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,8 @@
     "test:watch": "better-npm-run test-watch",
     "postinstall": "node scripts/mdl-variables-copy.js",
     "profile": "better-npm-run profile",
-    "fix-lint": "eslint --fix src/** || exit 0"
+    "fix-lint": "eslint --fix src/** || exit 0",
+    "prepublish": "npm run build"
   },
   "betterScripts": {
     "babelify": {

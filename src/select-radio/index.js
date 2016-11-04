@@ -8,12 +8,12 @@ class SelectRadio extends Component {
         super(props);
         this.state = {
             uniqueName: uniqueId('options_'),
-            value: this.props.value
+            value: this.props.rawInputValue
         };
     }
 
     componentWillReceiveProps(newProps) {
-        this.setState({value: newProps.value});
+        this.setState({value: newProps.rawInputValue});
     }
 
     /**
@@ -61,7 +61,7 @@ class SelectRadio extends Component {
             const disabled = this.props.disabled;
             const isChecked = value === this.state.value;
             return (
-                <Radio key={idx} label={i18next.t(label)} name={uniqueName} onChange={this._getRadioChangeHandler(value)} value={isChecked} disabled={disabled} />
+                <Radio key={idx} label={i18next.t(label)} name={uniqueName} onChange={this._getRadioChangeHandler(value)} rawInputValue={isChecked} disabled={disabled} />
             );
         });
     }
@@ -84,7 +84,7 @@ SelectRadio.defaultProps = {
 };
 SelectRadio.propTypes = {
     values: PropTypes.array,
-    value: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.array]),
+    rawInputValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     valueKey: PropTypes.string,
     labelKey: PropTypes.string,
     onChange: PropTypes.func,

@@ -40,7 +40,7 @@ describe('The input text', () => {
         before(
             () => {
                 onChangeSpy = sinon.spy();
-                component = renderIntoDocument(<Input name='inputName' onChange={onChangeSpy} value={value}/>);
+                component = renderIntoDocument(<Input name='inputName' onChange={onChangeSpy} rawInputValue={value}/>);
             }
         );
         it('shoud return the value on getValue call', () => {
@@ -80,7 +80,7 @@ describe('The input text', () => {
                  * @return {string} - The formated value
                  */
                 function formatter(value, mode){ isEditFormatterSpy(mode); return formatedValue; } // eslint-disable-line
-                component = renderIntoDocument(<Input formatter={formatter} name='inputName' onChange={onChange} value={testValue}/>);
+                component = renderIntoDocument(<Input formatter={formatter} name='inputName' onChange={onChange} rawInputValue={testValue}/>);
                 htmlInput = ReactDOM.findDOMNode(component.refs.htmlInput);
 
             }
@@ -106,7 +106,7 @@ describe('The input text', () => {
                  * @return {string} - The formated value
                  */
                 function unformatter(value, mode){ unFormatterSpy(mode);  return unformatedValue; }//eslint-disable-line
-                component = renderIntoDocument(<Input name='inputName' onChange={onChange} unformatter={unformatter} value={testValue}/>);
+                component = renderIntoDocument(<Input name='inputName' onChange={onChange} unformatter={unformatter} rawInputValue={testValue}/>);
                 componentValue = component.getValue();
             }
         );
@@ -125,7 +125,7 @@ describe('The input text', () => {
         before(
             () => {
                 onChange = identity;
-                component = renderIntoDocument(<Input error={error} name='inputName' onChange={onChange} value={testValue}/>);
+                component = renderIntoDocument(<Input error={error} name='inputName' onChange={onChange} rawInputValue={testValue}/>);
                 htmlInput = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
                 htmlError = TestUtils.findRenderedDOMComponentWithTag(component, 'span');
             }

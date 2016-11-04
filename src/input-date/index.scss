@@ -1,7 +1,5 @@
 [data-focus='input-date'] {
-    height: 26px;
-    width: 100%;
-    display: block;
+    display: inline-block;
     [data-focus='picker-zone'] {
         background-color: #FFF;
         position: absolute;

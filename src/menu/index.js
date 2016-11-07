@@ -36,7 +36,7 @@ class MenuItem extends Component {
         }
     }
     render() {
-        const {menu, isActive, onClick, showLabels, showPanel} = this.props;
+        const {menu, isActive, onClick, onClose, showLabels, showPanel} = this.props;
         const {route, label, icon, iconLibrary, subMenus} = menu;
         const {displaySubMenu} = this.state;
         const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), iconLibrary, shape: (showLabels ? null : 'icon')};
@@ -48,16 +48,18 @@ class MenuItem extends Component {
                     {displaySubMenu &&
                         <ul data-focus='menu-sub-items'>
                             {subMenus.map((menu, idx) => (
-                                <MenuItem key={idx} menu={menu} showLabels={showLabels} />
+                                <MenuItem key={idx} menu={menu} onClose={onClose} showLabels={showLabels} />
                             ))}
                         </ul>
                     }
                 </li>
             );
         } else {
+            const {handleOnClick, onClick} = buttonProps;
+            buttonProps.handleOnClick = () => {handleOnClick && handleOnClick(); onClick && onClick(); onClose && onClose()};
             return (
                 <li>
-                    {route && <Link to={route}><Button {...buttonProps} /></Link>}
+                    {route && <Link to={route} onClick={onClose}><Button {...buttonProps} /></Link>}
                     {!route && <Button {...buttonProps} />}
                 </li>
             );
@@ -67,11 +69,15 @@ class MenuItem extends Component {
 MenuItem.displayName = 'MenuItem';
 MenuItem.PropTypes = {
     menu: PropTypes.object.isRequired,
-    showLabels: PropTypes.bool.isRequired
+    isActive: PropTypes.bool,
+    onClick: PropTypes.func,
+    onClose: PropTypes.func,
+    showLabels: PropTypes.bool.isRequired,
+    showPanel: PropTypes.bool.isRequired
 };
 
 
-const MenuList = ({activeMenuId, menus, offset = 0, onClick, showLabels, showPanel}) => {
+const MenuList = ({activeMenuId, menus, offset = 0, onClick, onClose, showLabels, showPanel}) => {
     const style = {'position': 'relative', 'top': offset };
     return (
         <ul data-focus='menu-items' style={style}>
@@ -80,7 +86,7 @@ const MenuList = ({activeMenuId, menus, offset = 0, onClick, showLabels, showPan
                 const {route, label, icon, subMenus} = menu;
                 const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), shape: (showLabels ? null : 'icon')};
                 return (
-                    <MenuItem key={idx} menu={menu} onClick={(evt) => onClick && onClick(evt, idx)} isActive={isActive} showLabels={showLabels} showPanel={showPanel} />
+                    <MenuItem key={idx} menu={menu} onClick={(evt) => onClick && onClick(evt, idx)} onClose={onClose} isActive={isActive} showLabels={showLabels} showPanel={showPanel} />
                 );
             })}
         </ul>
@@ -91,6 +97,7 @@ MenuList.PropTypes = {
     activeMenuId: PropTypes.number,
     menus: PropTypes.array.isRequired,
     onClick: PropTypes.func,
+    onClose: PropTypes.func,
     showLabels: PropTypes.bool.isRequired,
     showPanel: PropTypes.bool.isRequired
 };
@@ -158,7 +165,7 @@ class Menu extends Component {
                     {children}
                     {showPanel && subMenuItems &&
                         <MenuPanel onClose={this._onSubPanelClose}>
-                            <MenuList offset={yPosition} menus={subMenuItems} showLabels={true} showPanel={false} />
+                            <MenuList offset={yPosition} menus={subMenuItems} onClose={this._onSubPanelClose} showLabels={true} showPanel={false} />
                         </MenuPanel>
                     }
                 </div>

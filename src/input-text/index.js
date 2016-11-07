@@ -76,7 +76,7 @@ InputText.propTypes = {
         PropTypes.string,
         PropTypes.number
     ]),
-    valid: false
+    valid: PropTypes.bool
 };
 InputText.defaultProps = {
     disabled: false,

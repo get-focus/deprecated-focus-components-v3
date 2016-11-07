@@ -80,6 +80,7 @@ InputText.propTypes = {
 };
 InputText.defaultProps = {
     disabled: false,
+    error: 'input.text.error.default',
     formatter: identity,
     unformatter: identity,
     type: 'text',

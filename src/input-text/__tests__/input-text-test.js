@@ -125,7 +125,7 @@ describe('The input text', () => {
         before(
             () => {
                 onChange = identity;
-                component = renderIntoDocument(<Input error={error} name='inputName' onChange={onChange} rawInputValue={testValue}/>);
+                component = renderIntoDocument(<Input error={error} valid={false} name='inputName' onChange={onChange} rawInputValue={testValue}/>);
                 htmlInput = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
                 htmlError = TestUtils.findRenderedDOMComponentWithTag(component, 'span');
             }

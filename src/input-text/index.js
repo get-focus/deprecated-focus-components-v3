@@ -22,8 +22,8 @@ class InputText extends PureComponent {
         return unformatter(domEl.value, MODE);
     };
     componentDidUpdate() {
-        const {error} = this.props;
-        if (!error) {
+        const {valid} = this.props;
+        if (valid) {
             // Make sure that the main div does not hold a is-invalid class when there's no error
             // MDL keeps the class even if React removes it
             this.refs.inputText.classList.remove('is-invalid');
@@ -46,8 +46,8 @@ class InputText extends PureComponent {
     render() {
         const { autoFocus, disabled, formatter, maxLength, onFocus, onClick, onKeyDown, onKeyPress, error, valid, name, placeholder, onBlur,  style, rawInputValue, size, type} = this.props;
         const value = formatter(rawInputValue, MODE); //TODO : what about formattedInputValue ?
-        const pattern = error ? 'hasError' : null; //add pattern to overide mdl error style when displaying an focus error.
-        const inputProps =  { autoFocus, disabled,onBlur, onKeyDown,onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange, pattern, size, type, value };
+        const pattern = valid ? null : 'hasError'; //add pattern to overide mdl error style when displaying an focus error.
+        const inputProps =  { autoFocus, disabled, onBlur, onKeyDown,onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange, pattern, size, type, value };
         const cssClass = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
         return (
             <div className={cssClass} data-focus='input-text' ref='inputText' style={style}>
@@ -65,6 +65,7 @@ InputText.propTypes = {
     disabled: PropTypes.bool,
     error: PropTypes.string,
     name: PropTypes.string.isRequired,
+    onBlur: PropTypes.func,
     onChange: PropTypes.func.isRequired,
     onKeyPress: PropTypes.func,
     placeholder: PropTypes.string,
@@ -74,12 +75,14 @@ InputText.propTypes = {
     rawInputValue: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number
-    ])
+    ]),
+    valid: false
 };
 InputText.defaultProps = {
     disabled: false,
     formatter: identity,
     unformatter: identity,
-    type: 'text'
+    type: 'text',
+    valid: true
 };
 export default InputText;

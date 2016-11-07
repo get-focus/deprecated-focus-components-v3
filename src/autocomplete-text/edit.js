@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import MDBehaviour from '../behaviours/material';
+import debounce from 'lodash/debounce';
 
 @MDBehaviour('materialInput')
 class AutocompleteTextEdit extends Component {
@@ -22,6 +23,11 @@ class AutocompleteTextEdit extends Component {
             this.setState({error: error});
         }
     }
+
+    componentDidMount() {
+     const {inputTimeout} = this.props;
+     this._debouncedQuerySearcher = debounce(this._querySearcher, inputTimeout);
+   }
 
     // Returns the state's inputValue
     getValue = () =>  {
@@ -63,7 +69,7 @@ class AutocompleteTextEdit extends Component {
         else {
             this.refs.loader.classList.add('mdl-progress__indeterminate');
             this.setState({isLoading: true});
-            this._querySearcher(value);
+            this._debouncedQuerySearcher(value);
             if (onChange) onChange(value);
         }
     };
@@ -106,7 +112,7 @@ class AutocompleteTextEdit extends Component {
     // Maybe give the option for the floating label
     render() {
         const {inputValue, hasSuggestions, hasFocus, isLoading, ...otherProps} = this.state;
-        const {placeholder, showAtFocus, emptyShowAll, error} = this.props
+        const {placeholder, inputTimeout, showAtFocus, emptyShowAll, error} = this.props
         return(
             <div data-focus='autocompleteText'>
                 <div className={`mdl-textfield mdl-js-textfield${error ? ' is-invalid' : ''}`} ref='materialInput'>
@@ -127,10 +133,12 @@ AutocompleteTextEdit.displayName = 'AutocompleteTextEdit';
 AutocompleteTextEdit.defaultProps = {
     placeholder: 'Search here...',
     showAtFocus: false,
-    emptyShowAll: false
+    emptyShowAll: false,
+    inputTimeout: 200
 };
 AutocompleteTextEdit.propTypes = {
     emptyShowAll: PropTypes.bool, //Defines if it shows suggestions on focus when the input is empty.
+    inputTimeout : PropTypes.number.isRequired, //Timeout to execute the debounce function.
     error: PropTypes.string, //Error showed message.
     onChange: PropTypes.func, //Launches the querySearcher.
     placeholder: PropTypes.string, //Placeholder field.

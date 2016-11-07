@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 
 function AutocompleteTextConsult({label, name, type, formattedInputValue}) {
     return (

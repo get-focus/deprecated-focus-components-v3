@@ -79,7 +79,7 @@ class Select extends PureComponent {
     * @override
     */
     render() {
-        const { autoFocus, error, labelKey, name, placeholder, style, rawInputValue, valueKey, disabled, onChange, size } = this.props;
+        const { autoFocus, error, labelKey, name, placeholder, style, rawInputValue, valueKey, disabled, onChange, size, valid } = this.props;
         const selectProps = { autoFocus, disabled, size };
         const currentValue = find(this.allValues, (o) => o[valueKey] === rawInputValue);
         const currentLabel = isUndefined(currentValue) || isNull(currentValue) ? i18next.t('input.select.noLabel') : currentValue[labelKey];
@@ -96,7 +96,7 @@ class Select extends PureComponent {
                         {this._renderOptions(this.props)}
                     </ul>
                 }
-                {error && <div className='label-error' ref='error'>{error}</div>}
+                {!valid && <div className='label-error' ref='error'>{error}</div>}
             </div>
         );
     }
@@ -105,12 +105,14 @@ class Select extends PureComponent {
 Select.displayName = 'Select';
 Select.defaultProps = {
     disabled: false,
+    error: 'input.select-mdl.error.default',
     hasUndefined: true,
     isActiveProperty: 'isActive',
     isRequired: false,
     labelKey: 'label',
     multiple: false,
     unSelectedLabel: 'select.unSelected',
+    valid: true,
     values: [],
     valueKey: 'code',
     valueParser: _valueParser
@@ -130,6 +132,7 @@ Select.propTypes = {
         PropTypes.string,
         PropTypes.number
     ]),
+    valid: PropTypes.bool,
     valueKey: PropTypes.string,
     values: PropTypes.array.isRequired
 };

@@ -2,7 +2,7 @@ $snackbar-message-center-error-color: #DE3226;
 $snackbar-message-center-success-color: #2AC955;
 $snackbar-message-center-warning-color: #FFAE00;
 
-[data-focus="snackbar-message-center"] {
+[data-focus="snackbar"] {
     &[data-message-type="error"] {
         background-color: $snackbar-message-center-error-color;
     }

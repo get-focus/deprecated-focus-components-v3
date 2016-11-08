@@ -60,7 +60,7 @@ class SelectCheckbox extends Component {
      * @return {ReactDOMNode} list of ReactDomNode
      */
     renderCheckboxes() {
-        return this.props.rawInputValue.map((val, idx) => {
+        return this.props.values.map((val, idx) => {
             const value = val[this.props.valueKey];
             const label = val[this.props.labelKey];
             const isChecked = 0 <= this.state.selectedValues.indexOf(value);

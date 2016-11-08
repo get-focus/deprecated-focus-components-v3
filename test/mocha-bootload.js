@@ -1,4 +1,4 @@
-import {init as initTranslation} from '../src/translation';
+import {init as initTranslation} from './translation';
 import translationResources from './translation/resources';
 initTranslation('fr', translationResources);
 

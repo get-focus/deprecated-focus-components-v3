@@ -70,14 +70,14 @@ class Select extends PureComponent {
     * @override
     */
     render() {
-        const { autoFocus, error, multiple, name, placeholder, style, rawInputValue, values, disabled, onChange, size } = this.props;
+        const { autoFocus, error, multiple, name, placeholder, style, rawInputValue, values, disabled, onChange, size, valid } = this.props;
         const selectProps = { autoFocus, disabled, multiple, size };
         return (
             <div data-focus='select' ref='select' data-valid={!error} style={style}>
                 <select name={name} onChange={this._handleSelectChange} ref='htmlSelect' value={rawInputValue} {...selectProps}>
                     {this._renderOptions(this.props)}
                 </select>
-                {error && <div className='label-error' ref='error'>{error}</div>}
+                {!valid && <div className='label-error' ref='error'>{error}</div>}
             </div>
         );
     }
@@ -101,17 +101,20 @@ Select.propTypes = {
         PropTypes.string,
         PropTypes.number
     ]),
+    valid: PropTypes.bool,
     valueKey: PropTypes.string,
     values: PropTypes.array.isRequired
 };
 Select.defaultProps = {
     disabled: false,
+    error: 'input.select.error.default',
     hasUndefined: true,
     isActiveProperty: 'isActive',
     isRequired: false,
     labelKey: 'label',
     multiple: false,
     unSelectedLabel: 'select.unSelected',
+    valid: true,
     values: [],
     valueKey: 'code',
     valueParser: _valueParser

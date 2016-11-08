@@ -189,7 +189,7 @@ InputDate.defaultProps =  {
         console.error('You did not give an onChange method to an input date, please check your code.');
     },
     showDropdowns: true,
-    valid: PropTypes.bool,
+    valid: true,
     validate: isISOString
 };
 export default InputDate;

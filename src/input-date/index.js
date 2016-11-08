@@ -175,10 +175,12 @@ InputDate.propTypes =  {
             throw new Error(`The date ${prop} provided to the component ${componentName} is not an ISO date. Please provide a valid date string.`);
         }
     },
+    valid: PropTypes.bool,
     validate: PropTypes.func
 };
 InputDate.defaultProps =  {
     drops: 'down',
+    error: 'input.date.error.default',
     locale: 'en',
     format: 'MM/DD/YYYY',
     beforeValueGetter: value => value,

@@ -129,7 +129,7 @@ describe('The select ', () => {
         let component;
         before(
             () => {
-                component = renderIntoDocument(<Select error={error} name='selectName' onChange={identity} rawInputValue={VALUE} values={VALUES} />);
+                component = renderIntoDocument(<Select error={error} valid={false} name='selectName' onChange={identity} rawInputValue={VALUE} values={VALUES} />);
             }
         );
         it('it should be displayed', () => {

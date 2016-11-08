@@ -76,10 +76,11 @@ InputText.propTypes = {
         PropTypes.string,
         PropTypes.number
     ]),
-    valid: false
+    valid: PropTypes.bool
 };
 InputText.defaultProps = {
     disabled: false,
+    error: 'input.text.error.default',
     formatter: identity,
     unformatter: identity,
     type: 'text',

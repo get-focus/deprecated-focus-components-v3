@@ -56,7 +56,7 @@ describe('The input textarea', () => {
         let component, errorComponent, inputNode;
         const errorLabel = 'this is an error';
         before(() => {
-            component = renderIntoDocument(<Textarea error={errorLabel} name="myTextArea" onChange={fake} />);
+            component = renderIntoDocument(<Textarea error={errorLabel} name="myTextArea" onChange={fake} valid={false} />);
             inputNode = ReactDOM.findDOMNode(component.refs.htmlInput);
             errorComponent = findRenderedDOMComponentWithClass(component, 'label-error');
         });

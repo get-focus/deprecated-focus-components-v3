@@ -78,9 +78,7 @@ class InputDate extends Component {
     };
 
     _onInputBlur = () => {
-        const {onBlur} = this.props;
         const {inputDate} = this.state;
-        if(onBlur) onBlur();
         this._onInputChange(inputDate, true);
     };
 

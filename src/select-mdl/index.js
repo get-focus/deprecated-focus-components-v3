@@ -30,8 +30,8 @@ function _valueParser(propsValue, rawValue) {
 class Select extends PureComponent {
 
     componentDidMount() {
-      const selectMenu = ReactDOM.findDOMNode(this.refs["selectMenu"]);
-      componentHandler.upgradeElement(selectMenu);
+        const selectMenu = ReactDOM.findDOMNode(this.refs["selectMenu"]);
+        componentHandler.upgradeElement(selectMenu);
     }
 
     /**
@@ -56,8 +56,7 @@ class Select extends PureComponent {
 
     /** inheritdoc */
     _renderOptions({hasUndefined, labelKey, isRequired, rawInputValue, values = [], valueKey, isActiveProperty, unSelectedLabel}) {
-        const isRequiredAndNoValue = isRequired && (isUndefined(rawInputValue) || isNull(rawInputValue));
-        values = (hasUndefined || isRequiredAndNoValue) ? union([{[labelKey]: i18next.t(unSelectedLabel), [valueKey]: UNSELECTED_KEY}], this.props.values) : values;
+        values = hasUndefined ? union([{[labelKey]: i18next.t(unSelectedLabel), [valueKey]: UNSELECTED_KEY}], this.props.values) : values;
 
         return values.filter(v => isUndefined(v[isActiveProperty]) || v[isActiveProperty] === true) // Filter on the active value only
         .map((val, idx) => {

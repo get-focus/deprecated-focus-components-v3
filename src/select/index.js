@@ -72,6 +72,7 @@ class Select extends PureComponent {
     render() {
         const { autoFocus, error, multiple, name, placeholder, style, rawInputValue, values, disabled, onChange, size, valid } = this.props;
         const selectProps = { autoFocus, disabled, multiple, size };
+        console.log(this.props);
         return (
             <div data-focus='select' ref='select' data-valid={!error} style={style}>
                 <select name={name} onChange={this._handleSelectChange} ref='htmlSelect' value={rawInputValue} {...selectProps}>

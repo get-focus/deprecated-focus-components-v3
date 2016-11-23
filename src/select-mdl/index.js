@@ -28,16 +28,10 @@ function _valueParser(propsValue, rawValue) {
 * https://github.com/CreativeIT/getmdl-select/
 */
 class Select extends PureComponent {
-    constructor(props) {
-        super(props);
-        const {hasUndefined, isRequired, labelKey, rawInputValue, values = [], valueKey, unSelectedLabel} = props;
-        const isRequiredAndNoValue = isRequired && (isUndefined(rawInputValue) || isNull(rawInputValue));
-        this.allValues = hasUndefined || isRequiredAndNoValue ? union([{[labelKey]: i18next.t(unSelectedLabel), [valueKey]: UNSELECTED_KEY}], values) : values;
-    };
 
     componentDidMount() {
-      const selectMenu = ReactDOM.findDOMNode(this.refs["selectMenu"]);
-      componentHandler.upgradeElement(selectMenu);
+        const selectMenu = ReactDOM.findDOMNode(this.refs["selectMenu"]);
+        componentHandler.upgradeElement(selectMenu);
     }
 
     /**
@@ -62,14 +56,15 @@ class Select extends PureComponent {
 
     /** inheritdoc */
     _renderOptions({hasUndefined, labelKey, isRequired, rawInputValue, values = [], valueKey, isActiveProperty, unSelectedLabel}) {
-        return this.allValues.filter(v => isUndefined(v[isActiveProperty]) || v[isActiveProperty] === true) // Filter on the active value only
+        values = hasUndefined ? union([{[labelKey]: i18next.t(unSelectedLabel), [valueKey]: UNSELECTED_KEY}], this.props.values) : values;
+
+        return values.filter(v => isUndefined(v[isActiveProperty]) || v[isActiveProperty] === true) // Filter on the active value only
         .map((val, idx) => {
             const optVal = `${val[valueKey]}`;
             const elementValue = val[labelKey];
-            const optLabel = isUndefined(elementValue) || isNull(elementValue) ? i18next.t('input.select.noLabel') : elementValue;
             const isSelected = optVal === rawInputValue;
             return (
-                <li key={idx} className='mdl-menu__item' data-selected={isSelected} data-val={optVal} onClick={() => this._handleSelectChange(optVal)}>{optLabel}</li>
+                <li key={idx} className='mdl-menu__item' data-selected={isSelected} data-val={optVal} onClick={() => this._handleSelectChange(optVal)}>{elementValue}</li>
             );
         });
     }
@@ -79,10 +74,10 @@ class Select extends PureComponent {
     * @override
     */
     render() {
-        const { autoFocus, error, labelKey, name, placeholder, style, rawInputValue, valueKey, disabled, onChange, size, valid } = this.props;
+        const { autoFocus, error, labelKey, name, placeholder, style, rawInputValue, valueKey, disabled, onChange, size, valid, unSelectedLabel } = this.props;
         const selectProps = { autoFocus, disabled, size };
-        const currentValue = find(this.allValues, (o) => o[valueKey] === rawInputValue);
-        const currentLabel = isUndefined(currentValue) || isNull(currentValue) ? i18next.t('input.select.noLabel') : currentValue[labelKey];
+        const currentValue = find(this.props.values, (o) => o[valueKey] === rawInputValue);
+        const currentLabel = isUndefined(currentValue) || isNull(currentValue) ? i18next.t(unSelectedLabel) : currentValue[labelKey];
         return (
             <div data-focus='select-mdl' ref='select' className='mdl-textfield mdl-js-textfield getmdl-select' data-valid={!error} style={style}>
                 <input placeholder={placeholder} className='mdl-textfield__input' value={currentLabel} type='text' id={name} name={name} readOnly tabIndex='-1' data-val={rawInputValue} ref='htmlSelect' {...selectProps} />

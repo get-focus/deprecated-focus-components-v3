@@ -51,20 +51,21 @@ class Select extends PureComponent {
     */
     _handleSelectChange = (value) => {
         const {onChange, valueParser, rawInputValue} = this.props;
+        ReactDOM.findDOMNode(this.refs["selectMenu"]).parentNode.classList.remove('is-visible');
         return onChange(valueParser.call(this, rawInputValue, value));
     };
 
     /** inheritdoc */
     _renderOptions({hasUndefined, labelKey, isRequired, rawInputValue, values = [], valueKey, isActiveProperty, unSelectedLabel}) {
         values = hasUndefined ? union([{[labelKey]: i18next.t(unSelectedLabel), [valueKey]: UNSELECTED_KEY}], this.props.values) : values;
-
         return values.filter(v => isUndefined(v[isActiveProperty]) || v[isActiveProperty] === true) // Filter on the active value only
         .map((val, idx) => {
             const optVal = `${val[valueKey]}`;
             const elementValue = val[labelKey];
             const isSelected = optVal === rawInputValue;
+            const optLabel = isUndefined(elementValue) || isNull(elementValue) ? i18next.t(unSelectedLabel) : i18next.t(elementValue);
             return (
-                <li key={idx} className='mdl-menu__item' data-selected={isSelected} data-val={optVal} onClick={() => this._handleSelectChange(optVal)}>{elementValue}</li>
+                <li key={idx} className='mdl-menu__item' data-selected={isSelected} data-val={optVal} onClick={() => this._handleSelectChange(optVal)}>{optLabel}</li>
             );
         });
     }

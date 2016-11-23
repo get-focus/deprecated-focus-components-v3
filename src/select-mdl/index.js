@@ -51,7 +51,6 @@ class Select extends PureComponent {
     */
     _handleSelectChange = (value) => {
         const {onChange, valueParser, rawInputValue} = this.props;
-        console.log( );
         ReactDOM.findDOMNode(this.refs["selectMenu"]).parentNode.classList.remove('is-visible');
         return onChange(valueParser.call(this, rawInputValue, value));
     };

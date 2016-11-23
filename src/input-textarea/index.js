@@ -25,7 +25,7 @@ class InputTextarea extends PureComponent {
     if (valid) {
         // Make sure that the main div does not hold a is-invalid class when there's no error
         // MDL keeps the class even if React removes it
-        this.refs.inputText.classList.remove('is-invalid');
+        this.refs.inputTextarea.classList.remove('is-invalid');
     }
 }
     /**
@@ -46,7 +46,7 @@ class InputTextarea extends PureComponent {
         const { autoFocus, disabled, formatter, maxLength, onBlur, onFocus, onClick, onKeyPress, error, name, placeholder, style, rawInputValue, size, type, valid} = this.props;
         const value = formatter(rawInputValue);
         const pattern = valid ? null : 'hasError'; //add pattern to overide mdl error style when displaying an focus error.
-        const inputProps =  { autoFocus, disabled, onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange, pattern, size, type, value };
+        const inputProps =  { autoFocus, disabled, onBlur, onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange, pattern, size, type, value };
         const mdlClasses = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
         return (
             <div data-error={!!error} data-focus='input-textarea'>

@@ -78,7 +78,7 @@ class Select extends PureComponent {
         const { autoFocus, error, labelKey, name, placeholder, style, rawInputValue, valueKey, disabled, onChange, size, valid, unSelectedLabel } = this.props;
         const selectProps = { autoFocus, disabled, size };
         const currentValue = find(this.props.values, (o) => o[valueKey] === rawInputValue);
-        const currentLabel = isUndefined(currentValue) || isNull(currentValue) ? i18next.t(unSelectedLabel) : currentValue[labelKey];
+        const currentLabel = isUndefined(currentValue) || isNull(currentValue) ? i18next.t(unSelectedLabel) : i18next.t(currentValue[labelKey]);
         return (
             <div data-focus='select-mdl' ref='select' className='mdl-textfield mdl-js-textfield getmdl-select' data-valid={!error} style={style}>
                 <input placeholder={placeholder} className='mdl-textfield__input' value={currentLabel} type='text' id={name} name={name} readOnly tabIndex='-1' data-val={rawInputValue} ref='htmlSelect' {...selectProps} />

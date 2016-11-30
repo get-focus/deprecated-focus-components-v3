@@ -7,17 +7,24 @@ import ButtonHelp from '../button-help';
 import Buttons from './edit-save-buttons';
 
 const defaultProps = {
+    Buttons: Buttons,
     buttonsPosition: 'top',
+    editing: false,
+    save: () => alert('please define a save action'),
     showHelp: false,
-    Buttons: Buttons
+    toggleEdit: () => alert('please define a toggleEdit action')
 };
 
 const propTypes = {
+    blockName: PropTypes.string,
     Buttons: PropTypes.func,
     buttonsPosition: PropTypes.oneOf(['both', 'bottom', 'top']).isRequired,
-    title: PropTypes.string,
+    editing: PropTypes.bool,
+    getUserInput: PropTypes.object,
+    save: PropTypes.func,
     showHelp: PropTypes.bool,
-    blockName: PropTypes.string
+    title: PropTypes.string,
+    toggleEdit: PropTypes.func
 };
 
 /**

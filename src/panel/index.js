@@ -20,7 +20,7 @@ const propTypes = {
     Buttons: PropTypes.func,
     buttonsPosition: PropTypes.oneOf(['both', 'bottom', 'top']).isRequired,
     editing: PropTypes.bool,
-    getUserInput: PropTypes.object,
+    getUserInput: PropTypes.func,
     save: PropTypes.func,
     showHelp: PropTypes.bool,
     title: PropTypes.string,

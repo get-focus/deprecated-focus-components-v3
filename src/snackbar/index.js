@@ -21,7 +21,7 @@ Snackbar.displayName = 'Snackbar';
 Snackbar.propTypes = {
     actionHandler: PropTypes.func,
     actionText: PropTypes.string,
-    messageId: PropTypes.number,
+    messageId: PropTypes.string,
     message: PropTypes.string,
     deleteMessage: PropTypes.func,
     type: PropTypes.string

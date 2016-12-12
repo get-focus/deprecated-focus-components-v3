@@ -11,7 +11,7 @@ function Snackbar({actionHandler, actionText, content, deleteMessage, messageId,
                     {i18next.t(actionText)}
                 </button>
             }
-            <button className='mdl-snackbar__close' type='button' onClick={() => deleteMessage({messageId})}>
+            <button className='mdl-snackbar__close' type='button' onClick={() => deleteMessage({id: messageId})}>
                 <i className='material-icons'>clear</i>
             </button>
         </div>

@@ -2,32 +2,73 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import MDBehaviour from '../behaviours/material';
-import debounce from 'lodash/debounce';
 
 @MDBehaviour('materialInput')
 class AutocompleteTextEdit extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            inputValue: this.props.rawInputValue,
-            suggestions: [],
-            hasSuggestions: false,
-            error: this.props.error,
-            hasFocus: false,
-            isLoading: false
-        };
-    }
+    static defaultProps = {
+        placeholder: 'Search here...',
+        showAtFocus: false,
+        emptyShowAll: false
+    };
+
+    static propTypes = {
+        /**
+        * Returns a promise which is connected to the web service.
+        * @type {Function}
+        */
+        querySearcher: PropTypes.func.isRequired,
+
+        /**
+        * Field value.
+        * @type {String}
+        */
+        value: PropTypes.string,
+
+        /**
+        * Launches the querySearcher.
+        * @type {Function}
+        */
+        onChange: PropTypes.func,
+
+        /**
+        * Error showed message.
+        * @type {String}
+        */
+        error: PropTypes.string,
+
+        /**
+        * Placeholder field.
+        * @type {String}
+        */
+        placeholder: PropTypes.string,
+
+        /**
+        * Defines it shows suggestions on focus.
+        * @type {Boolean}
+        */
+        showAtFocus: PropTypes.bool,
+
+        /**
+        * Defines if it shows suggestions on focus when the input is empty.
+        * @type {Boolean}
+        */
+        emptyShowAll: PropTypes.bool
+    };
+
+    state = {
+        inputValue: this.props.value,
+        suggestions: [],
+        hasSuggestions: false,
+        error: this.props.error,
+        hasFocus: false,
+        isLoading: false
+    };
 
     componentWillReceiveProps({error}) {
         if(error) {
             this.setState({error: error});
         }
     }
-
-    componentDidMount() {
-     const {inputTimeout} = this.props;
-     this._debouncedQuerySearcher = debounce(this._querySearcher, inputTimeout);
-   }
 
     // Returns the state's inputValue
     getValue = () =>  {
@@ -61,7 +102,6 @@ class AutocompleteTextEdit extends Component {
 
     // Sets the state's inputValue when the user is typing
     onQueryChange = ({target: {value}}) => {
-        const {onChange} = this.props;
         this.setState({inputValue: value});
         if(value.trim() == '') {
             this.setState({hasSuggestions: false});
@@ -69,17 +109,14 @@ class AutocompleteTextEdit extends Component {
         else {
             this.refs.loader.classList.add('mdl-progress__indeterminate');
             this.setState({isLoading: true});
-            this._debouncedQuerySearcher(value);
-            if (onChange) onChange(value);
+            this._querySearcher(value);
         }
     };
 
     // Sets the value input with the selected suggestion and hides the dropdown
     onResultClick(value) {
-        const {onChange} = this.props;
         this.refs.inputText.value = value;
         this.setState({inputValue: value, hasSuggestions: false, suggestions: []});
-        if (onChange) onChange(value);
         return value;
     };
 
@@ -98,6 +135,9 @@ class AutocompleteTextEdit extends Component {
     toggleHasFocus = e => {
         const {hasSuggestions, hasFocus} = this.state;
         const {showAtFocus, emptyShowAll} = this.props;
+        if(this.state.suggestions.length === 1){
+          this.setState({inputValue: this.state.suggestions[0].label})
+        }
         this.setState({hasFocus: !this.state.hasFocus});
         if(hasSuggestions && !showAtFocus && hasFocus === false) {
             this.setState({hasSuggestions: false});
@@ -112,7 +152,7 @@ class AutocompleteTextEdit extends Component {
     // Maybe give the option for the floating label
     render() {
         const {inputValue, hasSuggestions, hasFocus, isLoading, ...otherProps} = this.state;
-        const {placeholder, inputTimeout, showAtFocus, emptyShowAll, error} = this.props
+        const {placeholder, showAtFocus, emptyShowAll, error} = this.props
         return(
             <div data-focus='autocompleteText'>
                 <div className={`mdl-textfield mdl-js-textfield${error ? ' is-invalid' : ''}`} ref='materialInput'>
@@ -129,57 +169,40 @@ class AutocompleteTextEdit extends Component {
     }
 }
 
-AutocompleteTextEdit.displayName = 'AutocompleteTextEdit';
-AutocompleteTextEdit.defaultProps = {
-    placeholder: 'Search here...',
-    showAtFocus: false,
-    emptyShowAll: false,
-    inputTimeout: 200
-};
-AutocompleteTextEdit.propTypes = {
-    emptyShowAll: PropTypes.bool, //Defines if it shows suggestions on focus when the input is empty.
-    inputTimeout : PropTypes.number.isRequired, //Timeout to execute the debounce function.
-    error: PropTypes.string, //Error showed message.
-    onChange: PropTypes.func, //Launches the querySearcher.
-    placeholder: PropTypes.string, //Placeholder field.
-    querySearcher: PropTypes.func.isRequired, //Returns a promise which is connected to the web service.
-    rawInputValue: PropTypes.string, //Field value.
-    showAtFocus: PropTypes.bool //Defines it shows suggestions on focus.
-};
 export default AutocompleteTextEdit;
 
 
 /*
 EXAMPLE
 const _querySearcher = query => {
-let data = [
-{
-key: 'JL',
-label: 'Joh Lickeur'
-},
-{
-key: 'GK',
-label: 'Guénolé Kikabou'
-},
-{
-key: 'YL',
-label: 'Yannick Lounivis'
-}
-];
-return new Promise((resolve, reject) => {
-setTimeout(() => {
-resolve({
-data,
-totalCount: data.length
-});
-}, 500);
-});
+    let data = [
+        {
+            key: 'JL',
+            label: 'Joh Lickeur'
+        },
+        {
+            key: 'GK',
+            label: 'Guénolé Kikabou'
+        },
+        {
+            key: 'YL',
+            label: 'Yannick Lounivis'
+        }
+    ];
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve({
+                data,
+                totalCount: data.length
+            });
+        }, 500);
+    });
 };
 
 <AutocompleteText
-isEdit={isEdit}
-querySearcher={_querySearcher}
-placeholder={'Your search...'}
-error{Something wrong happend. Retry please...}
+    isEdit={isEdit}
+    querySearcher={_querySearcher}
+    placeholder={'Your search...'}
+    error{Something wrong happend. Retry please...}
 />
 */

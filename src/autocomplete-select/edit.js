@@ -12,16 +12,37 @@ const TAB_KEY_CODE = 27;
 const UP_ARROW_KEY_CODE = 38;
 const DOWN_ARROW_KEY_CODE = 40;
 
+const propTypes = {
+    customError: PropTypes.string,
+    inputTimeout: PropTypes.number.isRequired,
+    keyName: PropTypes.string.isRequired,
+    keyResolver: PropTypes.func.isRequired,
+    labelName: PropTypes.string.isRequired,
+    onBadInput: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
+    placeholder: PropTypes.string,
+    querySearcher: PropTypes.func.isRequired,
+    renderOptions: PropTypes.func,
+    value: PropTypes.string
+};
+
+const defaultProps = {
+    keyName: 'key',
+    labelName: 'label',
+    inputTimeout: 200
+};
+
 @MDBehaviour('inputText')
 class Autocomplete extends Component {
     constructor(props) {
         super(props);
         const state = {
             focus: false,
-            inputValue: this.props.rawInputValue,
+            inputValue: this.props.value,
             options: new Map(),
             active: null,
-            selected: this.props.rawInputValue,
+            suggestions:[],
+            selected: this.props.value,
             fromKeyResolver: false,
             isLoading: false,
             customError: this.props.customError,
@@ -32,9 +53,9 @@ class Autocomplete extends Component {
     };
 
     componentDidMount() {
-        const {rawInputValue, keyResolver, inputTimeout} = this.props;
-        if (rawInputValue !== undefined && rawInputValue !== null) { // rawInputValue is defined, call the keyResolver to get the associated label
-            keyResolver(rawInputValue).then(inputValue => {
+        const {value, keyResolver, inputTimeout} = this.props;
+        if (value !== undefined && value !== null) { // value is defined, call the keyResolver to get the associated label
+            keyResolver(value).then(inputValue => {
                 this.setState({inputValue, fromKeyResolver: true});
             }).catch(error => this.setState({customError: error.message}));
         }
@@ -42,10 +63,10 @@ class Autocomplete extends Component {
         this._debouncedQuerySearcher = debounce(this._querySearcher, inputTimeout);
     };
 
-    componentWillReceiveProps({rawInputValue, customError, error}) {
+    componentWillReceiveProps({value, customError, error}) {
         const {keyResolver} = this.props;
-        if (rawInputValue !== this.props.rawInputValue && rawInputValue !== undefined && rawInputValue !== null) { // rawInputValue is defined, call the keyResolver to get the associated label
-            this.setState({inputValue: rawInputValue, customError}, () => keyResolver(rawInputValue).then(inputValue => {
+        if (value !== this.props.value && value !== undefined && value !== null) { // value is defined, call the keyResolver to get the associated label
+            this.setState({inputValue: value, customError}, () => keyResolver(value).then(inputValue => {
                 this.setState({inputValue, fromKeyResolver: true});
             }).catch(error => this.setState({customError: error.message})));
         } else if (customError !== this.props.customError) {
@@ -69,13 +90,13 @@ class Autocomplete extends Component {
     };
 
     getValue() {
-        const {labelName, keyName, rawInputValue} = this.props;
+        const {labelName, keyName, value} = this.props;
         const {inputValue, selected, options, fromKeyResolver} = this.state;
         const resolvedLabel = options.get(selected);
         if (inputValue === '') { // The user cleared the field, return a null
             return null;
         } else if (fromKeyResolver) { // Value was received from the keyResolver, give it firectly
-            return rawInputValue;
+            return value;
         } else if (resolvedLabel !== inputValue && selected !== inputValue) { // The user typed something without selecting any option, return a null
             return null;
         } else { // The user selected an option (or no value was provided), return it
@@ -117,7 +138,7 @@ class Autocomplete extends Component {
             data.forEach(item => {
                 options.set(item[keyName], item[labelName]);
             });
-            this.setState({options, isLoading: false, totalCount});
+            this.setState({options, isLoading: false, totalCount, suggestions: data});
         }).catch(error => this.setState({customError: error.message}));
     };
 
@@ -129,6 +150,11 @@ class Autocomplete extends Component {
         this.setState({active: '', focus: true});
     };
 
+    _handleQueryBlur = () => {
+      if(this.state.suggestions.length === 1){
+        this.setState({inputValue: this.state.suggestions[0].label})
+      }
+    };
     _handleQueryKeyDown = (event) => {
         event.stopPropagation();
         const {which} = event;
@@ -193,7 +219,7 @@ class Autocomplete extends Component {
     render () {
         const {customError, inputTimeout, keyName, keyResolver, labelName, placeholder, querySearcher, renderOptions, ...inputProps} = this.props;
         const {inputValue, isLoading} = this.state;
-        const {_handleQueryFocus, _handleQueryKeyDown, _handleQueryChange} = this;
+        const {_handleQueryFocus, _handleQueryKeyDown, _handleQueryChange,_handleQueryBlur} = this;
         return (
             <div data-focus='autocomplete' data-id={this.autocompleteId}>
                 <div className={`mdl-textfield mdl-js-textfield${customError ? ' is-invalid' : ''}`} data-focus='input-text' ref='inputText'>
@@ -203,6 +229,7 @@ class Autocomplete extends Component {
                         {...inputProps}
                         onChange={_handleQueryChange}
                         onFocus={_handleQueryFocus}
+                        onBlur={_handleQueryBlur}
                         onKeyDown={_handleQueryKeyDown}
                         ref='htmlInput'
                         type='text'
@@ -218,22 +245,7 @@ class Autocomplete extends Component {
 }
 
 Autocomplete.displayName = 'Autocomplete';
-Autocomplete.propTypes = {
-    customError: PropTypes.string,
-    inputTimeout: PropTypes.number.isRequired,
-    keyName: PropTypes.string.isRequired,
-    keyResolver: PropTypes.func.isRequired,
-    labelName: PropTypes.string.isRequired,
-    onBadInput: PropTypes.func,
-    onChange: PropTypes.func.isRequired,
-    placeholder: PropTypes.string,
-    querySearcher: PropTypes.func.isRequired,
-    renderOptions: PropTypes.func,
-    rawInputValue: PropTypes.string
-};
-Autocomplete.defaultProps = {
-    keyName: 'key',
-    labelName: 'label',
-    inputTimeout: 200
-};
+Autocomplete.defaultProps = defaultProps;
+Autocomplete.propTypes = propTypes;
+
 export default Autocomplete;

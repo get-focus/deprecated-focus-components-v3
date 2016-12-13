@@ -122,7 +122,7 @@ class Autocomplete extends Component {
             data.forEach(item => {
                 options.set(item[keyName], item[labelName]);
             });
-            this.setState({options, isLoading: false, totalCount});
+            this.setState({options, isLoading: false, totalCount, suggestions: data});
         }).catch(error => this.setState({customError: error.message}));
     };
 

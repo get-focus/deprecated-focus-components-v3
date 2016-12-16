@@ -23,6 +23,7 @@ class Autocomplete extends Component {
             active: null,
             selected: this.props.rawInputValue,
             fromKeyResolver: false,
+            suggestions: [],
             isLoading: false,
             customError: this.props.customError,
             totalCount: 0
@@ -97,7 +98,11 @@ class Autocomplete extends Component {
             }
         }
     };
-
+    _handleQueryBlur = () => {
+        if(this.state.suggestions.length === 1){
+          this.setState({inputValue: this.state.suggestions[0].label})
+        }
+    };
     _handleQueryChange = ({target: {value}}) => {
         if (value === '') { // the user cleared the input, don't call the querySearcher
             const {onChange} = this.props;
@@ -117,7 +122,7 @@ class Autocomplete extends Component {
             data.forEach(item => {
                 options.set(item[keyName], item[labelName]);
             });
-            this.setState({options, isLoading: false, totalCount});
+            this.setState({options, isLoading: false, totalCount, suggestions: data});
         }).catch(error => this.setState({customError: error.message}));
     };
 
@@ -193,7 +198,7 @@ class Autocomplete extends Component {
     render () {
         const {customError, inputTimeout, keyName, keyResolver, labelName, placeholder, querySearcher, renderOptions, ...inputProps} = this.props;
         const {inputValue, isLoading} = this.state;
-        const {_handleQueryFocus, _handleQueryKeyDown, _handleQueryChange} = this;
+        const {_handleQueryFocus, _handleQueryKeyDown, _handleQueryChange, _handleQueryBlur} = this;
         return (
             <div data-focus='autocomplete' data-id={this.autocompleteId}>
                 <div className={`mdl-textfield mdl-js-textfield${customError ? ' is-invalid' : ''}`} data-focus='input-text' ref='inputText'>
@@ -203,6 +208,7 @@ class Autocomplete extends Component {
                         {...inputProps}
                         onChange={_handleQueryChange}
                         onFocus={_handleQueryFocus}
+                        onBlur={_handleQueryBlur}
                         onKeyDown={_handleQueryKeyDown}
                         ref='htmlInput'
                         type='text'

@@ -102,6 +102,9 @@ class AutocompleteTextEdit extends Component {
         if(hasSuggestions && !showAtFocus && hasFocus === false) {
             this.setState({hasSuggestions: false});
         }
+        if(this.state.suggestions.length === 1){
+          this.setState({inputValue: this.state.suggestions[0].label})
+        }
         if(!hasSuggestions && e.target.value.trim() === '' && emptyShowAll && hasFocus === false) {
             // Doing a global search here
             this._querySearcher('');

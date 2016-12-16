@@ -24,7 +24,7 @@ const HeaderActions = ({primary, secondary}) =>  {
         <div data-focus='header-actions'>
             {primary.map((primary) => {
                 if(Array.isArray(primary.action)) {
-                    return <Dropdown button={{icon: primary.icon, label: '', shape: 'fab'}} operationList={primary.action} position={defautDropdownPosition} />
+                    return <Dropdown button={{icon: primary.icon, label: '', shape: 'fab'}} operations={primary.action} position={defautDropdownPosition} />
                 } else {
                     return (
                         <Button key={primary.label} handleOnClick={primary.action} icon={primary.icon} label={primary.label} shape='fab' style={{className: primary.className}} type='button'/>
@@ -45,3 +45,16 @@ HeaderActions.defaultProps = {
     secondary: []
 };
 export default HeaderActions;
+
+//     {
+//         primary: [
+//             {icon: 'edit', label: 'test', shape: 'fab'},
+//             {icon: 'edit', label: 'test', shape: 'fab', action:
+//                 [
+//                     {icon: 'edit', label: 'test', shape: 'fab', action: () => console.log('toto')},
+//                     {icon: 'edit', label: 'test', shape: 'fab', action: () => console.log('toto')}
+//                 ]
+//             },
+//         ],
+//         secondary: [{icon: 'edit', label: 'test', shape: 'fab'},]
+//     },

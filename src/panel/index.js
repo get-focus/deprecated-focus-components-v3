@@ -26,7 +26,7 @@ class Panel extends PureComponent {
         const {blockName, Buttons, buttonsPosition, children, loading, saving, Spinner, title, showHelp, editing, toggleEdit, getUserInput, save} = this.props;
         const shouldDisplayActionsTop = Buttons && includes(['both', 'top'], buttonsPosition);
         const shouldDisplayActionsBottom = Buttons && includes(['both', 'bottom'], buttonsPosition);
-        const displaySpinner = loading || saving;
+        const displaySpinner = Spinner && (loading || saving);
         return (
             <div className='mdl-card mdl-card--border mdl-shadow--4dp' data-spy={this.spyId} data-focus='panel' data-loading={loading} data-saving={saving} data-editing={editing}>
                 {displaySpinner && <Spinner />}

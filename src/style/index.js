@@ -27,6 +27,8 @@ import '../select-mdl/index.scss';
 import '../select/index.scss';
 import '../select-radio/style/select-radio.scss';
 import '../snackbar/index.scss';
+import '../spinner/mdl-progress.scss';
+import '../spinner/pacman.scss';
 
 //STYLE FOLDER
 import '../style/animation.scss';

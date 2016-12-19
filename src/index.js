@@ -41,5 +41,6 @@ import './select-checkbox';
 import './select-mdl';
 import './select-radio';
 import './snackbar';
+import './spinner';
 import './title';
 import './translation';

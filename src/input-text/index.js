@@ -17,9 +17,8 @@ class InputText extends PureComponent {
      * @return {object} - The unformated dom value.
      */
     getValue = () => {
-        const {unformatter} = this.props;
         const domEl = ReactDOM.findDOMNode(this.refs.htmlInput);
-        return unformatter(domEl.value, MODE);
+        return domEl.value;
     };
     componentDidUpdate() {
         const {valid} = this.props;
@@ -35,9 +34,9 @@ class InputText extends PureComponent {
      * @return {object} - The function onChannge from the props, called.
      */
     _handleInputChange = (evt) => {
-        const {unformatter, onChange} = this.props;
+        const {onChange} = this.props;
         const {value} = evt.target;
-        return onChange(unformatter(value, MODE));
+        return onChange(value);
     };
     /**
      * @inheritdoc
@@ -69,7 +68,6 @@ InputText.propTypes = {
     onChange: PropTypes.func.isRequired,
     onKeyPress: PropTypes.func,
     placeholder: PropTypes.string,
-    unformatter: PropTypes.func,
     formatter: PropTypes.func,
     type: PropTypes.string,
     rawInputValue: PropTypes.oneOfType([
@@ -82,7 +80,6 @@ InputText.defaultProps = {
     disabled: false,
     error: 'input.text.error.default',
     formatter: identity,
-    unformatter: identity,
     type: 'text',
     valid: true
 };

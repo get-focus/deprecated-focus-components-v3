@@ -93,7 +93,8 @@ describe('The input text', () => {
             expect(isEditFormatterSpy).to.have.been.calledWith({isEdit: true});
         });
     });
-    describe('when an unformatter is provided', () => {
+    // Tests whith unformatter are skiped due to the fact they are now unused
+    describe.skip('when an unformatter is provided', () => {
         let component, onChange, unFormatterSpy, componentValue;
         const testValue = 'MY_TEST_VALUE';
         const unformatedValue = 'MY_UN_FORMATED_VALUE';

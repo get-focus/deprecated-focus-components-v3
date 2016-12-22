@@ -16,27 +16,27 @@ class InputTextarea extends PureComponent {
     * @return {object} - The unformated dom value.
     */
     getValue = () => {
-        const {unformatter} = this.props;
         const domEl = ReactDOM.findDOMNode(this.refs.htmlInput);
-        return unformatter(domEl.value);
+        return domEl.value;
     };
+
     componentDidUpdate() {
-    const {valid} = this.props;
-    if (valid) {
-        // Make sure that the main div does not hold a is-invalid class when there's no error
-        // MDL keeps the class even if React removes it
-        this.refs.inputTextarea.classList.remove('is-invalid');
+        const {valid} = this.props;
+        if (valid) {
+            // Make sure that the main div does not hold a is-invalid class when there's no error
+            // MDL keeps the class even if React removes it
+            this.refs.inputTextarea.classList.remove('is-invalid');
+        }
     }
-}
     /**
     * Handle the change on the input text, it only propagate the value.
     * @param  {object} evt - The react DOM event.
     * @return {object} - The function onChannge from the props, called.
     */
     _handleInputChange = (evt) => {
-        const {unformatter, onChange} = this.props;
+        const {onChange} = this.props;
         const {value} = evt.target;
-        return onChange(unformatter(value));
+        return onChange(value);
     };
     /**
     * @inheritdoc
@@ -69,7 +69,6 @@ InputTextarea.defaultProps = {
     minLength: 0,
     rows: 6,
     type: 'text',
-    unformatter: identity,
     valid: true
 };
 InputTextarea.propTypes = {
@@ -91,7 +90,6 @@ InputTextarea.propTypes = {
     ]),
     rows: PropTypes.number,
     type: PropTypes.string,
-    unformatter: PropTypes.func,
     valid: PropTypes.bool
 };
 export default InputTextarea;

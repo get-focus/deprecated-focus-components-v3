@@ -25,9 +25,9 @@ class AutocompleteTextEdit extends Component {
     }
 
     componentDidMount() {
-     const {inputTimeout} = this.props;
-     this._debouncedQuerySearcher = debounce(this._querySearcher, inputTimeout);
-   }
+        const {inputTimeout} = this.props;
+        this._debouncedQuerySearcher = debounce(this._querySearcher, inputTimeout);
+    }
 
     // Returns the state's inputValue
     getValue = () =>  {
@@ -102,9 +102,7 @@ class AutocompleteTextEdit extends Component {
         if(hasSuggestions && !showAtFocus && hasFocus === false) {
             this.setState({hasSuggestions: false});
         }
-        if(this.state.suggestions.length === 1){
-          this.setState({inputValue: this.state.suggestions[0].label})
-        }
+        
         if(!hasSuggestions && e.target.value.trim() === '' && emptyShowAll && hasFocus === false) {
             // Doing a global search here
             this._querySearcher('');

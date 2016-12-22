@@ -36,7 +36,9 @@ class Autocomplete extends Component {
         const {rawInputValue, keyResolver, inputTimeout} = this.props;
         if (rawInputValue !== undefined && rawInputValue !== null) { // rawInputValue is defined, call the keyResolver to get the associated label
             keyResolver(rawInputValue).then(inputValue => {
-                this.setState({inputValue, fromKeyResolver: true});
+                if(this.props.rawInputValue !== '') {
+                    this.setState({inputValue, fromKeyResolver: true})
+                }
             }).catch(error => this.setState({customError: error.message}));
         }
         document.addEventListener('click', this._handleDocumentClick);
@@ -212,7 +214,7 @@ class Autocomplete extends Component {
                         onKeyDown={_handleQueryKeyDown}
                         ref='htmlInput'
                         type='text'
-                        value={inputValue}
+                        value={!inputValue ? '' : inputValue}
                     />
                     <label className='mdl-textfield__label'>{i18next.t(placeholder)}</label>
                     <span className='mdl-textfield__error'>{i18next.t(customError)}</span>

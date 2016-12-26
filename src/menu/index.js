@@ -35,18 +35,8 @@ class MenuItem extends Component {
             this.setState({displaySubMenu: !displaySubMenu});
         }
     }
-    setActiveListClassName(route, homePath, pathname) {
-        if(route) {
-            if(route === homePath && pathname !== homePath) {
-                return ''
-            } else if (route === pathname) {
-                return 'activeList';
-            }
-        }
-        return '';
-    }
     render() {
-        const {menu, isActive, onClick, onClose, showLabels, showPanel, homePath, pathname} = this.props;
+        const {menu, isActive, onClick, onClose, showLabels, showPanel} = this.props;
         const {route, label, icon, iconLibrary, subMenus} = menu;
         const {displaySubMenu} = this.state;
         const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), iconLibrary, shape: (showLabels ? null : 'icon')};
@@ -68,8 +58,8 @@ class MenuItem extends Component {
             const {handleOnClick, onClick} = buttonProps;
             buttonProps.handleOnClick = () => {handleOnClick && handleOnClick(); onClick && onClick(); onClose && onClose()};
             return (
-                <li className={this.setActiveListClassName(route, homePath, pathname)}>
-                    {route && <Link to={route} onClick={onClose} onlyActiveOnIndex={homePath === route ? true : false}><Button {...buttonProps} /></Link>}
+                <li>
+                    {route && <Link to={route} onClick={onClose}><Button {...buttonProps} /></Link>}
                     {!route && <Button {...buttonProps} />}
                 </li>
             );
@@ -87,7 +77,7 @@ MenuItem.PropTypes = {
 };
 
 
-const MenuList = ({activeMenuId, menus, offset = 0, onClick, onClose, showLabels, showPanel, homePath, pathname}) => {
+const MenuList = ({activeMenuId, menus, offset = 0, onClick, onClose, showLabels, showPanel}) => {
     const style = {'position': 'relative', 'top': offset };
     return (
         <ul data-focus='menu-items' style={style}>
@@ -96,7 +86,7 @@ const MenuList = ({activeMenuId, menus, offset = 0, onClick, onClose, showLabels
                 const {route, label, icon, subMenus} = menu;
                 const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), shape: (showLabels ? null : 'icon')};
                 return (
-                    <MenuItem key={idx} menu={menu} onClick={(evt) => onClick && onClick(evt, idx)} homePath={homePath} onClose={onClose} isActive={isActive} pathname={pathname} showLabels={showLabels} showPanel={showPanel} />
+                    <MenuItem key={idx} menu={menu} onClick={(evt) => onClick && onClick(evt, idx)} onClose={onClose} isActive={isActive} showLabels={showLabels} showPanel={showPanel} />
                 );
             })}
         </ul>
@@ -162,7 +152,7 @@ class Menu extends Component {
         })
     }
     render() {
-        const { children, handleBrandClick, menus, showLabels, showPanel, homePath, pathname } = this.props;
+        const { children, handleBrandClick, menus, showLabels, showPanel } = this.props;
         const size = showLabels ? 'large' : 'small';
         const {activeMenuId, subMenus, yPosition} = this.state;
         const displayPanel = activeMenuId && subMenus[activeMenuId];
@@ -171,7 +161,7 @@ class Menu extends Component {
             <nav data-focus='menu' data-size={size}>
                 <div>
                     <div data-focus='menu-brand' data-click={!!handleBrandClick} onClick={() => handleBrandClick && handleBrandClick()} />
-                    <MenuList activeMenuId={activeMenuId} menus={menus} onClick={this._onSelectMenu} homePath={homePath} pathname={pathname} showLabels={showLabels} showPanel={showPanel} />
+                    <MenuList activeMenuId={activeMenuId} menus={menus} showLabels={showLabels} showPanel={showPanel} onClick={this._onSelectMenu} />
                     {children}
                     {showPanel && subMenuItems &&
                         <MenuPanel onClose={this._onSubPanelClose}>
@@ -187,8 +177,6 @@ Menu.displayName = 'Menu';
 Menu.propTypes = {
     handleBrandClick: PropTypes.func,
     menus: PropTypes.array.isRequired,
-    homePath: PropTypes.string,
-    pathname: PropTypes.string,
     showPanel: PropTypes.bool,
     showLabels: PropTypes.bool
 };

@@ -69,7 +69,7 @@ class MenuItem extends Component {
             buttonProps.handleOnClick = () => {handleOnClick && handleOnClick(); onClick && onClick(); onClose && onClose()};
             return (
                 <li className={this.setActiveListClassName(route, homePath, pathname)}>
-                    {route && <Link to={route} onClick={onClose} onlyActiveOnIndex={homePath === route ? true : false}><Button {...buttonProps} /></Link>}
+                    {route && <Link to={route} onClick={onClose}><Button {...buttonProps} /></Link>}
                     {!route && <Button {...buttonProps} />}
                 </li>
             );

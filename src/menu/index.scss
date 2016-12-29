@@ -5,6 +5,10 @@ $menu-brand-background-color: #424950;
 $menu-deployed-background-color: rgba(255,255,255,0.2);
 $menu-sub-width: 200px;
 
+.activeList {
+    background: rgba(255,255,255,0.4);
+}
+
 .animate-menu {
     animation-duration: 0.2s;
     animation-fill-mode: both;

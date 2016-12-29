@@ -35,11 +35,11 @@ class MenuItem extends Component {
             this.setState({displaySubMenu: !displaySubMenu});
         }
     }
-    setActiveListClassName(route, homePath, pathname, isActive) {
+    setActiveListClassName(route, homePath, pathname,possibleRoutes, isActive, hasSubMenus) {
         if(route) {
             if((route === homePath && pathname !== homePath )|| !isActive) {
                 return ''
-            } else if (route === pathname) {
+            } else if (pathname=== route || (possibleRoutes && possibleRoutes.indexOf(pathname) !== -1) ) {
                 return 'activeList';
             }
         }
@@ -47,13 +47,13 @@ class MenuItem extends Component {
     }
     render() {
         const {menu, isActive, onClick, onClose, showLabels, showPanel, homePath, pathname} = this.props;
-        const {route, label, icon, iconLibrary, subMenus} = menu;
+        const {route, label, icon, iconLibrary, subMenus, possibleRoutes} = menu;
         const {displaySubMenu} = this.state;
         const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), iconLibrary, shape: (showLabels ? null : 'icon'), onClick};
         const hasSubMenus = subMenus && subMenus.length > 0;
         if(hasSubMenus) {
             return (
-                <li data-deployed={isActive} className={this.setActiveListClassName(route, homePath, pathname, isActive)}>
+                <li data-deployed={isActive} className={this.setActiveListClassName(route, homePath, pathname,possibleRoutes, isActive,hasSubMenus)}>
                     <Button {...buttonProps} onClick={showPanel ? onClick : this._toggleSubMenuVisibility} />
                     {displaySubMenu &&
                         <ul data-focus='menu-sub-items'>
@@ -68,7 +68,7 @@ class MenuItem extends Component {
             const {onClick} = buttonProps;
             buttonProps.handleOnClick = onClick
             return (
-                <li className={this.setActiveListClassName(route, homePath, pathname, isActive)}>
+                <li className={this.setActiveListClassName(route, homePath, pathname,possibleRoutes , isActive, hasSubMenus)}>
                     {route && <Link to={route} onClick={onClose}><Button {...buttonProps} /></Link>}
                     {!route && <Button {...buttonProps} />}
                 </li>

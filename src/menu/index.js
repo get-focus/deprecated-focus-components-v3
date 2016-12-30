@@ -35,11 +35,20 @@ class MenuItem extends Component {
             this.setState({displaySubMenu: !displaySubMenu});
         }
     }
+
+    findPathnameInPossibleRoute(possibleRoutes, pathname){
+      return possibleRoutes.reduce((acc, element) => {
+         if(pathname.indexOf(element) !== -1) {
+            acc = true;
+          }
+          return acc;
+        },false)
+    }
     setActiveListClassName(route, homePath, pathname,possibleRoutes, isActive, hasSubMenus) {
         if(route) {
             if((route === homePath && pathname !== homePath )|| !isActive) {
                 return ''
-            } else if (pathname=== route || (possibleRoutes && possibleRoutes.indexOf(pathname) !== -1) ) {
+            } else if (pathname=== route || (possibleRoutes && this.findPathnameInPossibleRoute(possibleRoutes, pathname)) ) {
                 return 'activeList';
             }
         }

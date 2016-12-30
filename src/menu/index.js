@@ -45,12 +45,14 @@ class MenuItem extends Component {
         },false)
     }
     setActiveListClassName(route, homePath, pathname,possibleRoutes, isActive, hasSubMenus) {
-        if(route) {
+        if(route ) {
             if((route === homePath && pathname !== homePath )|| !isActive) {
                 return ''
             } else if (pathname=== route || (possibleRoutes && this.findPathnameInPossibleRoute(possibleRoutes, pathname)) ) {
                 return 'activeList';
             }
+        }else if (possibleRoutes && this.findPathnameInPossibleRoute(possibleRoutes, pathname)) {
+          return 'activeList';
         }
         return '';
     }

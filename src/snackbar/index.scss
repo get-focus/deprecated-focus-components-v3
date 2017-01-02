@@ -33,3 +33,23 @@ $snackbar-message-center-warning-color: #FFAE00;
     }
     z-index: 1002;
 }
+
+@keyframes slideUp {
+    from {
+        -webkit-transform: translate(-50%, 100%);
+        transform: translate(-50%, 100%);
+        visibility: visible;
+    }
+
+    to {
+        -webkit-transform: translate(-50%, 0%);
+        transform: translate(-50%, 0%);
+    }
+}
+
+.slideUp {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-name: slideUp;
+    animation-name: slideUp;
+}

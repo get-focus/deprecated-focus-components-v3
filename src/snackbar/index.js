@@ -4,7 +4,7 @@ import i18next from 'i18next';
 function Snackbar({actionHandler, actionText, content, deleteMessage, messageId, type}) {
     const ariaProps = { 'aria-hidden': 'true', 'aria-live':'assertive', 'aria-atomic':'true', 'aria-relevant': 'text' };
     return (
-        <div data-focus='snackbar' className='mdl-js-snackbar mdl-snackbar mdl-snackbar--active animated slideInUp' data-message-type={type} data-upgraded='MaterialSnackbar' {...ariaProps}>
+        <div data-focus='snackbar' className='mdl-js-snackbar mdl-snackbar mdl-snackbar--active slideUp' data-message-type={type} data-upgraded='MaterialSnackbar' {...ariaProps}>
             <div className='mdl-snackbar__text'>{i18next.t(content)}</div>
             {actionHandler && actionText &&
                 <button className='mdl-snackbar__action' type='button' onClick={() => { actionHandler(props); deleteMessage({messageId}); }}>

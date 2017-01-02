@@ -64,15 +64,14 @@ $panel-title-color:#36b7b9;
     .actions {
         display: none;
     }
-    [data-focus='panel-actions'] {
-        text-align: center;
-        height: 50px;
-    }
 
-    [data-focus='panel-content'] {
-        &.mdl-card__supporting-text {
-            width: auto;
-            overflow: inherit;
+    .buttons {
+        .panel-save-action {
+
+        }
+
+        .panel-cancel-action {
+            color: #949494;
         }
     }
 

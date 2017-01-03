@@ -49,7 +49,7 @@ class InputTextarea extends PureComponent {
         const inputProps =  { autoFocus, disabled, onBlur, onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange, pattern, size, type, value };
         const mdlClasses = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
         return (
-            <div data-error={!!error} data-focus='input-textarea'>
+            <div data-error={!valid} data-focus='input-textarea'>
                 <div className={mdlClasses} ref='inputTextarea' style={style}>
                     <textarea className='mdl-textfield__input' ref='htmlInput' {...inputProps} />
                     <label className='mdl-textfield__label' htmlFor={name}>{i18next.t(placeholder)}</label>
@@ -78,10 +78,10 @@ InputTextarea.propTypes = {
     minLength: PropTypes.number,
     maxLength: PropTypes.number,
     name: PropTypes.string.isRequired,
-    onBlur: PropTypes.func.isRequired,
+    onBlur: PropTypes.func,
     onChange: PropTypes.func.isRequired,
-    onFocus: PropTypes.func.isRequired,
-    onClick: PropTypes.func.isRequired,
+    onFocus: PropTypes.func,
+    onClick: PropTypes.func,
     onKeyPress: PropTypes.func,
     placeholder: PropTypes.string,
     rawInputValue: PropTypes.oneOfType([

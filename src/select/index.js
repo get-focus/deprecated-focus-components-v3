@@ -47,7 +47,7 @@ class Select extends PureComponent {
     };
 
     /** inheritdoc */
-    _renderOptions({hasUndefined, labelKey, isRequired, rawInputValue, values = [], valueKey, isActiveProperty, unSelectedLabel}) {
+    _renderOptions({hasUndefined, labelKey, isRequired, rawInputValue, values = [], valueKey, isActiveProperty, unSelectedLabel}, defaultValue) {
         const isRequiredAndNoValue = isRequired && (isUndefined(rawInputValue) || isNull(rawInputValue));
         if(hasUndefined || isRequiredAndNoValue) {
             values = union(
@@ -61,7 +61,7 @@ class Select extends PureComponent {
             const optVal = `${val[valueKey]}`;
             const elementValue = val[labelKey];
             const optLabel = isUndefined(elementValue) || isNull(elementValue) ? i18next.t('input.select.noLabel') : elementValue;
-            return (<option key={idx} value={optVal}>{optLabel}</option>);
+            return (<option key={idx} value={optVal} selected={val.isDefaultValue}>{optLabel}</option>);
         });
     }
 
@@ -87,6 +87,7 @@ class Select extends PureComponent {
 Select.displayName = 'Select';
 Select.propTypes = {
     disabled: PropTypes.bool,
+    defaultValue: PropTypes.object,
     error: PropTypes.string,
     hasUndefined: PropTypes.bool,
     isActiveProperty: PropTypes.string,

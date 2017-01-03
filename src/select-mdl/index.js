@@ -29,6 +29,13 @@ function _valueParser(propsValue, rawValue) {
 */
 class Select extends PureComponent {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            defaultValue: this.props.defaultValue
+        }
+    }
+
     componentDidMount() {
         const selectMenu = ReactDOM.findDOMNode(this.refs["selectMenu"]);
         componentHandler.upgradeElement(selectMenu);
@@ -49,7 +56,8 @@ class Select extends PureComponent {
     * @param  {object} evt - The react DOM event.
     * @return {object} - The function onChange from the props, called.
     */
-    _handleSelectChange = (value) => {
+    _handleSelectChange = (val, value) => {
+        this.setState({defaultValue: val});
         const {onChange, valueParser, rawInputValue} = this.props;
         ReactDOM.findDOMNode(this.refs["selectMenu"]).parentNode.classList.remove('is-visible');
         return onChange(valueParser.call(this, rawInputValue, value));
@@ -65,7 +73,7 @@ class Select extends PureComponent {
             const isSelected = optVal === rawInputValue;
             const optLabel = isUndefined(elementValue) || isNull(elementValue) ? i18next.t(unSelectedLabel) : i18next.t(elementValue);
             return (
-                <li key={idx} className='mdl-menu__item' data-selected={isSelected} data-val={optVal} onClick={() => this._handleSelectChange(optVal)}>{optLabel}</li>
+                <li key={idx} className='mdl-menu__item' data-selected={isSelected} data-val={optVal} onClick={() => this._handleSelectChange(val, optVal)}>{optLabel}</li>
             );
         });
     }
@@ -75,13 +83,32 @@ class Select extends PureComponent {
     * @override
     */
     render() {
-        const { autoFocus, error, labelKey, name, placeholder, style, rawInputValue, valueKey, disabled, onChange, size, valid, unSelectedLabel } = this.props;
+        const { autoFocus, error, labelKey, name, placeholder, style, rawInputValue, valueKey, disabled, onChange, size, valid, unSelectedLabel, defaultValue } = this.props;
         const selectProps = { autoFocus, disabled, size };
         const currentValue = find(this.props.values, (o) => o[valueKey] === rawInputValue);
-        const currentLabel = isUndefined(currentValue) || isNull(currentValue) ? i18next.t(unSelectedLabel) : i18next.t(currentValue[labelKey]);
+        let currentLabel, currentDataVal;
+
+        if(defaultValue && (isUndefined(currentValue) || isNull(currentValue))) {
+            currentLabel = i18next.t(this.state.defaultValue[labelKey]);
+            currentDataVal = this.state.defaultValue.code;
+        } else if(!defaultValue && (isUndefined(currentValue) || isNull(currentValue))) {
+            currentLabel = i18next.t(unSelectedLabel);
+            currentDataVal = undefined;
+        } else if(defaultValue && currentValue !== defaultValue) {
+            currentLabel = i18next.t(currentValue[labelKey]);
+            currentDataVal = currentValue.code;
+        } else if(defaultValue && currentValue === defaultValue) {
+            currentLabel = i18next.t(currentValue[labelKey]);
+            currentDataVal = currentValue.code;
+        } else {
+            currentDataVal = 'YOLO';
+            console.log('VALUE', 'YOLOOOOOOO');
+        }
+
+        // const currentLabel = isUndefined(currentValue) || isNull(currentValue) ? i18next.t(currentValue) : isUndefined(currentValue) || isNull(currentValue) ? i18next.t(unSelectedLabel) : i18next.t(currentValue[labelKey]);
         return (
             <div data-focus='select-mdl' ref='select' className='mdl-textfield mdl-js-textfield getmdl-select' data-valid={!error} style={style}>
-                <input placeholder={placeholder} className='mdl-textfield__input' value={currentLabel} type='text' id={name} name={name} readOnly tabIndex='-1' data-val={rawInputValue} ref='htmlSelect' {...selectProps} />
+                <input placeholder={placeholder} className='mdl-textfield__input' value={currentLabel} type='text' id={name} name={name} readOnly tabIndex='-1' data-val={currentDataVal} ref='htmlSelect' {...selectProps} />
                 {!disabled &&
                     <label htmlFor={name}>
                         <i className='mdl-icon-toggle__label material-icons'>keyboard_arrow_down</i>
@@ -114,6 +141,7 @@ Select.defaultProps = {
     valueParser: _valueParser
 };
 Select.propTypes = {
+    defaultValue: PropTypes.object,
     disabled: PropTypes.bool,
     error: PropTypes.string,
     hasUndefined: PropTypes.bool,

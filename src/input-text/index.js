@@ -43,10 +43,11 @@ class InputText extends PureComponent {
      * @override
     */
     render() {
-        const { autoFocus, disabled, formatter, maxLength, onFocus, onClick, onKeyDown, onKeyPress, error, valid, name, placeholder, onBlur,  style, rawInputValue, size, type} = this.props;
+        const { autoFocus, disabled, formatter, maxLength, onFocus, onClick, onKeyDown, metadata : {validator}, onKeyPress, error, valid, name, metadata, placeholder, onBlur,  style, rawInputValue, size, type} = this.props;
         const value = !rawInputValue ? '' : formatter(rawInputValue, MODE); //TODO : what about formattedInputValue ?
         const pattern = valid ? null : 'hasError'; //add pattern to overide mdl error style when displaying an focus error.
-        const inputProps =  { autoFocus, disabled, onBlur, onKeyDown,onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange, pattern, size, type, value, placeholder };
+        const {options: validatorsOptions} = validator || {};
+        const inputProps =  { autoFocus, disabled, onBlur, onKeyDown,onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange,placeholder, pattern, size, type, value,...validatorsOptions };
         const cssClass = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
         return (
             <div className={cssClass} data-focus='input-text' ref='inputText' style={style}>
@@ -67,6 +68,7 @@ InputText.propTypes = {
     onBlur: PropTypes.func,
     onChange: PropTypes.func.isRequired,
     onKeyPress: PropTypes.func,
+    metadata: PropTypes.object,
     placeholder: PropTypes.string,
     formatter: PropTypes.func,
     type: PropTypes.string,
@@ -78,6 +80,7 @@ InputText.propTypes = {
 };
 InputText.defaultProps = {
     disabled: false,
+    metadata: {},
     error: 'input.text.error.default',
     formatter: identity,
     type: 'text',

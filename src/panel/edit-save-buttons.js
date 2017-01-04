@@ -3,8 +3,12 @@ import Button from '../button';
 
 const renderEditingButtons = (toggleEdit, getUserInput, save) => (
     <span>
-        <Button icon='save' label='button.save' onClick={() => save(getUserInput())} shape={null} type='button' />
-        <Button icon='undo' label='button.cancel' onClick={() => toggleEdit(false)} shape={null} type='button' />
+        <div data-focus='panel-save-action'>
+            <Button icon='save' label='button.save' onClick={() => save(getUserInput())} shape={null} type='button' />
+        </div>
+        <div data-focus='panel-cancel-action'>
+            <Button icon='undo' label='button.cancel' onClick={() => toggleEdit(false)} shape={null} type='button' />
+        </div>
     </span>
 );
 

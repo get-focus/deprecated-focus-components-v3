@@ -35,25 +35,36 @@ class MenuItem extends Component {
             this.setState({displaySubMenu: !displaySubMenu});
         }
     }
-    setActiveListClassName(route, homePath, pathname) {
-        if(route) {
-            if(route === homePath && pathname !== homePath) {
+
+    findPathnameInPossibleRoute(possibleRoutes, pathname){
+      return possibleRoutes.reduce((acc, element) => {
+         if(pathname.indexOf(element) !== -1) {
+            acc = true;
+          }
+          return acc;
+        },false)
+    }
+    setActiveListClassName(route, homePath, pathname,possibleRoutes, isActive, hasSubMenus) {
+        if(route ) {
+            if((route === homePath && pathname !== homePath )|| !isActive) {
                 return ''
-            } else if (route === pathname) {
+            } else if (pathname=== route || (possibleRoutes && this.findPathnameInPossibleRoute(possibleRoutes, pathname)) ) {
                 return 'activeList';
             }
+        }else if (possibleRoutes && this.findPathnameInPossibleRoute(possibleRoutes, pathname)) {
+          return 'activeList';
         }
         return '';
     }
     render() {
         const {menu, isActive, onClick, onClose, showLabels, showPanel, homePath, pathname} = this.props;
-        const {route, label, icon, iconLibrary, subMenus} = menu;
+        const {route, label, icon, iconLibrary, subMenus, possibleRoutes} = menu;
         const {displaySubMenu} = this.state;
-        const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), iconLibrary, shape: (showLabels ? null : 'icon')};
+        const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), iconLibrary, shape: (showLabels ? null : 'icon'), onClick};
         const hasSubMenus = subMenus && subMenus.length > 0;
         if(hasSubMenus) {
             return (
-                <li data-deployed={isActive}>
+                <li data-deployed={isActive} className={this.setActiveListClassName(route, homePath, pathname,possibleRoutes, isActive,hasSubMenus)}>
                     <Button {...buttonProps} onClick={showPanel ? onClick : this._toggleSubMenuVisibility} />
                     {displaySubMenu &&
                         <ul data-focus='menu-sub-items'>
@@ -65,10 +76,10 @@ class MenuItem extends Component {
                 </li>
             );
         } else {
-            const {handleOnClick, onClick} = buttonProps;
-            buttonProps.handleOnClick = () => {handleOnClick && handleOnClick(); onClick && onClick(); onClose && onClose()};
+            const {onClick} = buttonProps;
+            buttonProps.handleOnClick = onClick
             return (
-                <li className={this.setActiveListClassName(route, homePath, pathname)}>
+                <li className={this.setActiveListClassName(route, homePath, pathname,possibleRoutes , isActive, hasSubMenus)}>
                     {route && <Link to={route} onClick={onClose}><Button {...buttonProps} /></Link>}
                     {!route && <Button {...buttonProps} />}
                 </li>
@@ -92,7 +103,7 @@ const MenuList = ({activeMenuId, menus, offset = 0, onClick, onClose, showLabels
     return (
         <ul data-focus='menu-items' style={style}>
             {menus.map((menu, idx) => {
-                const isActive = activeMenuId && activeMenuId === idx;
+                const isActive = activeMenuId ? activeMenuId === idx : -1;
                 const {route, label, icon, subMenus} = menu;
                 const buttonProps = {...defaultButtonProps, label, icon: (!showLabels && icon === undefined ? 'link' : icon), shape: (showLabels ? null : 'icon')};
                 return (

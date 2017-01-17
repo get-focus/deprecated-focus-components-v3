@@ -214,7 +214,7 @@ class Autocomplete extends Component {
                         onKeyDown={_handleQueryKeyDown}
                         ref='htmlInput'
                         type='text'
-                        value={!inputValue ? '' : inputValue}
+                        value={inputValue === undefined || inputValue === null ? '' : inputValue}
                     />
                     <label className='mdl-textfield__label'>{i18next.t(placeholder)}</label>
                     <span className='mdl-textfield__error'>{i18next.t(customError)}</span>

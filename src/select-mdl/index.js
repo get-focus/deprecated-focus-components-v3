@@ -29,12 +29,6 @@ function _valueParser(propsValue, rawValue) {
 */
 class Select extends PureComponent {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            defaultValue: this.props.defaultValue
-        }
-    }
 
     componentDidMount() {
         const selectMenu = ReactDOM.findDOMNode(this.refs["selectMenu"]);
@@ -57,7 +51,6 @@ class Select extends PureComponent {
     * @return {object} - The function onChange from the props, called.
     */
     _handleSelectChange = (val, value) => {
-        this.setState({defaultValue: val});
         const {onChange, valueParser, rawInputValue} = this.props;
         ReactDOM.findDOMNode(this.refs["selectMenu"]).parentNode.classList.remove('is-visible');
         return onChange(valueParser.call(this, rawInputValue, value));
@@ -89,8 +82,8 @@ class Select extends PureComponent {
         let currentLabel, currentDataVal;
 
         if(defaultValue && (isUndefined(currentValue) || isNull(currentValue))) {
-            currentLabel = i18next.t(this.state.defaultValue[labelKey]);
-            currentDataVal = this.state.defaultValue.code;
+            currentLabel = i18next.t(defaultValue[labelKey]);
+            currentDataVal = defaultValue.code;
         } else if(!defaultValue && (isUndefined(currentValue) || isNull(currentValue))) {
             currentLabel = i18next.t(unSelectedLabel);
             currentDataVal = undefined;

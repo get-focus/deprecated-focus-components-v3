@@ -60,7 +60,7 @@ class Select extends PureComponent {
         .map((val, idx) => {
             const optVal = `${val[valueKey]}`;
             const elementValue = val[labelKey];
-            const optLabel = isUndefined(elementValue) || isNull(elementValue) ? i18next.t('input.select.noLabel') : elementValue;
+            const optLabel = isUndefined(elementValue) || isNull(elementValue) ? i18next.t('focus.components.input.select.noLabel') : elementValue;
             return (<option key={idx} value={optVal} selected={val.isDefaultValue}>{optLabel}</option>);
         });
     }
@@ -108,7 +108,7 @@ Select.propTypes = {
 };
 Select.defaultProps = {
     disabled: false,
-    error: 'input.select.error.default',
+    error: 'focus.components.input.select.error.default',
     hasUndefined: true,
     isActiveProperty: 'isActive',
     isRequired: false,

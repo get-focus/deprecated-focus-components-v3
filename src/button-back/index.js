@@ -7,7 +7,7 @@ function ButtonBack({back}) {
         <Button
             handleOnClick={back}
             icon='keyboard_backspace'
-            label='button.back'
+            label='focus.components.button.back'
             shape={null}
             type='button'
         />

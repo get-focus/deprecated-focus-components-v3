@@ -55,10 +55,15 @@ class ConfirmationModal extends Component {
         return (
             <div data-focus='confirmation-modal'>
                 <Modal onModalClose={this._handleModalClose} open={this.props.open} ref='modal'>
-                    {this.props.children}
-                    <div data-focus='button-stack'>
+                    <div data-focus='confirmation-modal--title'>
+                        <h1>{i18next.t('focus.components.modal.confirmation.title')}</h1>
+                    </div>
+                    <div data-focus='confirmation-modal--content'>
+                        {this.props.children}
+                    </div>
+                    <div data-focus='confirmation-modal--actions'>
                         <Button handleOnClick={this._handleCancel} label={i18next.t(this.props.cancelButtonLabel)} />
-                        <Button handleOnClick={this._handleConfirm} label={i18next.t(this.props.confirmButtonLabel)} option='primary' />
+                        <Button handleOnClick={this._handleConfirm} label={i18next.t(this.props.confirmButtonLabel)} color='primary' />
                     </div>
                 </Modal>
             </div>
@@ -75,7 +80,7 @@ ConfirmationModal.propTypes = {
 };
 ConfirmationModal.defaultProps = {
     open: false,
-    cancelButtonLabel: 'modal.confirmation.cancel',
-    confirmButtonLabel: 'modal.confirmation.confirm'
+    cancelButtonLabel: 'focus.components.modal.confirmation.cancel',
+    confirmButtonLabel: 'focus.components.modal.confirmation.confirm'
 };
 export default ConfirmationModal;

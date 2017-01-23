@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 import includes from 'lodash/includes';
+import i18next from 'i18next';
 
 /**
 * Small overlay component used to listen to scroll and prevent it to leave the Modal component
@@ -39,8 +40,9 @@ class ModalOverlay extends Component {
     */
     render() {
         const {children, clickHandler, show} = this.props;
+        const otherProps = clickHandler ? { onClick: clickHandler } : {};
         return (
-            <div className='animated fadeIn' data-animation='fadeIn' data-closing-animation='fadeOut' data-focus='modal-overlay' data-visible={show} onClick={clickHandler} ref='overlay'>
+            <div className='animated fadeIn' data-animation='fadeIn' data-closing-animation='fadeOut' data-focus='modal-overlay' data-visible={show} ref='overlay' {...otherProps}>
                 {children}
             </div>
         );
@@ -67,7 +69,7 @@ class Modal extends Component {
         this._onWheel = this._onWheel.bind(this);
         this.toggleOpen = this.toggleOpen.bind(this);
         this._getAnimationProps = this._getAnimationProps.bind(this);
-
+        this._closePopin = this._closePopin.bind(this);
         this.state = {
             opened: this.props.open
         };
@@ -85,13 +87,8 @@ class Modal extends Component {
         ReactDOM.findDOMNode(this.refs['modal-window']).scrollTop += 0 < event.deltaY ? 100 : -100;
     };
 
-    /**
-    * Toggle the modal's open state
-    */
-    toggleOpen() {
+    _closePopin() {
         let timeout = 0;
-        const {opened} = this.state;
-        const {onModalClose} = this.props;
         if (opened) {
             const modalWindow = ReactDOM.findDOMNode(this.refs['modal-window']);
             const modalOverlay = ReactDOM.findDOMNode(this.refs['modal-overlay']);
@@ -101,6 +98,8 @@ class Modal extends Component {
             modalOverlay.classList.add(modalOverlay.getAttribute('data-closing-animation'));
             timeout = 200;
         }
+        const {opened} = this.state;
+        const {onModalClose} = this.props;
         if (opened && onModalClose) {
             onModalClose();
         }
@@ -122,6 +121,24 @@ class Modal extends Component {
                 }
             });
         }, timeout);
+    }
+
+    /**
+    * Toggle the modal's open state
+    */
+    toggleOpen() {
+        const {opened} = this.state;
+        const {ConfirmContentComponent, confirmFunction} = this.props;
+        if(opened && confirmFunction) {
+            confirmFunction(
+                ConfirmContentComponent,
+                {
+                    resolve: this._closePopin
+                }
+            );
+        } else {
+            this._closePopin();
+        }
     };
 
     /**
@@ -134,7 +151,7 @@ class Modal extends Component {
         return (
             <div data-focus='modal' data-level={level} data-size={size} data-type={type} >
                 {this.state.opened &&
-                    <ModalOverlay clickHandler={modal && this.toggleOpen} ref='modal-overlay' resize={'full' === type} show={overlay}>
+                    <ModalOverlay clickHandler={!modal && this.toggleOpen} ref='modal-overlay' resize={'full' === type} show={overlay}>
                         <div {...animationProps} data-focus='modal-window' onClick={this._preventModalClose} ref='modal-window'>
                             <i className='material-icons' data-focus='modal-window-close' onClick={this.toggleOpen}>close</i>
                             <div onWheel={this._onWheel}>
@@ -188,19 +205,23 @@ class Modal extends Component {
 
 Modal.displayName = 'Modal';
 Modal.defaultProps = {
-    modal: true,
-    size: 'medium',
-    type: 'full',
+    ConfirmContentComponent: () => <span>{i18next.t('focus.components.modal.confirmation.text')}</span>,
     level: 0,
+    modal: false,
+    open: false,
     overlay: true,
-    open: false
+    size: 'medium',
+    type: 'full'
 };
 Modal.propTypes = {
-    modal: PropTypes.bool.isRequired,
-    size: PropTypes.oneOf(['small', 'medium', 'large']).isRequired,
-    type: PropTypes.string.isRequired,
+    confirmFunction: PropTypes.func,
+    ConfirmContentComponent: PropTypes.func,
     level: PropTypes.number.isRequired,
+    modal: PropTypes.bool.isRequired,
+    onModalClose: PropTypes.func,
+    open: PropTypes.bool.isRequired,
     overlay: PropTypes.bool.isRequired,
-    open: PropTypes.bool.isRequired
+    size: PropTypes.oneOf(['small', 'medium', 'large']).isRequired,
+    type: PropTypes.string.isRequired
 };
 export default Modal;

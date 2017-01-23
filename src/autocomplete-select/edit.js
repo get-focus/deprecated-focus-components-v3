@@ -109,7 +109,7 @@ class Autocomplete extends Component {
         if (value === '') { // the user cleared the input, don't call the querySearcher
             const {onChange} = this.props;
             this.setState({inputValue: value, fromKeyResolver: false});
-            if (onChange) onChange(null);
+            if (onChange) onChange.call(this);
         } else {
             this.setState({inputValue: value, fromKeyResolver: false, isLoading: true});
             this._debouncedQuerySearcher(value);

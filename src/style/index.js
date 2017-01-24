@@ -33,3 +33,6 @@ import '../spinner/pacman.scss';
 //STYLE FOLDER
 import '../style/animation.scss';
 import '../style/spinner.scss';
+
+
+//style react storybook

@@ -1,0 +1,58 @@
+body {
+  height: 100%;
+  min-height: 100%;
+}
+div#root {
+  height: 100%;
+  min-height: 100%;
+}
+[data-focus='documentation']{
+  [data-focus='documentation-input']{
+    display: flex;
+    flex-direction: column;
+  }
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;;
+  height: 100%;
+  & > div {
+    font-size: 25px;
+    padding: 10px;
+    margin: 5px;
+  }
+  [data-focus='documentation-props']{
+    flex-grow: 1;
+    background-color: rgba(0,0,0,0.14);
+
+    [data-focus='documentation-props-title']{
+    }
+    [data-focus='documentation-props-content']{
+      [data-focus='documentation-label']{
+        min-width: 70px;
+      }
+      display : flex;
+      font-size: 15px;
+      & > div {
+        margin: 15px;
+      }
+    }
+  }
+  [data-focus='documentation-composant']{
+    flex-grow: 30;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    [data-focus='documentation-composant-title']{
+      flex-grow:1;
+
+    }
+    [data-focus='documentation-composant-content']{
+      font-size: 15px;
+      flex-grow: 150;
+
+      & > div {
+        margin: 15px;
+      }
+    }
+  }
+}

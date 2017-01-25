@@ -82,6 +82,14 @@ SelectRadio.defaultProps = {
     labelKey: 'label',
     disabled: false
 };
+export const defaultTypeSelectRadio = {
+  values: 'arrayWithObject',
+  rawInputValue: 'string',
+  valueKey: 'string',
+  labelKey: 'string',
+  onChange: 'func',
+  disabled: 'bool'
+};
 SelectRadio.propTypes = {
     values: PropTypes.array,
     rawInputValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

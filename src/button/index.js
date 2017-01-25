@@ -33,7 +33,7 @@ const defaultProps = {
     iconLibrary: 'material'
 }
 
-@MDBehaviour('materialButton', 'MaterialButton')
+//@MDBehaviour('materialButton', 'MaterialButton')
 class Button extends Component {
 
     /**
@@ -134,6 +134,9 @@ class Button extends Component {
         );
     }
 }
+
+
+
 
 Button.displayName = 'Button'
 Button.defaultProps = defaultProps;

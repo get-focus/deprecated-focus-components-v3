@@ -4,7 +4,7 @@ import i18next from 'i18next';
 
 function InputDisplayCheckbox({className, name, rawInputValue}) {
     const stringValue = rawInputValue ? 'true' : 'false';
-    return <div data-focus='input-display-checkbox' className={className} id={name} name={name}>{i18next.t(`input.display.checkbox.${stringValue}`)}</div>
+    return <div data-focus='input-display-checkbox' className={className} id={name} name={name}>{i18next.t(`focus.components.input.display.checkbox.${stringValue}`)}</div>
 }
 
 InputDisplayCheckbox.displayName = 'InputDisplayCheckbox';

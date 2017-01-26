@@ -124,12 +124,12 @@ class InputDate extends Component {
         if ('' === inputDate || !inputDate) {
             return ({
                 isValid: !isRequired,
-                message: 'field.required'
+                message: 'focus.components.field.required'
             });
         } else {
             return ({
                 isValid: this._isInputFormatCorrect(inputDate),
-                message: i18next.t('input.date.invalid', {date: inputDate})
+                message: i18next.t('focus.components.input.date.invalid', {date: inputDate})
             });
         }
     };
@@ -178,7 +178,7 @@ InputDate.propTypes =  {
 };
 InputDate.defaultProps =  {
     drops: 'down',
-    error: 'input.date.error.default',
+    error: 'focus.components.input.date.error.default',
     locale: 'en',
     format: 'MM/DD/YYYY',
     beforeValueGetter: value => value,

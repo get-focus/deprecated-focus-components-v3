@@ -1,4 +1,5 @@
 import map from 'lodash/map'
+import reduce from 'lodash/reduce'
 import React, {Component, PropTypes} from 'react';
 import isArray from 'lodash/isArray'
 import isString from 'lodash/isString'
@@ -7,11 +8,28 @@ import  InputText from '../input-text';
 import isObject from 'lodash/isObject'
 import SelectRadio from '../select-radio';
 import isFunction from 'lodash/isFunction'
-
+const LiveEditor = require('./LiveEditor');
 import '../src/style/storybook.scss'
+require('brace');
+require('brace/mode/jsx');
+require('brace/theme/github');
+
+// Components
+
+const CodeEditor = require('react-ace');
 
 function ComposantComposant ({Composant, propsComposant }) {
   return <Composant {...propsComposant} />
+}
+
+
+function renderCodeForEditor(list, state, Composant) {
+  const preCode = reduce(Object.keys(list), (acc, element) => {
+    if(state[element] !== undefined && state[element] !== null && state[element] !== "" ) return acc + ` \n \t \t \t \t ${element}={${state[element]}}`
+    else return acc;
+  }, `import React, {Component, PropTypes} from 'react'; \nimport ${Composant.displayName} from 'focus-components/${Composant.displayName}' \n class YourClass extends Component { \n \t render() { \n \t \treturn ( \n \t \t \t<${Composant.displayName}`)
+  const code = preCode + "/> \n \t \t); \n \t} \n}"
+  return code;
 }
 
 ComposantComposant.propTypes = {
@@ -68,15 +86,32 @@ class SurComposantCompose extends Component {
                this.setState({['onChangeFunc'+subElement]: value, ['isOnChangeFunc'+subElement]: false, ['onChangeError'+subElement]: "Votre fonction génère une erreur :"+t})
              }
           }}
-           rawInputValue={this.state.onChangeFunc}
+           rawInputValue={this.state['onChangeFunc'+subElement]}
            />
-           {this.state.isOnChangeFunc && <i className="material-icons">check</i>}
-           <div data-focus='documentation-error'>{this.state.onChangeError && <span style={{color: 'red'}}>{this.state.onChangeError}</span>}</div>
+           {this.state['isOnChangeFunc'+subElement] && <i className="material-icons">check</i>}
+           <div data-focus='documentation-error'>{this.state['onChangeError'+subElement] && <span style={{color: 'red'}}>{this.state['onChangeError'+subElement] }</span>}</div>
+         </div>
+      )
+    }
+    renderObjectComposant(subElement){
+      const test = this.state['onChangeObject'+subElement]  ? this.state['onChangeObject'+subElement] : JSON.stringify(this.state[subElement])
+      return (
+        <div><InputText
+           onChange={(value) => {
+             try{
+               isObject(eval(value))
+               this.setState({[subElement] : (value), ['onChangeObject'+subElement]: value, ['isOnChangeObject'+subElement]: true})
+
+             }catch (ex){
+               this.setState({['onChangeObject'+subElement]: value, ['isOnChangeObject'+subElement]: false})
+             }
+          }}
+           rawInputValue={test !== "" ? test: undefined}
+           />
          </div>
       )
     }
     renderTabWithObject(subElement, defaultType){
-      console.log(this.state.isOnChangeArray)
       return (
         <div><InputText
            onChange={(value) => {
@@ -90,7 +125,7 @@ class SurComposantCompose extends Component {
           }}
            rawInputValue={this.state['onChangeArray'+subElement]}
            />
-           {this.state.isOnChangeArray && <i className="material-icons">check</i>}
+           {this.state['isOnChangeArray'+subElement] && <i className="material-icons">check</i>}
          </div>
       )
     }
@@ -115,13 +150,15 @@ class SurComposantCompose extends Component {
         return this.renderBoolComposant(element)
       }else if(this.props.defaultType[element] === 'func'){
         return this.renderFuncComposant(element)
+      }else if(this.props.defaultType[element] === 'object' || isObject(this.props.defaultType[element])){
+        return this.renderObjectComposant(element)
       }else {
         return this.renderInputComposant(element)
       }
     }
     render() {
         const list = {...this.props.defaultType}
-        console.log(list)
+        const CodeEditorComposant = CodeEditor.default;
         return (
             <div data-focus='documentation'>
               <div data-focus='documentation-props'>
@@ -140,7 +177,7 @@ class SurComposantCompose extends Component {
                 <div data-focus='documentation-composant-title'>Le Composant</div>
                 <div data-focus='documentation-composant-content'>{this.state.isVisible && <div><ComposantComposant propsComposant={this.state} Composant={this.props.Composant}/></div>}</div>
               </div>
-
+              <CodeEditorComposant mode='jsx' theme='github' value={renderCodeForEditor(list, this.state, this.props.Composant)} fontSize={11.5} />
               <div data-focus='documentation-button'><button onClick={() => this.setState({isVisible: !this.state.isVisible})}>Faire revivre</button></div>
             </div>
         );

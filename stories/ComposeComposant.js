@@ -6,29 +6,56 @@ import isString from 'lodash/isString'
 import isBoolean from 'lodash/isBoolean'
 import  InputText from '../input-text';
 import isObject from 'lodash/isObject'
+import capitalize from 'lodash/capitalize'
 import SelectRadio from '../select-radio';
 import isFunction from 'lodash/isFunction'
-const LiveEditor = require('./LiveEditor');
+import LiveEditor from './LiveEditor'
 import '../src/style/storybook.scss'
-require('brace');
-require('brace/mode/jsx');
-require('brace/theme/github');
+import 'brace';
+import 'brace/mode/jsx'
+import 'brace/theme/github'
 
+const verifTabObject = ['array', 'arrayWithObject']
+
+const verifTab = ['func', 'array', 'arrayWithObject']
 // Components
 
-const CodeEditor = require('react-ace');
+import CodeEditorComposant from 'react-ace';
 
 function ComposantComposant ({Composant, propsComposant }) {
   return <Composant {...propsComposant} />
 }
 
+function onChangeEval(isWhatFunction, type, subElement, isFunction = false){
+  return (value) => {
+    try{
+      isWhatFunction(eval(value))
+    }catch(ex){
+      this.setState({['onChange'+type+subElement]: value, ['isOnChange'+type+subElement]: false, ['onChangeError'+type+subElement]: "Pas une fonction"})
+      return;
+    }
+    if(isFunction){
+      try{
+        eval(value)('test')
+        this.setState({[subElement] : eval(value),['onChange'+type+subElement]: value,['onChangeError'+type+subElement]: null, ['isOnChange'+type+subElement]: true})
+      }catch(t){
+        this.setState({['onChange'+type+subElement]: value, ['isOnChange'+type+subElement]: false, ['onChangeError'+type+subElement]: "Votre fonction génère une erreur :"+t})
+      }
+    }
+  }
+}
 
-function renderCodeForEditor(list, state, Composant) {
+function renderCodeForEditor(list, state, Composant, defaultType) {
   const preCode = reduce(Object.keys(list), (acc, element) => {
-    if(state[element] !== undefined && state[element] !== null && state[element] !== "" ) return acc + ` \n \t \t \t \t ${element}={${state[element]}}`
+    if(state[element] !== undefined && state[element] !== null && state[element] !== "" ){
+      if(verifTabObject.indexOf(defaultType[element]) !== -1) {
+        return acc + ` \n \t \t \t \t ${element}={${JSON.stringify(state[element])}}`
+      }
+      return acc + ` \n \t \t \t \t ${element}={${state[element]}}`
+    }
     else return acc;
-  }, `import React, {Component, PropTypes} from 'react'; \nimport ${Composant.displayName} from 'focus-components/${Composant.displayName}' \n class YourClass extends Component { \n \t render() { \n \t \treturn ( \n \t \t \t<${Composant.displayName}`)
-  const code = preCode + "/> \n \t \t); \n \t} \n}"
+  }, `import React, {Component, PropTypes} from 'react';  \nimport ${Composant.displayName} from 'focus-components/${Composant.displayName}' \n class YourClass extends Component { \n \t render() { \n \t \treturn ( \n \t \t \t<${Composant.displayName}`)
+  const code = preCode + "\n \t \t \t/> \n \t \t); \n \t} \n}"
   return code;
 }
 
@@ -42,17 +69,45 @@ ComposantComposant.propTypes = {
 import i18next from 'i18next';
 import Modal from '../modal';
 import Button from '../button';
-
-
+import omitBy from 'lodash/omitBy'
+//false
 class SurComposantCompose extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isVisible: true,
+            isEditChange: false,
             ...props.Composant.defaultProps
         };
+        onChangeEval = onChangeEval.bind(this);
+        this.onChange = this.onChange.bind(this);
     };
+    onChange(element){
+      const tab = element.slice(element.indexOf('<'), element.indexOf('/>'))
+      const newNewTab = tab.split('\n').map(el => el.trim())
+      newNewTab.slice(0,1).slice(newNewTab.length -1, 1)
+      const nexNewNewTab = newNewTab.reduce((acc, elm) => {if(elm && elm.indexOf('=') !== -1) {acc.push(elm);} return acc}, [])//omitBy(newNewTab, element => element.indexOf('=') === -1 )
+      nexNewNewTab.map(element => {
+        const stateName = element.slice(0, element.indexOf('='))
+        const preElementOfState = element.slice(0-(element.length - element.indexOf('=') -1)).trim().slice(0-(element.length - element.indexOf('{') -1))
+        const elementOfState = preElementOfState.slice(0,preElementOfState.lastIndexOf('}'))
+        console.log('stateName',stateName)
+        console.log('elementOfState',elementOfState)
 
+        try {
+          const evalElementOfState = eval(elementOfState)
+          console.log('onChange'+capitalize(this.props.defaultType[stateName])+stateName)
+          if(verifTab.indexOf(this.props.defaultType[stateName]) !== -1 ){
+            this.setState({[stateName] : elementOfState === "" ? " " : elementOfState, ['onChange'+capitalize(this.props.defaultType[stateName])+stateName] : evalElementOfState})
+          }else {
+            this.setState({[stateName] : evalElementOfState === "" ? " " : evalElementOfState})
+
+          }
+        }catch(t) {
+          this.setState({[stateName] : elementOfState === "" ? " " : elementOfState, ['onChangeFunc'+stateName] : elementOfState})
+        }
+      })
+    };
     renderInputComposant(subElement) {
       return (
         <InputText
@@ -70,26 +125,16 @@ class SurComposantCompose extends Component {
       )
     }
     renderFuncComposant(subElement){
+      const onChangeErrorFunc = this.state['onChangeErrorFunc'+subElement];
+      const isOnChangeFunc = this.state['isOnChangeFunc'+subElement];
+      const onChangeValue = this.state['onChangeFunc'+subElement];
       return (
         <div data-focus='documentation-input'><InputText
-           onChange={(value) => {
-             try{
-               isFunction(eval(value))
-             }catch (ex){
-               this.setState({['onChangeFunc'+subElement]: value, ['isOnChangeFunc'+subElement]: false, ['onChangeError'+subElement]: "Pas une fonction"})
-               return;
-             }
-             try{
-               eval(value)('test')
-               this.setState({[subElement] : eval(value),['onChangeFunc'+subElement]: value,['onChangeError'+subElement]: null, ['isOnChangeFunc'+subElement]: true})
-             }catch (t) {
-               this.setState({['onChangeFunc'+subElement]: value, ['isOnChangeFunc'+subElement]: false, ['onChangeError'+subElement]: "Votre fonction génère une erreur :"+t})
-             }
-          }}
-           rawInputValue={this.state['onChangeFunc'+subElement]}
+           onChange={onChangeEval(isFunction, 'Func', subElement, true)}
+           rawInputValue={onChangeValue}
            />
-           {this.state['isOnChangeFunc'+subElement] && <i className="material-icons">check</i>}
-           <div data-focus='documentation-error'>{this.state['onChangeError'+subElement] && <span style={{color: 'red'}}>{this.state['onChangeError'+subElement] }</span>}</div>
+           { isOnChangeFunc && <i className="material-icons">check</i>}
+           <div data-focus='documentation-error'>{ onChangeErrorFunc && <span style={{color: 'red'}}>{onChangeErrorFunc}</span>}</div>
          </div>
       )
     }
@@ -97,15 +142,7 @@ class SurComposantCompose extends Component {
       const test = this.state['onChangeObject'+subElement]  ? this.state['onChangeObject'+subElement] : JSON.stringify(this.state[subElement])
       return (
         <div><InputText
-           onChange={(value) => {
-             try{
-               isObject(eval(value))
-               this.setState({[subElement] : (value), ['onChangeObject'+subElement]: value, ['isOnChangeObject'+subElement]: true})
-
-             }catch (ex){
-               this.setState({['onChangeObject'+subElement]: value, ['isOnChangeObject'+subElement]: false})
-             }
-          }}
+           onChange={onChangeEval(isObject, 'Object', subElement)}
            rawInputValue={test !== "" ? test: undefined}
            />
          </div>
@@ -114,15 +151,7 @@ class SurComposantCompose extends Component {
     renderTabWithObject(subElement, defaultType){
       return (
         <div><InputText
-           onChange={(value) => {
-             try{
-               isArray(eval(value))
-               this.setState({[subElement] : eval(value), ['onChangeArray'+subElement]: value, ['isOnChangeArray'+subElement]: true})
-
-             }catch (ex){
-               this.setState({['onChangeArray'+subElement]: value, ['isOnChangeArray'+subElement]: false})
-             }
-          }}
+           onChange={onChangeEval(isArray, 'Array', subElement)}
            rawInputValue={this.state['onChangeArray'+subElement]}
            />
            {this.state['isOnChangeArray'+subElement] && <i className="material-icons">check</i>}
@@ -158,7 +187,6 @@ class SurComposantCompose extends Component {
     }
     render() {
         const list = {...this.props.defaultType}
-        const CodeEditorComposant = CodeEditor.default;
         return (
             <div data-focus='documentation'>
               <div data-focus='documentation-props'>
@@ -177,7 +205,7 @@ class SurComposantCompose extends Component {
                 <div data-focus='documentation-composant-title'>Le Composant</div>
                 <div data-focus='documentation-composant-content'>{this.state.isVisible && <div><ComposantComposant propsComposant={this.state} Composant={this.props.Composant}/></div>}</div>
               </div>
-              <CodeEditorComposant mode='jsx' theme='github' value={renderCodeForEditor(list, this.state, this.props.Composant)} fontSize={11.5} />
+              <LiveEditor onChange={this.onChange} valueOfEditor={renderCodeForEditor(list, this.state, this.props.Composant, this.props.defaultType)} />
               <div data-focus='documentation-button'><button onClick={() => this.setState({isVisible: !this.state.isVisible})}>Faire revivre</button></div>
             </div>
         );

@@ -8,5 +8,5 @@ export const defaultType = {
         label: 'string',
         shape: 'string'
     },
-    operations: 'array'
+    operations: 'arrayWithObject'
 };

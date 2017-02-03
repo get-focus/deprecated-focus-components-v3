@@ -54,8 +54,6 @@ import {defaultType as defaultTypeInputText} from '../input-text/showcase';
 import {defaultType as defaultTypeInputTextArea} from '../input-textarea/showcase';
 import {defaultType as defaultTypeInputToggle} from '../input-toggle/showcase';
 
-
-
 export default [
   {name: 'AutoComplete', elements: [
     {Composant: AutocompleteSelect, defaultType: defaultTypeAutocompleteSelect, isHighOrderComponent: false, name:'AutocompleteSelect'},

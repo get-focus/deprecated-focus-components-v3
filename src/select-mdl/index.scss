@@ -1,6 +1,7 @@
 
 //https://github.com/CreativeIT/getmdl-select/
 [data-focus="select-mdl"] {
+
     &.mdl-textfield {
         width: auto;
     }
@@ -16,6 +17,9 @@
             color: #000;
         }
     }
+    [data-selected="true"]{
+        background-color: #CFD8DC;
+    }
     .mdl-menu__container {
         width: 100% !important;
         top: 0px !important;
@@ -26,9 +30,7 @@
             width: 100% !important;
             .mdl-menu__item {
               z-index: 999;
-              [data-selected="true"]{
-                  background-color: #CFD8DC;
-              }
+
             }
         }
     }

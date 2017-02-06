@@ -95,7 +95,7 @@ class Select extends PureComponent {
                         {this._renderOptions({...this.props, currentValue})}
                     </ul>
                 }
-                {!valid && <span className='mdl-textfield__error' ref='error'>{i18next.t(error)}</span>}
+                {!!error && <span className='mdl-textfield__error' ref='error'>{i18next.t(error)}</span>}
             </div>
         );
     }

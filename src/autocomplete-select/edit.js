@@ -102,7 +102,15 @@ class Autocomplete extends Component {
     };
     _handleQueryBlur = () => {
         if(this.state.suggestions.length === 1){
-          this.setState({inputValue: this.state.suggestions[0].label})
+            const {onChange} = this.props;
+            this.setState({selected: this.state.suggestions[0].key, focus: false, inputValue: this.state.suggestions[0].label}, () => {
+                if(onChange) onChange(this.state.suggestions[0].key);
+            });
+        } else {
+            const {onChange} = this.props;
+            this.setState({focus: false,}, () => {
+                if(onChange) onChange(null);
+            });
         }
     };
     _handleQueryChange = ({target: {value}}) => {
@@ -141,7 +149,10 @@ class Autocomplete extends Component {
         const {which} = event;
         const {active, options} = this.state;
         if (which === ENTER_KEY_CODE && active) this._select(active);
-        if (which === TAB_KEY_CODE) this.setState({focus: false}, () => this.refs.htmlInput.blur());
+        if (which === TAB_KEY_CODE) {
+            this.setState({focus: false});
+            this.refs.htmlInput.blur();
+        }
         if ([DOWN_ARROW_KEY_CODE, UP_ARROW_KEY_CODE].indexOf(which) !== -1) { // the user pressed on an arrow key, change the active key
             const optionKeys = [];
             for (let key of options.keys()) {

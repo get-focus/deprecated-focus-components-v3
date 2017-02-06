@@ -12,6 +12,9 @@ class ModalOverlay extends Component {
         this._hideBodyOverflow = this._hideBodyOverflow.bind(this);
         this._restoreBodyOverflow = this._restoreBodyOverflow.bind(this);
     }
+    componentDidMount() {
+        this._hideBodyOverflow();
+    }
     /**
     * Store the body overgflow property, and set it to hidden
     * @private

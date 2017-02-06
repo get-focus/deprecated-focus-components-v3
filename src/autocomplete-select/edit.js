@@ -101,15 +101,18 @@ class Autocomplete extends Component {
         }
     };
     _handleQueryBlur = () => {
+        const {onChange, onBadInput} = this.props;
         if(this.state.suggestions.length === 1){
-            const {onChange} = this.props;
             this.setState({selected: this.state.suggestions[0].key, focus: false, inputValue: this.state.suggestions[0].label}, () => {
                 if(onChange) onChange(this.state.suggestions[0].key);
             });
         } else {
-            const {onChange} = this.props;
+            const {inputValue} = this.state;
             this.setState({focus: false,}, () => {
                 if(onChange) onChange(null);
+                if (onBadInput && this.getValue() === null && inputValue !== '') {
+                    onBadInput(inputValue);
+                }
             });
         }
     };

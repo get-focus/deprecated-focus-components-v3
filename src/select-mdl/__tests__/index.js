@@ -121,8 +121,8 @@ describe('<SelectMdl />', () => {
         const wrapper = mount(<Select name='component' onChange={sinon.spy()} values={VALUES} error={message} valid={false} />)
         const selectComponent = wrapper.find('[data-focus="select-mdl"]');
         it('it should be displayed', () => {
-            expect(selectComponent.find('div.label-error')).to.exist;
-            expect(selectComponent.find('div.label-error').text()).to.equal(message);
+            expect(selectComponent.find('span.mdl-textfield__error')).to.exist;
+            expect(selectComponent.find('span.mdl-textfield__error').text()).to.equal(message);
         });
     })
 });

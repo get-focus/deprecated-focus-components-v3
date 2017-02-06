@@ -25,7 +25,7 @@ class LiveEditor extends Component {
     render() {
         return (
             <div data-focus='live-editor'>
-              <CodeEditorComposant mode='jsx' theme='github' value={this.state.valueOfEditor} onChange={(value) => this.setState({valueOfEditor: value})} fontSize={11.5} />
+              <CodeEditorComposant mode='jsx' theme='github' editorProps={{$blockScrolling: Infinity}} value={this.state.valueOfEditor} onChange={(value) => this.setState({valueOfEditor: value})} fontSize={11.5} />
               {this.state.isEditChange && <button onClick={()=> this.props.onChange(this.state.valueOfEditor)}> Submit my component</button>}
 
             </div>

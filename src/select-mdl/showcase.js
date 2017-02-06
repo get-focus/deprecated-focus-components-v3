@@ -13,5 +13,5 @@ export const defaultType = {
   rawInputValue: "string",
   valid: "bool",
   valueKey: "string",
-  values: "arrayWithObject"
+  values: "arraywithobject"
 };

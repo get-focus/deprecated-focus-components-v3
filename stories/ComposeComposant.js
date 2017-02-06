@@ -15,9 +15,9 @@ import 'brace';
 import 'brace/mode/jsx'
 import 'brace/theme/github'
 
-const verifTabObject = ['array', 'arrayWithObject']
+const verifTabObject = ['array', 'arraywithobject', 'object']
 
-const verifTab = ['func', 'array', 'arrayWithObject']
+const verifTab = ['func', 'array', 'arraywithobject']
 // Components
 
 import CodeEditorComposant from 'react-ace';
@@ -30,6 +30,10 @@ function onChangeEval(isWhatFunction, type, subElement, isFunction = false){
   return (value) => {
     try{
       isWhatFunction(eval(value))
+      if(!isFunction){
+        console.log(eval(value))
+        this.setState({[subElement] : eval(value),['onChange'+type+subElement]: value,['onChangeError'+type+subElement]: null, ['isOnChange'+type+subElement]: true})
+      }
     }catch(ex){
       this.setState({['onChange'+type+subElement]: value, ['isOnChange'+type+subElement]: false, ['onChangeError'+type+subElement]: "Pas une fonction"})
       return;
@@ -48,8 +52,8 @@ function onChangeEval(isWhatFunction, type, subElement, isFunction = false){
 function renderCodeForEditor(list, state, Composant, defaultType) {
   const preCode = reduce(Object.keys(list), (acc, element) => {
     if(state[element] !== undefined && state[element] !== null && state[element] !== "" ){
-      if(verifTabObject.indexOf(defaultType[element]) !== -1) {
-        return acc + ` \n \t \t \t \t ${element}={${JSON.stringify(state[element])}}`
+      if((verifTabObject.indexOf(defaultType[element]) !== -1 || isObject(defaultType[element] ) && !isString(state[element]))) {
+        return acc + ` \n \t \t \t \t ${element}={${'{' + Object.keys(state[element]).reduce((acc, elm) => acc + `${elm}: '${state[element][elm]}',`, "" ) + "}"}}`
       }
       return acc + ` \n \t \t \t \t ${element}={${state[element]}}`
     }
@@ -91,19 +95,18 @@ class SurComposantCompose extends Component {
         const stateName = element.slice(0, element.indexOf('='))
         const preElementOfState = element.slice(0-(element.length - element.indexOf('=') -1)).trim().slice(0-(element.length - element.indexOf('{') -1))
         const elementOfState = preElementOfState.slice(0,preElementOfState.lastIndexOf('}'))
-        console.log('stateName',stateName)
-        console.log('elementOfState',elementOfState)
 
         try {
           const evalElementOfState = eval(elementOfState)
-          console.log('onChange'+capitalize(this.props.defaultType[stateName])+stateName)
           if(verifTab.indexOf(this.props.defaultType[stateName]) !== -1 ){
-            this.setState({[stateName] : elementOfState === "" ? " " : elementOfState, ['onChange'+capitalize(this.props.defaultType[stateName])+stateName] : evalElementOfState})
+            this.setState({[stateName] : evalElementOfState === "" ? " " : evalElementOfState, ['onChange'+capitalize(this.props.defaultType[stateName])+stateName] : elementOfState})
           }else {
             this.setState({[stateName] : evalElementOfState === "" ? " " : evalElementOfState})
 
           }
         }catch(t) {
+
+          console.log(t)
           this.setState({[stateName] : elementOfState === "" ? " " : elementOfState, ['onChangeFunc'+stateName] : elementOfState})
         }
       })
@@ -139,7 +142,7 @@ class SurComposantCompose extends Component {
       )
     }
     renderObjectComposant(subElement){
-      const test = this.state['onChangeObject'+subElement]  ? this.state['onChangeObject'+subElement] : JSON.stringify(this.state[subElement])
+      const test = this.state['onChangeObject'+subElement]  ? this.state['onChangeObject'+subElement] : isString(this.state[subElement]) ? this.state[subElement]: '{' + Object.keys(this.state[subElement]).reduce((acc, elm) => acc + `${elm}: '${this.state[subElement][elm]}',`, "" ) + "}"
       return (
         <div><InputText
            onChange={onChangeEval(isObject, 'Object', subElement)}
@@ -151,10 +154,10 @@ class SurComposantCompose extends Component {
     renderTabWithObject(subElement, defaultType){
       return (
         <div><InputText
-           onChange={onChangeEval(isArray, 'Array', subElement)}
-           rawInputValue={this.state['onChangeArray'+subElement]}
+           onChange={onChangeEval(isArray, 'arraywithobject', subElement)}
+           rawInputValue={this.state['onChangeArraywithobject'+subElement]}
            />
-           {this.state['isOnChangeArray'+subElement] && <i className="material-icons">check</i>}
+           {this.state['isOnChangeArraywithobject'+subElement] && <i className="material-icons">check</i>}
          </div>
       )
     }
@@ -173,7 +176,7 @@ class SurComposantCompose extends Component {
         return this.renderInputComposant(element)
       }else if(isArray(this.props.defaultType[element]) && !isObject(this.props.defaultType[element][0]) ){
         return this.renderTabComposant(element, this.props.defaultType[element])
-      }else if(this.props.defaultType[element] === 'arrayWithObject'){
+      }else if(this.props.defaultType[element] === 'arraywithobject'){
         return this.renderTabWithObject(element, this.props.defaultType[element])
       }else if(this.props.defaultType[element] === 'bool'){
         return this.renderBoolComposant(element)

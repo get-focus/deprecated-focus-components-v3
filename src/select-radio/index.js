@@ -83,7 +83,7 @@ SelectRadio.defaultProps = {
     disabled: false
 };
 export const defaultTypeSelectRadio = {
-  values: 'arrayWithObject',
+  values: 'arraywithobject',
   rawInputValue: 'string',
   valueKey: 'string',
   labelKey: 'string',

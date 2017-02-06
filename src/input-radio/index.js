@@ -60,7 +60,7 @@ class Radio extends Component {
         const checkedProps = isChecked ? {checked: 'checked'} : {};
 
         return (
-            <label className='mdl-radio mdl-js-radio mdl-js-ripple-effect' data-focus="input-radio" ref='inputMdl'>
+            <label className='mdl-radio mdl-js-radio' data-focus="input-radio" ref='inputMdl'>
                 <input className='mdl-radio__button' name={name} onChange={this._onChange} type='radio' {...checkedProps} value={rawInputValue} ref='inputRadio'/>
                 <span className='mdl-radio__label'>{i18next.t(label)}</span>
             </label>

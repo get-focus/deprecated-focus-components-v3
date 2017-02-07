@@ -101,8 +101,19 @@ class Autocomplete extends Component {
         }
     };
     _handleQueryBlur = () => {
+        const {onChange, onBadInput} = this.props;
         if(this.state.suggestions.length === 1){
-          this.setState({inputValue: this.state.suggestions[0].label})
+            this.setState({selected: this.state.suggestions[0].key, focus: false, inputValue: this.state.suggestions[0].label}, () => {
+                if(onChange) onChange(this.state.suggestions[0].key);
+            });
+        } else {
+            const {inputValue} = this.state;
+            this.setState({focus: false,}, () => {
+                if(onChange) onChange(null);
+                if (onBadInput && this.getValue() === null && inputValue !== '') {
+                    onBadInput(inputValue);
+                }
+            });
         }
     };
     _handleQueryChange = ({target: {value}}) => {
@@ -141,7 +152,10 @@ class Autocomplete extends Component {
         const {which} = event;
         const {active, options} = this.state;
         if (which === ENTER_KEY_CODE && active) this._select(active);
-        if (which === TAB_KEY_CODE) this.setState({focus: false}, () => this.refs.htmlInput.blur());
+        if (which === TAB_KEY_CODE) {
+            this.setState({focus: false});
+            this.refs.htmlInput.blur();
+        }
         if ([DOWN_ARROW_KEY_CODE, UP_ARROW_KEY_CODE].indexOf(which) !== -1) { // the user pressed on an arrow key, change the active key
             const optionKeys = [];
             for (let key of options.keys()) {
@@ -217,7 +231,7 @@ class Autocomplete extends Component {
                         value={inputValue === undefined || inputValue === null ? '' : inputValue}
                     />
                     <label className='mdl-textfield__label'>{i18next.t(placeholder)}</label>
-                    <span className='mdl-textfield__error'>{i18next.t(customError)}</span>
+                    {customError && <span className='mdl-textfield__error'>{i18next.t(customError)}</span>}
                 </div>
                 {renderOptions ? renderOptions.call(this) : this._renderOptions()}
             </div>

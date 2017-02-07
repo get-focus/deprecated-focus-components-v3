@@ -34,7 +34,8 @@ class Autocomplete extends Component {
 
     componentDidMount() {
         const {rawInputValue, keyResolver, inputTimeout} = this.props;
-        if (rawInputValue !== undefined && rawInputValue !== null) { // rawInputValue is defined, call the keyResolver to get the associated label
+        // rawInputValue is defined, call the keyResolver to get the associated label
+        if (rawInputValue !== undefined && rawInputValue !== null) {
             keyResolver(rawInputValue).then(inputValue => {
                 if(this.props.rawInputValue !== '') {
                     this.setState({inputValue, fromKeyResolver: true})
@@ -75,13 +76,17 @@ class Autocomplete extends Component {
         const {labelName, keyName, rawInputValue} = this.props;
         const {inputValue, selected, options, fromKeyResolver} = this.state;
         const resolvedLabel = options.get(selected);
-        if (inputValue === '') { // The user cleared the field, return a null
+        // The user cleared the field, return a null
+        if (inputValue === '') {
             return null;
-        } else if (fromKeyResolver) { // Value was received from the keyResolver, give it firectly
+            // Value was received from the keyResolver, give it firectly
+        } else if (fromKeyResolver) {
             return rawInputValue;
-        } else if (resolvedLabel !== inputValue && selected !== inputValue) { // The user typed something without selecting any option, return a null
+            // The user typed something without selecting any option, return a null
+        } else if (resolvedLabel !== inputValue && selected !== inputValue) {
             return null;
-        } else { // The user selected an option (or no value was provided), return it
+            // The user selected an option (or no value was provided), return it
+        } else {
             return selected || null;
         }
     };
@@ -100,8 +105,9 @@ class Autocomplete extends Component {
             }
         }
     };
+
     _handleQueryBlur = () => {
-        const {onChange, onBadInput} = this.props;
+        const {onChange, onBadInput, onBlurError, customError} = this.props;
         if(this.state.suggestions.length === 1){
             this.setState({selected: this.state.suggestions[0].key, focus: false, inputValue: this.state.suggestions[0].label}, () => {
                 if(onChange) onChange(this.state.suggestions[0].key);
@@ -109,15 +115,17 @@ class Autocomplete extends Component {
         } else {
             const {inputValue} = this.state;
             this.setState({focus: false,}, () => {
-                if(onChange) onChange(null);
                 if (onBadInput && this.getValue() === null && inputValue !== '') {
                     onBadInput(inputValue);
                 }
             });
+            if(onBlurError) onBlurError(customError);
         }
     };
+
     _handleQueryChange = ({target: {value}}) => {
-        if (value === '') { // the user cleared the input, don't call the querySearcher
+        // the user cleared the input, don't call the querySearcher
+        if (value === '') {
             const {onChange} = this.props;
             this.setState({inputValue: value, fromKeyResolver: false});
             if (onChange) onChange(null);
@@ -128,7 +136,8 @@ class Autocomplete extends Component {
     };
 
     _querySearcher = value => {
-        const {querySearcher, keyName, labelName} = this.props;
+        console.log('VALUE', value);
+        const {querySearcher, keyName, labelName, onChange} = this.props;
         querySearcher(value).then(({data, totalCount}) => {
             // TODO handle the incomplete option list case
             const options = new Map();
@@ -137,6 +146,7 @@ class Autocomplete extends Component {
             });
             this.setState({options, isLoading: false, totalCount, suggestions: data});
         }).catch(error => this.setState({customError: error.message}));
+        onChange(value);
     };
 
     _handleQueryFocus = () => {
@@ -156,7 +166,8 @@ class Autocomplete extends Component {
             this.setState({focus: false});
             this.refs.htmlInput.blur();
         }
-        if ([DOWN_ARROW_KEY_CODE, UP_ARROW_KEY_CODE].indexOf(which) !== -1) { // the user pressed on an arrow key, change the active key
+        // the user pressed on an arrow key, change the active key
+        if ([DOWN_ARROW_KEY_CODE, UP_ARROW_KEY_CODE].indexOf(which) !== -1) {
             const optionKeys = [];
             for (let key of options.keys()) {
                 optionKeys.push(key);
@@ -194,19 +205,19 @@ class Autocomplete extends Component {
             const isActive = active === key;
             renderedOptions.push(
                 <li
-                data-active={isActive}
-                data-focus='option'
-                key={key}
-                onClick={this._select.bind(this, key)}
-                onMouseOver={this._handleSuggestionHover.bind(this, key)}
-                >
-                {i18next.t(value)}
+                    data-active={isActive}
+                    data-focus='option'
+                    key={key}
+                    onClick={this._select.bind(this, key)}
+                    onMouseOver={this._handleSuggestionHover.bind(this, key)}
+                    >
+                    {i18next.t(value)}
                 </li>
             );
         }
         return (
             <ul data-focus='options' ref='options' data-focussed={focus}>
-            {renderedOptions}
+                {renderedOptions}
             </ul>
         );
     };
@@ -229,7 +240,7 @@ class Autocomplete extends Component {
                         ref='htmlInput'
                         type='text'
                         value={inputValue === undefined || inputValue === null ? '' : inputValue}
-                    />
+                        />
                     <label className='mdl-textfield__label'>{i18next.t(placeholder)}</label>
                     {customError && <span className='mdl-textfield__error'>{i18next.t(customError)}</span>}
                 </div>

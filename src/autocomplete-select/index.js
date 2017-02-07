@@ -38,11 +38,13 @@ class AutocompleteSelectField extends Component {
 
     _renderEdit = () => {
         const {customError} = this.state;
+        const {onBlurError} = this.props;
         return (
             <AutocompleteSelectEdit
                 customError={customError}
                 onBadInput={this._handleAutocompleteBadInput}
                 onChange={this._handleAutocompleteChange}
+                onBlurError={onBlurError}
                 ref='autocomplete'
                 {...this.props}
                 />

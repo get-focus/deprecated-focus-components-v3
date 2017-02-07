@@ -136,7 +136,6 @@ class Autocomplete extends Component {
     };
 
     _querySearcher = value => {
-        console.log('VALUE', value);
         const {querySearcher, keyName, labelName, onChange} = this.props;
         querySearcher(value).then(({data, totalCount}) => {
             // TODO handle the incomplete option list case

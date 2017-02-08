@@ -7,6 +7,7 @@ import isBoolean from 'lodash/isBoolean'
 import  InputText from '../input-text';
 import isObject from 'lodash/isObject'
 import capitalize from 'lodash/capitalize'
+import InputArea from '../input-textarea'
 import SelectRadio from '../select-radio';
 import isFunction from 'lodash/isFunction'
 import LiveEditor from './LiveEditor'
@@ -17,7 +18,7 @@ import 'brace/theme/github'
 
 const verifTabObject = ['array', 'arraywithobject', 'object']
 
-const verifTab = ['func', 'array', 'arraywithobject']
+const verifTab = ['func', 'array', 'arraywithobject', 'object']
 // Components
 
 import CodeEditorComposant from 'react-ace';
@@ -81,6 +82,7 @@ class SurComposantCompose extends Component {
         this.state = {
             isVisible: true,
             isEditChange: false,
+            isLiveEditor: false,
             ...props.Composant.defaultProps
         };
         onChangeEval = onChangeEval.bind(this);
@@ -97,8 +99,9 @@ class SurComposantCompose extends Component {
         const elementOfState = preElementOfState.slice(0,preElementOfState.lastIndexOf('}'))
 
         try {
-          const evalElementOfState = eval(elementOfState)
+          let evalElementOfState = elementOfState
           if(verifTab.indexOf(this.props.defaultType[stateName]) !== -1 ){
+            evalElementOfState = eval(elementOfState)
             this.setState({[stateName] : evalElementOfState === "" ? " " : evalElementOfState, ['onChange'+capitalize(this.props.defaultType[stateName])+stateName] : elementOfState})
           }else {
             this.setState({[stateName] : evalElementOfState === "" ? " " : evalElementOfState})
@@ -132,7 +135,7 @@ class SurComposantCompose extends Component {
       const isOnChangeFunc = this.state['isOnChangeFunc'+subElement];
       const onChangeValue = this.state['onChangeFunc'+subElement];
       return (
-        <div data-focus='documentation-input'><InputText
+        <div data-focus='documentation-input-text'><InputText
            onChange={onChangeEval(isFunction, 'Func', subElement, true)}
            rawInputValue={onChangeValue}
            />
@@ -188,6 +191,9 @@ class SurComposantCompose extends Component {
         return this.renderInputComposant(element)
       }
     }
+    _toggleVisible(){
+    this.setState({isLiveEditor: !this.state.isLiveEditor});
+    }
     render() {
         const list = {...this.props.defaultType}
         return (
@@ -202,14 +208,23 @@ class SurComposantCompose extends Component {
                        </div>
                      </div>
                    })}
+                  
               </div>
-
-              <div data-focus='documentation-composant'>
-                <div data-focus='documentation-composant-title'>Le Composant</div>
-                <div data-focus='documentation-composant-content'>{this.state.isVisible && <div><ComposantComposant propsComposant={this.state} Composant={this.props.Composant}/></div>}</div>
+              <div data-focus='documentation-live'>
+                  <div data-focus='documentation-composant'>
+                    <div data-focus='documentation-composant-title'>Le Composant</div>
+                    <div data-focus='documentation-button'><button onClick={() => this.setState({isVisible: !this.state.isVisible})}>Faire revivre</button></div>
+                    <div data-focus='documentation-composant-content'>{this.state.isVisible && <div><ComposantComposant propsComposant={this.state} Composant={this.props.Composant}/></div>}</div>
+                  </div>
+                  <div data-focus='documentation-editor'>
+                     <div  data-focus='documentation-live-editor'>
+                        <button className='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect' onClick={this._toggleVisible.bind(this)}>
+                            <i className='material-icons' style={{color: 'white'}}>{`expand_${this.state.isLiveEditor ? 'more' : 'less'}`}</i>
+                        </button>
+                    </div>
+                      {this.state.isLiveEditor && <LiveEditor onChange={this.onChange} theme='solarized light' valueOfEditor={renderCodeForEditor(list, this.state, this.props.Composant, this.props.defaultType)} />}
+                  </div>
               </div>
-              <LiveEditor onChange={this.onChange} valueOfEditor={renderCodeForEditor(list, this.state, this.props.Composant, this.props.defaultType)} />
-              <div data-focus='documentation-button'><button onClick={() => this.setState({isVisible: !this.state.isVisible})}>Faire revivre</button></div>
             </div>
         );
     };

@@ -1,12 +1,14 @@
 import React from 'react';
 import { storiesOf, action, linkTo, addDecorator , configure } from '@kadira/storybook';
 import centered from '@kadira/react-storybook-decorator-centered';
-
+import { WithNotes } from '@kadira/storybook-addon-notes';
 import Welcome from './Welcome';
 import i18next from 'i18next';
 import style from '../style'
 import componentsFr from '../src/translation/resources/fr-FR';
 const ressources = [componentsFr]
+
+
 
 i18next.init({
   lng: 'fr-FR',
@@ -23,11 +25,16 @@ function renderAdd(storie, elements){
     if(add.isHighOrderComponent){
       return storie.add(add.Composant.displayName, () => {
         const HighComposant = add.Composant;
+
         return <ComposeComposant Composant={props => <HighComposant {...props} ><div style={{border: '1px solid black'}}>Bonjour je suis le sousComposant</div></HighComposant>} defaultType={add.defaultType}/>
       })
     }else {
       return storie.add(add.Composant.displayName, () => {
-        return <ComposeComposant Composant={add.Composant} defaultType={add.defaultType}/>
+        return (
+            <WithNotes notes={'Yooooooooo'}>
+                <ComposeComposant Composant={add.Composant} defaultType={add.defaultType}/>
+            </WithNotes>
+        )
       })
     }
 

@@ -1,58 +1,123 @@
+.PaneverticalPane1 {
+    background-color: white;
+}
+
+div.Pane.vertical.Pane2 {
+    display: none;
+}
+
 body {
-  height: 100%;
-  min-height: 100%;
+    height: 100%;
+    min-height: 100%;
 }
 div#root {
-  height: 100%;
-  min-height: 100%;
+    height: 100%;
+    min-height: 100%;
 }
 [data-focus='documentation']{
-  [data-focus='documentation-input']{
+    [data-focus='documentation-input']{
+        display: flex;
+        flex-direction: column;
+    }
     display: flex;
-    flex-direction: column;
-  }
-  display: flex;
-  align-items: stretch;
-  justify-content: space-around;;
-  height: 100%;
-  & > div {
-    font-size: 25px;
-    padding: 10px;
-    margin: 5px;
-  }
-  [data-focus='documentation-props']{
-    flex-grow: 1;
-    background-color: rgba(0,0,0,0.14);
+    align-items: stretch;
+    height: 100%;
+    & > div {
+        font-size: 25px;
+    }
+    [data-focus='documentation-props']{
+        background-color: rgba(0, 0, 0, 0.11);
+        overflow-y: scroll;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 
-    [data-focus='documentation-props-title']{
+        [data-focus='documentation-props-title']{
+            background-color: #41545e;
+            padding: 15px;
+            color: white;
+        }
+        [data-focus='documentation-props-content']{
+            [data-focus='documentation-label']{
+                min-width: 70px;
+            }
+            [data-focus='documentation-input'] {
+                background-color: rgba(0, 0, 0, 0.30);
+                border-radius: 2px;
+                border: 0;
+                font-size: 16px;
+                font-weight: 300;
+                outline: none;
+                resize: none;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-left: 12px;
+                .mdl-textfield__input, .mdl-textfield__label{
+                    width: 95% !important;
+                }
+            }
+            display : flex;
+            font-size: 15px;
+            border-top-width: 1px;
+            border-top-style: solid;
+            border-top-color: rgb(60, 51, 54);
+            flex-direction: column;
+            & > div {
+                margin: 5px;
+            }
+        }
     }
-    [data-focus='documentation-props-content']{
-      [data-focus='documentation-label']{
-        min-width: 70px;
-      }
-      display : flex;
-      font-size: 15px;
-      & > div {
-        margin: 15px;
-      }
+    [data-focus='documentation-composant']{
+        flex-grow: 30;
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        [data-focus='documentation-button']{
+            flex: 1 0 50%;
+            text-align: end;
+        }
+        [data-focus='documentation-composant-title']{
+            background-color: #41545e;
+            padding: 15px;
+            color: white;
+        }
+        [data-focus='documentation-composant-content']{
+            font-size: 15px;
+            flex-grow: 150;
+            padding: 20px;
+
+            & > div {
+                margin: 2px;
+            }
+        }
     }
-  }
-  [data-focus='documentation-composant']{
-    flex-grow: 30;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    [data-focus='documentation-composant-title']{
-      flex-grow:1;
+    [data-focus='documentation-live']{
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        [data-focus='documentation-editor']{
+
+            [data-focus='live-editor']{
+                display: flex;
+                flex-direction: column;
+                & > button {
+                    background-color: #41545e;
+                    color: white
+                }
+                #brace-editor {
+                    width: 100% !important;
+                }
+            }
+
+
+            width: 50%;
+            position: fixed;
+            bottom: 0px;
+            right: 0px;
+            z-index: 10000000;
+            min-height: 0;
+            background-color: #41545e;
+            margin-right: 10px;
+        }
 
     }
-    [data-focus='documentation-composant-content']{
-      font-size: 15px;
-      flex-grow: 150;
 
-      & > div {
-        margin: 15px;
-      }
-    }
-  }
 }

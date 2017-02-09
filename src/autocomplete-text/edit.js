@@ -6,6 +6,7 @@ import {InputBehaviour} from '../behaviours/input-component';
 import debounce from 'lodash/debounce';
 
 @MDBehaviour('materialInput')
+@InputBehaviour
 class AutocompleteTextEdit extends Component {
     constructor(props) {
         super(props);
@@ -131,7 +132,7 @@ class AutocompleteTextEdit extends Component {
             <div data-focus='autocompleteText'>
                 <div className={`mdl-textfield mdl-js-textfield${error ? ' is-invalid' : ''}`} ref='materialInput'>
                     <div data-focus='loading' data-loading={isLoading} className='mdl-progress mdl-js-progress' ref='loader'/>
-                    <input className='mdl-textfield__input' type='text' ref='inputText'/>
+                    <input className='mdl-textfield__input' type='text' ref='inputText' {...inputProps}/>
                     <label className="mdl-textfield__label">{i18next.t(placeholder)}</label>
                     <span className="mdl-textfield__error" ref='errorMessage'>{i18next.t(error)}</span>
                 </div>

@@ -5,7 +5,6 @@ import i18next from 'i18next';
 import MDBehaviour from '../behaviours/material';
 import {InputBehaviour} from '../behaviours/input-component';
 
-
 /**
 * Component standing for an HTML input.
 */
@@ -49,15 +48,17 @@ class InputTextarea extends PureComponent {
         const validInputProps = managedProps[0];
         const invalidInputProps = managedProps[1];
 
-        const {error, rawInputValue, formatter} = invalidInputProps;
-        const {name, style, placeholder, valid} = validInputProps;
+        const {error, formatter, rawInputValue, valid} = invalidInputProps;
+        const {name, style, placeholder} = validInputProps;
 
         const pattern = valid ? null : 'hasError'; //add pattern to overide mdl error style when displaying an focus error.
         const mdlClasses = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
 
         validInputProps.value = formatter(rawInputValue === undefined || rawInputValue === null ? '' : rawInputValue);
+        validInputProps.id = name;
         validInputProps.onChange = this._handleInputChange
-        const inputProps = {...validInputProps};
+        const inputProps = {...validInputProps, pattern};
+
         return (
             <div data-error={!!error} data-focus='input-textarea'>
                 <div className={mdlClasses} ref='inputTextarea' style={style}>
@@ -83,10 +84,7 @@ InputTextarea.defaultProps = {
 };
 InputTextarea.propTypes = {
     cols: PropTypes.number,
-    error: PropTypes.oneOfType([
-        PropTypes.bool,
-        PropTypes.string
-    ]),
+    error: PropTypes.string,
     formatter: PropTypes.func,
     minLength: PropTypes.number,
     maxLength: PropTypes.number,

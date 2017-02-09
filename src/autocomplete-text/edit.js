@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import MDBehaviour from '../behaviours/material';
+import {InputBehaviour} from '../behaviours/input-component';
 import debounce from 'lodash/debounce';
 
 @MDBehaviour('materialInput')
@@ -112,13 +113,25 @@ class AutocompleteTextEdit extends Component {
 
     // Maybe give the option for the floating label
     render() {
-        const {inputValue, hasSuggestions, hasFocus, isLoading, ...otherProps} = this.state;
-        const {placeholder, inputTimeout, showAtFocus, emptyShowAll, error} = this.props
+        const {inputValue, hasSuggestions, hasFocus, isLoading} = this.state;
+
+        const managedProps = this._checkProps(this.props);
+        const validInputProps = managedProps[0];
+        const invalidInputProps = managedProps[1];
+
+        const {inputTimeout, error} = invalidInputProps;
+        const {placeholder} = validInputProps;
+
+        validInputProps.value = inputValue === undefined || inputValue === null  ? '' : inputValue;
+        validInputProps.onFocus = this.toggleHasFocus;
+        validInputProps.onBlur = this.toggleHasFocus;
+        validInputProps.onChange = this.onQueryChange;
+        const inputProps = {...validInputProps};
         return(
             <div data-focus='autocompleteText'>
                 <div className={`mdl-textfield mdl-js-textfield${error ? ' is-invalid' : ''}`} ref='materialInput'>
                     <div data-focus='loading' data-loading={isLoading} className='mdl-progress mdl-js-progress' ref='loader'/>
-                    <input onFocus={this.toggleHasFocus} onBlur={this.toggleHasFocus} className='mdl-textfield__input' type='text' value={inputValue === undefined || inputValue === null  ? '' : inputValue} ref='inputText' onChange={::this.onQueryChange} showAtFocus={showAtFocus} emptyShowAll={emptyShowAll} {...otherProps} />
+                    <input className='mdl-textfield__input' type='text' ref='inputText'/>
                     <label className="mdl-textfield__label">{i18next.t(placeholder)}</label>
                     <span className="mdl-textfield__error" ref='errorMessage'>{i18next.t(error)}</span>
                 </div>

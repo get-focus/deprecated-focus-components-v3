@@ -4,12 +4,14 @@ import ReactDOM from 'react-dom';
 import identity from 'lodash/identity';
 import i18next from 'i18next';
 import MDBehaviour from '../behaviours/material';
+import {InputBehaviour} from '../behaviours/input-component';
 const MODE = {isEdit: true};
 
 /**
  * Component standing for an HTML input.
  */
 @MDBehaviour('inputText')
+@InputBehaviour
 class InputText extends PureComponent {
 
     /**
@@ -43,11 +45,20 @@ class InputText extends PureComponent {
      * @override
     */
     render() {
-        const { autoFocus, disabled, formatter, maxLength, onFocus, onClick, onKeyDown, metadata : {validator}, onKeyPress, error, valid, name, metadata, placeholder, onBlur,  style, rawInputValue, size, type} = this.props;
-        const value = rawInputValue === undefined || rawInputValue === null ? '' : formatter(rawInputValue, MODE); //TODO : what about formattedInputValue ?
-        const pattern = valid ? null : 'hasError'; //add pattern to overide mdl error style when displaying an focus error.
+        const managedProps = this._checkProps(this.props);
+        const validInputProps = managedProps[0];
+        const invalidInputProps = managedProps[1]
+
+        const { name, placeholder, style } = validInputProps;
+        const {metadata : {validator}, error, metadata, rawInputValue, valid} = invalidInputProps;
+
         const {options: validatorsOptions} = validator || {};
-        const inputProps =  { autoFocus, disabled, onBlur, onKeyDown,onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange,placeholder, pattern, size, type, value,...validatorsOptions };
+        validInputProps.value = rawInputValue === undefined || rawInputValue === null ? '' : this.props.formatter(rawInputValue, MODE); //TODO : what about formattedInputValue ?
+        validInputProps.onChange = this._handleInputChange;
+
+        const pattern = valid ? null : 'hasError'; //add pattern to overide mdl error style when displaying an focus error.
+        const inputProps = {...validInputProps, pattern, ...validatorsOptions};
+
         const cssClass = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
         return (
             <div className={cssClass} data-focus='input-text' ref='inputText' style={style}>
@@ -63,7 +74,10 @@ class InputText extends PureComponent {
 InputText.displayName = 'InputText';
 InputText.propTypes = {
     disabled: PropTypes.bool,
-    error: PropTypes.string,
+    error: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool
+    ]),
     name: PropTypes.string.isRequired,
     onBlur: PropTypes.func,
     onChange: PropTypes.func.isRequired,

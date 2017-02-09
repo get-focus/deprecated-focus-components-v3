@@ -160,7 +160,10 @@ class InputDate extends Component {
 InputDate.displayName = 'InputDate';
 InputDate.propTypes =  {
     drops: PropTypes.oneOf(['up', 'down']).isRequired,
-    error: PropTypes.string,
+    error: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool
+    ]),
     locale: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,

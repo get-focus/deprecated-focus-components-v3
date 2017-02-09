@@ -2,9 +2,11 @@ import React, {PropTypes, PureComponent} from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import Material from '../behaviours/material';
+import {InputBehaviour} from '../behaviours/input-component';
 
 
 @Material('mdlHolder')
+@InputBehaviour
 class InputCheckBox extends PureComponent {
     constructor(props) {
         super(props);
@@ -31,11 +33,20 @@ class InputCheckBox extends PureComponent {
     };
 
     render() {
-        const {label, rawInputValue, disabled} = this.props;
+        const managedProps = this._checkProps(this.props);
+        const validInputProps = managedProps[0];
+        const invalidInputProps = managedProps[1];
+
+        const {label} = validInputProps;
+        const {rawInputValue} = invalidInputProps;
+
+        validInputProps.onChange = this.handleOnChange;
+        const inputProps = {...validInputProps};
+
         return (
           <div data-focus='input-checkbox-container'>
             <label className={'mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect'} data-focus='input-checkbox' ref='mdlHolder'>
-                <input checked={rawInputValue} className='mdl-checkbox__input' disabled={disabled} onChange={this.handleOnChange} ref='checkbox' type='checkbox'/>
+                <input checked={rawInputValue} className='mdl-checkbox__input' ref='checkbox' type='checkbox' {...inputProps}/>
                 {label && <span className='mdl-checkbox__label'>{i18next.t(label)}</span>}
             </label>
           </div>

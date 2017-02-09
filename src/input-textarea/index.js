@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import identity from 'lodash/identity';
 import i18next from 'i18next';
 import MDBehaviour from '../behaviours/material';
+import {InputBehaviour} from '../behaviours/input-component';
 
 
 /**
 * Component standing for an HTML input.
 */
 @MDBehaviour('inputTextarea')
+@InputBehaviour
 class InputTextarea extends PureComponent {
 
     /**
@@ -43,11 +45,19 @@ class InputTextarea extends PureComponent {
     * @override
     */
     render() {
-        const { autoFocus, disabled, formatter, maxLength, onBlur, onFocus, onClick, onKeyPress, error, name, placeholder, style, rawInputValue, size, type, valid} = this.props;
-        const value = formatter(rawInputValue === undefined || rawInputValue === null ? '' : rawInputValue);
+        const managedProps = this._checkProps(this.props);
+        const validInputProps = managedProps[0];
+        const invalidInputProps = managedProps[1];
+
+        const {error, rawInputValue, formatter} = invalidInputProps;
+        const {name, style, placeholder, valid} = validInputProps;
+
         const pattern = valid ? null : 'hasError'; //add pattern to overide mdl error style when displaying an focus error.
-        const inputProps =  { autoFocus, disabled, onBlur, onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange, pattern, size, type, value };
         const mdlClasses = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
+
+        validInputProps.value = formatter(rawInputValue === undefined || rawInputValue === null ? '' : rawInputValue);
+        validInputProps.onChange = this._handleInputChange
+        const inputProps = {...validInputProps};
         return (
             <div data-error={!!error} data-focus='input-textarea'>
                 <div className={mdlClasses} ref='inputTextarea' style={style}>
@@ -73,7 +83,10 @@ InputTextarea.defaultProps = {
 };
 InputTextarea.propTypes = {
     cols: PropTypes.number,
-    error: PropTypes.string,
+    error: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.string
+    ]),
     formatter: PropTypes.func,
     minLength: PropTypes.number,
     maxLength: PropTypes.number,

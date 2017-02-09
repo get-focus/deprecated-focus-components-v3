@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import MDBehaviour from '../behaviours/material';
+import {InputBehaviour} from '../behaviours/input-component';
 import i18next from 'i18next';
 
 import closest from 'closest';
@@ -13,6 +14,7 @@ const UP_ARROW_KEY_CODE = 38;
 const DOWN_ARROW_KEY_CODE = 40;
 
 @MDBehaviour('inputText')
+@InputBehaviour
 class Autocomplete extends Component {
     constructor(props) {
         super(props);
@@ -212,23 +214,32 @@ class Autocomplete extends Component {
     };
 
     render () {
-        const {customError, inputTimeout, keyName, keyResolver, labelName, placeholder, querySearcher, renderOptions, ...inputProps} = this.props;
         const {inputValue, isLoading} = this.state;
-        const {_handleQueryFocus, _handleQueryKeyDown, _handleQueryChange, _handleQueryBlur} = this;
+        const managedProps = this._checkProps(this.props);
+
+        const validInputProps = managedProps[0];
+        const invalidInputProps = managedProps[1]
+
+        const { name, placeholder, value: valueToFormat } = validInputProps;
+        const { customError, renderOptions } = validInputProps;
+
+        validInputProps.value = inputValue === undefined || inputValue === null ? '' : inputValue;
+        validInputProps.onChange = this._handleQueryChange;
+        validInputProps.onFocus = this._handleQueryFocus;
+        validInputProps.onBlur = this._handleQueryBlur;
+        validInputProps.onKeyDown = this._handleQueryKeyDown;
+
+        const inputProps = {...validInputProps};
+
         return (
             <div data-focus='autocomplete' data-id={this.autocompleteId}>
                 <div className={`mdl-textfield mdl-js-textfield${customError ? ' is-invalid' : ''}`} data-focus='input-text' ref='inputText'>
                     <div data-focus='loading' data-loading={isLoading} className='mdl-progress mdl-js-progress mdl-progress__indeterminate' ref='loader'></div>
                     <input
                         className='mdl-textfield__input'
-                        {...inputProps}
-                        onChange={_handleQueryChange}
-                        onFocus={_handleQueryFocus}
-                        onBlur={_handleQueryBlur}
-                        onKeyDown={_handleQueryKeyDown}
                         ref='htmlInput'
                         type='text'
-                        value={inputValue === undefined || inputValue === null ? '' : inputValue}
+                        {...inputProps}
                     />
                     <label className='mdl-textfield__label'>{i18next.t(placeholder)}</label>
                     {customError && <span className='mdl-textfield__error'>{i18next.t(customError)}</span>}
@@ -241,7 +252,10 @@ class Autocomplete extends Component {
 
 Autocomplete.displayName = 'Autocomplete';
 Autocomplete.propTypes = {
-    customError: PropTypes.string,
+    customError: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool
+    ]),
     inputTimeout: PropTypes.number.isRequired,
     keyName: PropTypes.string.isRequired,
     keyResolver: PropTypes.func.isRequired,

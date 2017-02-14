@@ -43,4 +43,5 @@ import './select-radio';
 import './snackbar';
 import './spinner';
 import './title';
+import './tooltip';
 import './translation';

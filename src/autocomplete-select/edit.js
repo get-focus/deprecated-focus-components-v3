@@ -197,7 +197,7 @@ class Autocomplete extends Component {
                 data-active={isActive}
                 data-focus='option'
                 key={key}
-                onClick={this._select.bind(this, key)}
+                onMouseDown={this._select.bind(this, key)}
                 onMouseOver={this._handleSuggestionHover.bind(this, key)}
                 >
                 {i18next.t(value)}

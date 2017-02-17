@@ -27,26 +27,18 @@ class InputCheckBox extends PureComponent {
         }
     };
 
-    handleOnChange({target: {checked}}) {
+    _handleonChange({target: {checked}}) {
         const {onChange} = this.props;
         onChange(checked);
     };
 
     render() {
-        const managedProps = this._checkProps(this.props);
-        const validInputProps = managedProps[0];
-        const invalidInputProps = managedProps[1];
-
-        const {label} = validInputProps;
-        const {rawInputValue} = invalidInputProps;
-
-        validInputProps.onChange = this.handleOnChange;
-        const inputProps = {...validInputProps};
-
+        const validInputProps = this._checkProps(this.props);
+        const {label, rawInputValue} = this.props;
         return (
           <div data-focus='input-checkbox-container'>
             <label className={'mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect'} data-focus='input-checkbox' ref='mdlHolder'>
-                <input checked={rawInputValue} className='mdl-checkbox__input' ref='checkbox' type='checkbox' {...inputProps}/>
+                <input checked={rawInputValue} className='mdl-checkbox__input' ref='checkbox' type='checkbox' {...validInputProps}/>
                 {label && <span className='mdl-checkbox__label'>{i18next.t(label)}</span>}
             </label>
           </div>

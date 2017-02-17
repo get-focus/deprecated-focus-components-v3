@@ -13,26 +13,18 @@ class InputToggle extends PureComponent {
         return domElement.checked;
     };
 
-    handleOnChange = ({target: {checked}}) => {
+    _handleonChange = ({target: {checked}}) => {
         const {onChange} = this.props;
         onChange(checked);
     };
 
     render() {
-        const managedProps = this._checkProps(this.props);
-        const validInputProps = managedProps[0];
-        const invalidInputProps = managedProps[1];
-
-        const {label} = validInputProps;
-        const {rawInputValue} = invalidInputProps;
-
-        validInputProps.onChange = this.handleOnChange;
+        const validInputProps = this._checkProps(this.props);
+        const {label,rawInputValue} = this.props;
         validInputProps.checked = rawInputValue;
-        const inputProps = {...validInputProps};
-
         return (
             <label className='mdl-switch mdl-js-switch mdl-js-ripple-effect' data-focus='input-toggle' ref='mdlHolder'>
-                <input className='mdl-switch__input' ref='toggle' type='checkbox' {...inputProps} />
+                <input className='mdl-switch__input' ref='toggle' type='checkbox' {...validInputProps} />
                 {label && <span className='mdl-switch__label'>{i18next.t(label)}</span>}
             </label>
         );

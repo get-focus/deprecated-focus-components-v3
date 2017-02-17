@@ -35,7 +35,7 @@ class InputText extends PureComponent {
      * @param  {object} evt - The react DOM event.
      * @return {object} - The function onChannge from the props, called.
      */
-    _handleInputChange = (evt) => {
+    _handleonChange = (evt) => {
         const {onChange} = this.props;
         const {value} = evt.target;
         return onChange(value);
@@ -46,19 +46,16 @@ class InputText extends PureComponent {
     */
     render() {
         const managedProps = this._checkProps(this.props);
-        const validInputProps = managedProps[0];
-        const invalidInputProps = managedProps[1]
+        const validInputProps = managedProps
 
-        const { name, placeholder, style } = validInputProps;
-        const {metadata : {validator}, error, metadata, rawInputValue, valid} = invalidInputProps;
+        const { name, placeholder, style,rawInputValue, metadata : {validator}, error, metadata, valid } = this.props;
+        const {} = this.props;
 
         const {options: validatorsOptions} = validator || {};
-        validInputProps.value = rawInputValue === undefined || rawInputValue === null ? '' : this.props.formatter(rawInputValue, MODE); //TODO : what about formattedInputValue ?
-        validInputProps.onChange = this._handleInputChange;
 
         const pattern = valid ? null : 'hasError'; //add pattern to overide mdl error style when displaying an focus error.
         const inputProps = {...validInputProps, pattern, ...validatorsOptions};
-
+        inputProps.value = rawInputValue === undefined || rawInputValue === null ? '' : this.props.formatter(rawInputValue, MODE)
         const cssClass = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
         return (
             <div className={cssClass} data-focus='input-text' ref='inputText' style={style}>

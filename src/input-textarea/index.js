@@ -34,7 +34,7 @@ class InputTextarea extends PureComponent {
     * @param  {object} evt - The react DOM event.
     * @return {object} - The function onChannge from the props, called.
     */
-    _handleInputChange = (evt) => {
+    _handleonChange = (evt) => {
         const {onChange} = this.props;
         const {value} = evt.target;
         return onChange(value);
@@ -44,19 +44,16 @@ class InputTextarea extends PureComponent {
     * @override
     */
     render() {
-        const managedProps = this._checkProps(this.props);
-        const validInputProps = managedProps[0];
-        const invalidInputProps = managedProps[1];
+        const validInputProps = this._checkProps(this.props);
 
-        const {error, formatter, rawInputValue, valid} = invalidInputProps;
-        const {name, style, placeholder} = validInputProps;
+
+        const {error, formatter, rawInputValue, valid, name, style, placeholder} = this.props;
 
         const pattern = valid ? null : 'hasError'; //add pattern to overide mdl error style when displaying an focus error.
         const mdlClasses = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
 
         validInputProps.value = formatter(rawInputValue === undefined || rawInputValue === null ? '' : rawInputValue);
         validInputProps.id = name;
-        validInputProps.onChange = this._handleInputChange
         const inputProps = {...validInputProps, pattern};
 
         return (

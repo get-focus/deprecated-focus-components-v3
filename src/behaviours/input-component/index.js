@@ -1,4 +1,6 @@
-import {inputHtmlAttributes} from './react-html-attributes';
+import {inputHtmlAttributes, eventHtmlAttributes} from './react-html-attributes';
+import {capitalize} from 'lodash';
+const MODE = {isEdit: true};
 
 export const InputBehaviour = Component => class InputComponent extends Component {
 
@@ -6,17 +8,21 @@ export const InputBehaviour = Component => class InputComponent extends Componen
     * comments will be right there
     */
     _checkProps(props) {
-        let validInputProps = {};
-        let invalidInputProps = {};
 
-        Object.keys(props).map(key => {
+        const attributesInputProps = Object.keys(props).reduce((acc, key) => {
             if(key === inputHtmlAttributes[inputHtmlAttributes.indexOf(key)]) {
-                validInputProps[key] = (key === 'value' && (props[key] === null || props[key] === undefined)) ? '' : props[key];
-            } else {
-                invalidInputProps[key] = props[key];
+                acc[key] = (key === 'value' && (props[key] === null || props[key] === undefined)) ? '' : props[key];
             }
-        });
-        const managedProps = [validInputProps, invalidInputProps];
-        return managedProps;
+            return acc;
+        }, {});
+        attributesInputProps.value = this.props.rawInputValue;
+        const eventHtmlProps = eventHtmlAttributes.reduce((acc, key) => {
+            if(this['_handle' + key]){
+                acc[key] = this['_handle' + key]
+            }
+            return acc;
+        }, {})
+
+        return { ...eventHtmlProps, ...attributesInputProps };
     };
 };

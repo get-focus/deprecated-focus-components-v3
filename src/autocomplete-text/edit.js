@@ -62,7 +62,7 @@ class AutocompleteTextEdit extends Component {
     };
 
     // Sets the state's inputValue when the user is typing
-    onQueryChange = ({target: {value}}) => {
+    _handleonChange = ({target: {value}}) => {
         const {onChange} = this.props;
         this.setState({inputValue: value});
         if(value.trim() == '') {
@@ -97,7 +97,7 @@ class AutocompleteTextEdit extends Component {
     };
 
     // Behaviour when onFocus and onBlur are triggered
-    toggleHasFocus = e => {
+    _handleonFocus = e => {
         const {hasSuggestions, hasFocus} = this.state;
         const {showAtFocus, emptyShowAll} = this.props;
         this.setState({hasFocus: !this.state.hasFocus});
@@ -116,17 +116,12 @@ class AutocompleteTextEdit extends Component {
     render() {
         const {inputValue, hasSuggestions, hasFocus, isLoading} = this.state;
 
-        const managedProps = this._checkProps(this.props);
-        const validInputProps = managedProps[0];
-        const invalidInputProps = managedProps[1];
+        const validInputProps = this._checkProps(this.props);
 
-        const {inputTimeout, error} = invalidInputProps;
-        const {placeholder} = validInputProps;
+        const {inputTimeout, error, placeholder} = this.props;
 
         validInputProps.value = inputValue === undefined || inputValue === null  ? '' : inputValue;
-        validInputProps.onFocus = this.toggleHasFocus;
-        validInputProps.onBlur = this.toggleHasFocus;
-        validInputProps.onChange = this.onQueryChange;
+        validInputProps.onBlur = this._handleonFocus;
         const inputProps = {...validInputProps};
         return(
             <div data-focus='autocompleteText'>

@@ -102,7 +102,7 @@ class Autocomplete extends Component {
             }
         }
     };
-    _handleQueryBlur = () => {
+    _handleonBlur = () => {
         const {onChange, onBadInput} = this.props;
         if(this.state.suggestions.length === 1){
             this.setState({selected: this.state.suggestions[0].key, focus: false, inputValue: this.state.suggestions[0].label}, () => {
@@ -118,7 +118,7 @@ class Autocomplete extends Component {
             });
         }
     };
-    _handleQueryChange = ({target: {value}}) => {
+    _handleonChange = ({target: {value}}) => {
         if (value === '') { // the user cleared the input, don't call the querySearcher
             const {onChange} = this.props;
             this.setState({inputValue: value, fromKeyResolver: false});
@@ -141,7 +141,7 @@ class Autocomplete extends Component {
         }).catch(error => this.setState({customError: error.message}));
     };
 
-    _handleQueryFocus = () => {
+    _handleonFocus = () => {
         this.refs.options.scrollTop = 0;
         if (this.props.onFocus) {
             this.props.onFocus.call(this);
@@ -149,7 +149,7 @@ class Autocomplete extends Component {
         this.setState({active: '', focus: true});
     };
 
-    _handleQueryKeyDown = (event) => {
+    _handleonKeyDown = (event) => {
         event.stopPropagation();
         const {which} = event;
         const {active, options} = this.state;
@@ -215,22 +215,12 @@ class Autocomplete extends Component {
 
     render () {
         const {inputValue, isLoading} = this.state;
-        const managedProps = this._checkProps(this.props);
+        const validInputProps = this._checkProps(this.props);
 
-        const validInputProps = managedProps[0];
-        const invalidInputProps = managedProps[1]
 
-        const { name, placeholder, value: valueToFormat } = validInputProps;
-        const { customError, renderOptions } = validInputProps;
+        const { name, placeholder, value: valueToFormat, customError, renderOptions  } = this.props;
 
         validInputProps.value = inputValue === undefined || inputValue === null ? '' : inputValue;
-        validInputProps.onChange = this._handleQueryChange;
-        validInputProps.onFocus = this._handleQueryFocus;
-        validInputProps.onBlur = this._handleQueryBlur;
-        validInputProps.onKeyDown = this._handleQueryKeyDown;
-
-        const inputProps = {...validInputProps};
-
         return (
             <div data-focus='autocomplete' data-id={this.autocompleteId}>
                 <div className={`mdl-textfield mdl-js-textfield${customError ? ' is-invalid' : ''}`} data-focus='input-text' ref='inputText'>
@@ -239,7 +229,7 @@ class Autocomplete extends Component {
                         className='mdl-textfield__input'
                         ref='htmlInput'
                         type='text'
-                        {...inputProps}
+                        {...validInputProps}
                     />
                     <label className='mdl-textfield__label'>{i18next.t(placeholder)}</label>
                     {customError && <span className='mdl-textfield__error'>{i18next.t(customError)}</span>}

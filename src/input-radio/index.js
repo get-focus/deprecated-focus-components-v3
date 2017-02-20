@@ -14,7 +14,7 @@ class Radio extends Component {
         this.state = {
             isChecked: isUndefined(this.props.rawInputValue) ? false : this.props.rawInputValue
         };
-        this._onChange = this._onChange.bind(this);
+        this._handleonChange = this._handleonChange.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
@@ -61,7 +61,7 @@ class Radio extends Component {
         const validInputProps = this._checkProps(this.props);
 
         const {label, onChange, rawInputValue} = this.props;
-        
+
         // we use inputProps to be able to display 'checked' property. it is required to be able to use MDL.
         validInputProps.checked = isChecked ? 'checked' : undefined;
 

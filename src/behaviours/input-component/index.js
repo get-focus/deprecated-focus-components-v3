@@ -10,7 +10,7 @@ export const InputBehaviour = Component => class InputComponent extends Componen
     _checkProps(props) {
 
         const attributesInputProps = Object.keys(props).reduce((acc, key) => {
-            if(key === inputHtmlAttributes[inputHtmlAttributes.indexOf(key)]) {
+            if(key === inputHtmlAttributes[inputHtmlAttributes.indexOf(key)] || key === eventHtmlAttributes[eventHtmlAttributes.indexOf(key)]) {
                 acc[key] = (key === 'value' && (props[key] === null || props[key] === undefined)) ? '' : props[key];
             }
             return acc;
@@ -22,7 +22,7 @@ export const InputBehaviour = Component => class InputComponent extends Componen
             }
             return acc;
         }, {})
-
-        return { ...eventHtmlProps, ...attributesInputProps };
+        const newProps = { ...attributesInputProps, ...eventHtmlProps }
+        return newProps;
     };
 };

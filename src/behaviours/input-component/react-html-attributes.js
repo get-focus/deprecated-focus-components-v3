@@ -20,8 +20,8 @@ export const inputHtmlAttributes = [
     "style", "summary", "tabIndex", "target", "title", "type", "useMap", "wmode",
     "wrap"
 ]
- export const eventHtmlAttributes = [
-     "onCopy", "onCut",
+export const eventHtmlAttributes = [
+    "onCopy", "onCut",
     "onPast", "onKeyDown", "onKeyPress", "onKeyUp", "onCompositionEnd",
     "onCompositionStart", "onCompositionUpdate", "onFocus", "onBlur",
     "onChange", "onInput", "onSubmit", "onInput", "onClick", "onContextMenu",
@@ -36,4 +36,4 @@ export const inputHtmlAttributes = [
     "onTimeUpdate", "onVolumeChange", "onWaiting", "onLoad", "onError",
     "onAnimationStart", "onAnimationEnd", "onAnimationIteration",
     "onTransitionEnd"
- ]
+]

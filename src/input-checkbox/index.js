@@ -10,7 +10,7 @@ import {InputBehaviour} from '../behaviours/input-component';
 class InputCheckBox extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleOnChange = this.handleOnChange.bind(this);
+        this._handleonChange = this._handleonChange.bind(this);
     };
 
     getValue = () => {

@@ -52,7 +52,6 @@ class InputText extends PureComponent {
         const {} = this.props;
 
         const {options: validatorsOptions} = validator || {};
-
         const pattern = valid ? null : 'hasError'; //add pattern to overide mdl error style when displaying an focus error.
         const inputProps = {...validInputProps, pattern, ...validatorsOptions};
         inputProps.value = rawInputValue === undefined || rawInputValue === null ? '' : this.props.formatter(rawInputValue, MODE)

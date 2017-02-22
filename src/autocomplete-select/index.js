@@ -12,8 +12,8 @@ class AutocompleteSelectField extends Component {
         };
     }
 
-    componentWillReceiveProps({error}) {
-        this.setState({customError: error});
+    componentWillReceiveProps({error, valid}) {
+        if(!valid) this.setState({customError: error});
     }
 
     getValue = () => {
@@ -26,23 +26,25 @@ class AutocompleteSelectField extends Component {
     };
 
     _handleAutocompleteBadInput = formattedInputValue => {
-        this.setState({customError: i18next.t('focus.components.input.autocomplete.error.invalid', {formattedInputValue})})
+        const {onBlurError} = this.props;
+        if(onBlurError) onBlurError(i18next.t('focus.components.input.autocomplete.error.invalid', {formattedInputValue}));
     };
 
     _handleAutocompleteChange = rawInputValue => {
         const {onChange} = this.props;
-        this.setState({customError: null}, () => {
-            if (onChange) onChange(rawInputValue);
-        });
+        if (onChange) onChange(rawInputValue);
     };
 
     _renderEdit = () => {
         const {customError} = this.state;
+        const {onBlurError, valid} = this.props;
         return (
             <AutocompleteSelectEdit
                 customError={customError}
+                valid={valid}
                 onBadInput={this._handleAutocompleteBadInput}
                 onChange={this._handleAutocompleteChange}
+                onBlurError={onBlurError}
                 ref='autocomplete'
                 {...this.props}
                 />

@@ -32,6 +32,10 @@ class Autocomplete extends Component {
         this.autocompleteId = uniqueId('autocomplete-text-');
     };
 
+    componentWillMount() {
+        this.allowBlur = true;
+    };
+
     componentDidMount() {
         const {rawInputValue, keyResolver, inputTimeout} = this.props;
         // rawInputValue is defined, call the keyResolver to get the associated label
@@ -61,7 +65,8 @@ class Autocomplete extends Component {
     };
 
     componentDidUpdate() {
-        if (this.props.customError) {
+        const {valid} = this.props;
+        if (!valid) {
             this.refs.inputText.classList.add('is-invalid');
         } else {
             this.refs.inputText.classList.remove('is-invalid');
@@ -107,19 +112,24 @@ class Autocomplete extends Component {
     };
 
     _handleQueryBlur = () => {
-        const {onChange, onBadInput, onBlurError, customError} = this.props;
-        if(this.state.suggestions.length === 1){
-            this.setState({selected: this.state.suggestions[0].key, focus: false, inputValue: this.state.suggestions[0].label}, () => {
-                if(onChange) onChange(this.state.suggestions[0].key);
-            });
-        } else {
-            const {inputValue} = this.state;
-            this.setState({focus: false,}, () => {
-                if (onBadInput && this.getValue() === null && inputValue !== '') {
-                    onBadInput(inputValue);
-                }
-            });
-            if(onBlurError) onBlurError(customError);
+        const {onChange, onBadInput, onBlurError} = this.props;
+        const {suggestions, options, rawInputValue, inputValue, selected, resolvedLabel} = this.state;
+        if(this.allowBlur) {
+            if(suggestions.length === 0 && options.size === 1 && inputValue !== '') {
+                this.setState({selected: rawInputValue, focus: false, inputValue: options.get(rawInputValue)}, () => {
+                    if(onChange) onChange(rawInputValue);
+                });
+            } else if(suggestions.length === 1){
+                this.setState({selected: suggestions[0].key, focus: false, inputValue: suggestions[0].label}, () => {
+                    if(onChange) onChange(suggestions[0].key);
+                });
+            } else if(this.getValue() === null) {
+                this.setState({focus: false}, () => {
+                    if (onBadInput && this.getValue() === null && inputValue !== '') {
+                        onBadInput(inputValue);
+                    }
+                });
+            }
         }
     };
 
@@ -136,16 +146,18 @@ class Autocomplete extends Component {
     };
 
     _querySearcher = value => {
-        const {querySearcher, keyName, labelName, onChange} = this.props;
+        const {querySearcher, keyName, labelName, onChange, onBadInput, onInputChange} = this.props;
         querySearcher(value).then(({data, totalCount}) => {
             // TODO handle the incomplete option list case
             const options = new Map();
             data.forEach(item => {
                 options.set(item[keyName], item[labelName]);
             });
-            this.setState({options, isLoading: false, totalCount, suggestions: data});
+
+            this.setState({options, isLoading: false, totalCount, suggestions: data}, () => {
+                if(data.length === 0) onBadInput(value);
+            });
         }).catch(error => this.setState({customError: error.message}));
-        onChange(value);
     };
 
     _handleQueryFocus = () => {
@@ -187,14 +199,16 @@ class Autocomplete extends Component {
         this.setState({active: key});
     };
 
-    _select(key) {
+    _select = (key) => {
         const {options} = this.state;
         const {onChange, keyName, labelName} = this.props;
         const resolvedLabel = options.get(key) || '';
+        this.allowBlur = false;
         this.refs.htmlInput.blur();
         this.setState({inputValue: i18next.t(resolvedLabel), selected: key, focus: false}, () => {
-            if (onChange) onChange(key);
+            onChange(key);
         });
+        this.allowBlur = true;
     };
 
     _renderOptions = () => {
@@ -207,7 +221,7 @@ class Autocomplete extends Component {
                     data-active={isActive}
                     data-focus='option'
                     key={key}
-                    onClick={this._select.bind(this, key)}
+                    onMouseDown={this._select.bind(this, key)}
                     onMouseOver={this._handleSuggestionHover.bind(this, key)}
                     >
                     {i18next.t(value)}
@@ -222,12 +236,15 @@ class Autocomplete extends Component {
     };
 
     render () {
-        const {customError, inputTimeout, keyName, keyResolver, labelName, placeholder, querySearcher, renderOptions, ...inputProps} = this.props;
+        const {customError, inputTimeout, keyName, keyResolver, labelName, placeholder, querySearcher, renderOptions, valid, ...inputProps} = this.props;
         const {inputValue, isLoading} = this.state;
         const {_handleQueryFocus, _handleQueryKeyDown, _handleQueryChange, _handleQueryBlur} = this;
+        const isValid = !valid ? ' is-invalid' : '';
+        const cssClass = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
+
         return (
             <div data-focus='autocomplete' data-id={this.autocompleteId}>
-                <div className={`mdl-textfield mdl-js-textfield${customError ? ' is-invalid' : ''}`} data-focus='input-text' ref='inputText'>
+                <div className={cssClass} data-focus='input-text' ref='inputText'>
                     <div data-focus='loading' data-loading={isLoading} className='mdl-progress mdl-js-progress mdl-progress__indeterminate' ref='loader'></div>
                     <input
                         className='mdl-textfield__input'
@@ -241,7 +258,7 @@ class Autocomplete extends Component {
                         value={inputValue === undefined || inputValue === null ? '' : inputValue}
                         />
                     <label className='mdl-textfield__label'>{i18next.t(placeholder)}</label>
-                    {customError && <span className='mdl-textfield__error'>{i18next.t(customError)}</span>}
+                    {!valid && <span className='mdl-textfield__error'>{i18next.t(customError)}</span>}
                 </div>
                 {renderOptions ? renderOptions.call(this) : this._renderOptions()}
             </div>

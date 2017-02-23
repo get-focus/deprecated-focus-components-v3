@@ -1,6 +1,6 @@
 {
   "name": "focus-components",
-  "version": "3.2.4",
+  "version": "3.2.5",
   "description": "Focus web components to build applications (based on Material Design)",
   "main": "index.js",
   "scripts": {

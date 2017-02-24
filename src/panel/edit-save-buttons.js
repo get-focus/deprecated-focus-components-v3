@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Button from '../button';
+import DoubleActionButton from '../double-action-button';
 
 const renderEditingButtons = (toggleEdit, getUserInput, save) => (
     <span>
@@ -21,7 +22,7 @@ const renderConsultingButtons = (toggleEdit) => (
 * @param  {[function]} save}           save function which will be call on save button click
 * @return {[element]}                  Buttons dipending on the form mode (edit or not)
 */
-const renderButtons = ({editing, toggleEdit, getUserInput, save}) => (
-    editing ? renderEditingButtons(toggleEdit, getUserInput, save) : renderConsultingButtons(toggleEdit)
+const renderButtons = ({editing, toggleEdit, getUserInput, save, saving}) => (
+    editing ? renderEditingButtons(toggleEdit, getUserInput, save, saving) : renderConsultingButtons(toggleEdit)
 );
 export default renderButtons;

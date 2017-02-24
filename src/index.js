@@ -17,6 +17,7 @@ import './chips';
 import './column';
 import './confirmation-popin';
 import './draggable-iframe';
+import './double-action-button';
 import './dropdown';
 import './empty';
 import './form';

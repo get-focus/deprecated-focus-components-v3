@@ -9,6 +9,7 @@ import '../button-back/style/back.scss';
 import '../button-back-to-top/style/back-to-top.scss';
 import '../chips/index.scss';
 import '../confirmation-popin/index.scss';
+import '../double-action-button/style/double-action-button.scss';
 import '../draggable-iframe/style/draggable-iframe.scss';
 import '../dropdown/index.scss';
 import '../header-actions/index.scss';

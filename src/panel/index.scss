@@ -1,5 +1,9 @@
 $panel-title-color:#36b7b9;
 
+.mdl-card__supporting-text{
+   overflow: visible !important;
+}
+
 @mixin busy {
     &::after {
         content: '';

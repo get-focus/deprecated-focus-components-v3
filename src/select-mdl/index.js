@@ -76,22 +76,23 @@ class Select extends PureComponent {
     * @override
     */
     render() {
-        const { autoFocus, error, labelKey, name, placeholder, hasUndefined, style, rawInputValue, valueKey, disabled, onChange, size, valid, unSelectedLabel,  defaultValue } = this.props;
+        const { autoFocus, error, labelKey, name, placeholder, hasUndefined, style, rawInputValue, valueKey, disabled, onChange,index, size, valid, unSelectedLabel,  defaultValue } = this.props;
         const selectProps = { autoFocus, disabled, size };
         const currentValue = find(this.props.values, (o) => o[valueKey] === rawInputValue) || {};
         const currentLabel = rawInputValue ? i18next.t(currentValue[labelKey]) : i18next.t(unSelectedLabel)
         const currentDataVal = rawInputValue ? i18next.t(currentValue[labelKey]) : i18next.t(unSelectedLabel)
         const cssClass = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
+        console.log(index);
         return (
             <div data-focus='select-mdl' ref='select' className={`${cssClass} getmdl-select`} data-valid={!error} style={style}>
-                <input placeholder={placeholder} className='mdl-textfield__input' value={currentLabel} type='text' id={name} name={name} readOnly tabIndex='-1' data-val={currentDataVal} ref='htmlSelect' {...selectProps} />
+                <input placeholder={placeholder} className='mdl-textfield__input' value={currentLabel} type='text' id={index ? `${name}${index}`:`${name}`} name={index ? `${name}${index}`:`${name}`} readOnly tabIndex={index} data-val={currentDataVal} ref='htmlSelect' {...selectProps} />
                 {!disabled &&
-                    <label htmlFor={name}>
+                    <label htmlFor={index ? `${name}${index}`:`${name}`}>
                         <i className='mdl-icon-toggle__label material-icons'>keyboard_arrow_down</i>
                     </label>
                 }
                 {!disabled &&
-                    <ul className='mdl-menu mdl-js-menu' htmlFor={name} ref='selectMenu'>
+                    <ul className='mdl-menu mdl-js-menu' htmlFor={index ? `${name}${index}`:`${name}`} ref='selectMenu'>
                         {this._renderOptions({...this.props, currentValue})}
                     </ul>
                 }

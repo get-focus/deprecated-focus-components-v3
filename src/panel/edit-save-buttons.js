@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import Button from '../button';
-import DoubleActionButton from '../double-action-button';
 
 const renderEditingButtons = (toggleEdit, getUserInput, save) => (
     <span>

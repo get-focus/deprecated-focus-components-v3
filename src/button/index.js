@@ -11,14 +11,16 @@ const RIPPLE_EFFECT = 'mdl-js-ripple-effect';
 const propTypes = {
     className: PropTypes.string,
     color: PropTypes.oneOf([undefined,'colored', 'primary', 'accent']),
-    id: PropTypes.string,
     handleOnClick: PropTypes.func, //to remove in V2
     hasRipple: PropTypes.bool,
+    id: PropTypes.string,
     isJs: PropTypes.bool,
     icon: PropTypes.string,
     iconLibrary: PropTypes.oneOf(['material', 'font-awesome', 'font-custom']),
     label: PropTypes.string,
     onClick: PropTypes.func,
+    processingLabel: PropTypes.string,
+    saving: PropTypes.bool,
     shape: PropTypes.oneOf([undefined, 'raised', 'fab', 'icon', 'mini-fab']),
     type: PropTypes.oneOf(['submit', 'button'])
 }
@@ -30,8 +32,8 @@ const defaultProps = {
     id: '',
     isJs: true,
     label: '',
-    type: 'submit',
-    shape: 'raised'
+    shape: 'raised',
+    type: 'submit'
 }
 
 @MDBehaviour('materialButton', 'MaterialButton')
@@ -45,6 +47,13 @@ class Button extends Component {
         const refNode = ReactDOM.findDOMNode(this.refs['materialButton']);
         if (hasRipple) {
             componentHandler.upgradeElement(refNode, 'MaterialRipple');
+        }
+    }
+
+    componentDidUpdate() {
+        const spinnerNode = ReactDOM.findDOMNode(this.refs['double-action-button-spinner']);
+        if(spinnerNode) {
+            componentHandler.upgradeElement(spinnerNode, 'MaterialSpinner');
         }
     }
 
@@ -113,9 +122,12 @@ class Button extends Component {
     * @return {Component} - Tle button label.
     */
     _renderLabel() {
-        const {label, shape} = this.props;
-        if (label && 'fab' !== shape && 'icon' !== shape && 'mini-fab' !== shape ) {
-            return i18next.t(label);
+        const {label,processLabel, saving, shape} = this.props;
+
+        if (label && 'fab' !== shape && 'icon' !== shape && 'mini-fab' !== shape && (!saving || !processLabel)) {
+            return <span data-focus='button-label'>{i18next.t(label)}</span>;
+        } else if (processLabel && 'fab' !== shape && 'icon' !== shape && 'mini-fab' !== shape && saving) {
+            return <span data-focus='button-label'>{i18next.t(processLabel)}</span>
         }
         return null;
     };
@@ -124,13 +136,14 @@ class Button extends Component {
     render() {
         // attribute doc : https://developer.mozilla.org/fr/docs/Web/HTML/Element/Button
         // be careful the way you declare your attribute names : https://developer.mozilla.org/fr/docs/Web/HTML/Element/Button
-        const {className, disabled, formNoValidate, handleOnClick, icon, id, onClick, type, label, style, hasRipple, isJs, iconLibrary, ...otherProps } = this.props;
+        const {className, disabled, formNoValidate, handleOnClick, icon, id, onClick, type, label, style, hasRipple, isJs, iconLibrary, saving, ...otherProps } = this.props;
         const otherInputProps = { disabled, formNoValidate, onClick: handleOnClick ? handleOnClick : onClick, style, type, ...otherProps}; //on click for legacy. Remove handleOnClick in v2
         const renderedClassName = `${className ? className : ''} ${::this._getComponentClassName()}`.trim();
         return (
-            <button alt={i18next.t(label)} className={renderedClassName} data-focus='button-action' id={id} title={i18next.t(label)} {...otherInputProps} ref='materialButton'>
+            <button alt={i18next.t(label)} className={renderedClassName} data-focus='button-action' data-saving={saving} disabled={saving} id={id} title={i18next.t(label)} {...otherInputProps} ref='materialButton'>
                 {icon && ::this._renderIcon()}
                 {::this._renderLabel()}
+                {saving && <div className='mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active' data-focus='double-action-button-spinner' ref='double-action-button-spinner' ></div>}
             </button>
         );
     }

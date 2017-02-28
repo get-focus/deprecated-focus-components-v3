@@ -28,8 +28,6 @@ class Panel extends PureComponent {
         const shouldDisplayActionsBottom = Buttons && includes(['both', 'bottom'], buttonsPosition);
         const displaySpinner = Spinner && (loading || saving);
 
-        console.log('PANEL SAVING', saving);
-
         return (
             <div className='mdl-card mdl-card--border mdl-shadow--4dp' data-spy={this.spyId} data-focus='panel' data-loading={loading} data-saving={saving} data-editing={editing}>
                 {displaySpinner && <Spinner />}

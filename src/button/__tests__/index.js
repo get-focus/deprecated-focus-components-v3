@@ -1,4 +1,5 @@
 import Button from '../';
+import ReactDOM from 'react-dom';
 const {renderIntoDocument, Simulate} = TestUtils;
 
 describe('<Button />', () => {
@@ -53,6 +54,40 @@ describe('<Button />', () => {
             it('should give add the fab mention in the className', () => {
                 const {materialButton} = renderedButton.refs;
                 expect(materialButton.className).to.contain('mdl-button--fab');
+            });
+        });
+        describe('When we set a processingLabel', () => {
+            let renderedButton;
+            describe('When saving props is false', () => {
+                before(() => {
+                    renderedButton = renderIntoDocument(<Button label='SAVE' processLabel='Loading' saving={false} />);
+                });
+                it('should render the default label', () => {
+                    const buttonLabel = ReactDOM.findDOMNode(renderedButton).querySelector('[data-focus="button-label"]').innerHTML;
+                    expect(buttonLabel).to.equal(renderedButton.props.label);
+                });
+                it('should not render the process label', () => {
+                    const buttonLabel = ReactDOM.findDOMNode(renderedButton).querySelector('[data-focus="button-label"]').innerHTML;
+                    expect(buttonLabel).to.not.equal(renderedButton.props.processLabel);
+                });
+            });
+            describe('When saving props is true', () => {
+                before(() => {
+                    renderedButton = renderIntoDocument(<Button label='SAVE' processLabel='Loading' saving={true} />);
+                });
+                it('should render the process label', () => {
+                    const buttonLabel = ReactDOM.findDOMNode(renderedButton).querySelector('[data-focus="button-label"]').innerHTML;
+                    expect(buttonLabel).to.equal(renderedButton.props.processLabel);
+                });
+                it('should not render the default label', () => {
+                    const buttonLabel = ReactDOM.findDOMNode(renderedButton).querySelector('[data-focus="button-label"]').innerHTML;
+                    expect(buttonLabel).to.not.equal(renderedButton.props.label);
+                });
+                it('should have a spinner', () => {
+                    const spinner = ReactDOM.findDOMNode(renderedButton).querySelector('[data-focus="double-action-button-spinner"]');
+                    expect(spinner).to.not.be.null;
+                    expect(spinner).to.not.be.undefined;
+                });
             });
         });
     });

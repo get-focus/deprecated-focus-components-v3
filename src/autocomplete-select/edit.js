@@ -199,7 +199,7 @@ class Autocomplete extends Component {
         this.setState({active: key});
     };
 
-    _select = (key, e) => {
+    _select = (key) => {
         const {options} = this.state;
         const {onChange, keyName, labelName} = this.props;
         const resolvedLabel = options.get(key) || '';
@@ -241,7 +241,7 @@ class Autocomplete extends Component {
         const {_handleQueryFocus, _handleQueryKeyDown, _handleQueryChange, _handleQueryBlur} = this;
         const isValid = !valid ? ' is-invalid' : '';
         const cssClass = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
-        const value = hasResolved ? resolvedValue: rawInputValue;
+        const value = hasResolved ? resolvedValue: inputValue;
         return (
             <div data-focus='autocomplete' data-id={this.autocompleteId}>
                 <div className={cssClass} data-focus='input-text' ref='inputText'>

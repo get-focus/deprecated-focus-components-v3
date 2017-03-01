@@ -53,7 +53,7 @@ class Autocomplete extends Component {
     componentWillReceiveProps({rawInputValue, customError, error}) {
         const {keyResolver} = this.props;
         if (rawInputValue !== this.props.rawInputValue && rawInputValue !== undefined && rawInputValue !== null) { // rawInputValue is defined, call the keyResolver to get the associated label
-            this.setState({inputValue: rawInputValue, customError}, () => keyResolver(rawInputValue).then(value => {
+            this.setState({customError}, () => keyResolver(rawInputValue).then(value => {
                 this.setState({resolvedValue: value, fromKeyResolver: true});
             }).catch(error => this.setState({customError: error.message})));
         } else if (customError !== this.props.customError) {

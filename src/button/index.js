@@ -9,6 +9,7 @@ const BUTTON_PRFX = 'mdl-button--';
 const RIPPLE_EFFECT = 'mdl-js-ripple-effect';
 
 const propTypes = {
+    className: PropTypes.string,
     color: PropTypes.oneOf([undefined,'colored', 'primary', 'accent']),
     id: PropTypes.string,
     handleOnClick: PropTypes.func, //to remove in V2
@@ -23,14 +24,14 @@ const propTypes = {
 }
 
 const defaultProps = {
-    type: 'submit',
-    shape: 'raised',
-    label: '',
-    icon: null,
-    id: '',
     hasRipple: true,
+    icon: null,
+    iconLibrary: 'material',
+    id: '',
     isJs: true,
-    iconLibrary: 'material'
+    label: '',
+    type: 'submit',
+    shape: 'raised'
 }
 
 @MDBehaviour('materialButton', 'MaterialButton')

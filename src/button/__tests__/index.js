@@ -84,7 +84,7 @@ describe('<Button />', () => {
                     expect(buttonLabel).to.not.equal(renderedButton.props.label);
                 });
                 it('should have a spinner', () => {
-                    const spinner = ReactDOM.findDOMNode(renderedButton).querySelector('[data-focus="double-action-button-spinner"]');
+                    const spinner = ReactDOM.findDOMNode(renderedButton).querySelector('.double-action-button-spinner');
                     expect(spinner).to.not.be.null;
                     expect(spinner).to.not.be.undefined;
                 });

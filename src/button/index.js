@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import MDBehaviour from '../behaviours/material';
 import i18next from 'i18next';
+import Spinner from '../spinner/mdl-spinner';
 
 const BTN_JS = 'mdl-js-button';
 const BTN_CLASS = 'mdl-button';
@@ -47,13 +48,6 @@ class Button extends Component {
         const refNode = ReactDOM.findDOMNode(this.refs['materialButton']);
         if (hasRipple) {
             componentHandler.upgradeElement(refNode, 'MaterialRipple');
-        }
-    }
-
-    componentDidUpdate() {
-        const spinnerNode = ReactDOM.findDOMNode(this.refs['double-action-button-spinner']);
-        if(spinnerNode) {
-            componentHandler.upgradeElement(spinnerNode, 'MaterialSpinner');
         }
     }
 
@@ -143,7 +137,7 @@ class Button extends Component {
             <button alt={i18next.t(label)} className={renderedClassName} data-focus='button-action' data-saving={saving} disabled={saving} id={id} title={i18next.t(label)} {...otherInputProps} ref='materialButton'>
                 {icon && ::this._renderIcon()}
                 {::this._renderLabel()}
-                {saving && <div className='mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active' data-focus='double-action-button-spinner' ref='double-action-button-spinner' ></div>}
+                {saving && <Spinner className='double-action-button-spinner' />}
             </button>
         );
     }

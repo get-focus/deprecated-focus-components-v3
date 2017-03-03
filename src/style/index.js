@@ -29,6 +29,7 @@ import '../select-radio/style/select-radio.scss';
 import '../snackbar/index.scss';
 import '../spinner/mdl-progress.scss';
 import '../spinner/pacman.scss';
+import '../tooltip/style/tooltip.scss';
 
 //STYLE FOLDER
 import '../style/animation.scss';

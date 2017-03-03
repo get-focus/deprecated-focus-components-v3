@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react';
 import Button from '../button';
 
-const renderEditingButtons = (toggleEdit, getUserInput, save) => (
+const renderEditingButtons = (toggleEdit, getUserInput, save, saving) => (
     <span>
-        <Button className='panel-button-save' icon='save' label='focus.components.button.save' color='primary' onClick={() => save(getUserInput())} shape={null} type='button' />
+        <Button className='panel-button-save' icon='save' label='focus.components.button.save' processLabel='focus.components.button.save' saving={saving} color='primary' onClick={() => save(getUserInput())} shape={null} type='button' />
         <Button className='panel-button-cancel'icon='clear' label='focus.components.button.cancel' onClick={() => toggleEdit(false)} shape={null} type='button' />
     </span>
 );
@@ -21,7 +21,7 @@ const renderConsultingButtons = (toggleEdit) => (
 * @param  {[function]} save}           save function which will be call on save button click
 * @return {[element]}                  Buttons dipending on the form mode (edit or not)
 */
-const renderButtons = ({editing, toggleEdit, getUserInput, save}) => (
-    editing ? renderEditingButtons(toggleEdit, getUserInput, save) : renderConsultingButtons(toggleEdit)
+const renderButtons = ({editing, toggleEdit, getUserInput, save, saving}) => (
+    editing ? renderEditingButtons(toggleEdit, getUserInput, save, saving) : renderConsultingButtons(toggleEdit)
 );
 export default renderButtons;

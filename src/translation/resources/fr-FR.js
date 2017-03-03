@@ -7,7 +7,8 @@ export default {
                 cancel: 'Annuler',
                 edit: 'Modifier',
                 help: 'Accédez au centre d\'aide en cliquant ici',
-                save: 'Enregistrer'
+                save: 'Enregistrer',
+                saving: 'Enregistrement'
             },
             field: {
                 required: 'Ce champ est requis'

@@ -2,7 +2,7 @@
 
 Ce composant permet d'afficher un bouton.
 
-![Image]https://github.com/get-focus/focus-components/blob/develop/src/button/example/capture.png?raw=true)
+![Image](https://github.com/get-focus/focus-components/blob/develop/src/button/example/capture.png?raw=true)
 
 ```javascript
 <Button label='button.label' type='button' shape='raised' color='accent' hasRipple={true} handleOnClick={() => console.log(this)} />

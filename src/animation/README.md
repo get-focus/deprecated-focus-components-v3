@@ -1,4 +1,4 @@
-# Titre du component
+# Animation
 
 Ce composant permet d'animer un autre composant.
 
@@ -8,9 +8,6 @@ Ce composant permet d'animer un autre composant.
     <h3>{'Test Animation'}</h3>
 </Animation>
 ```
-
-Découvrir le composant sur le [showcase](http://google.com)
-
 
 | Props | Type | Default props | Description |
 |---|---|---|---|

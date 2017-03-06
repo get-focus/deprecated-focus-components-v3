@@ -1,4 +1,4 @@
-# Titre du component
+# ButtonBackToTop
 
 Ce composant permet d'afficher un bouton pour remonter en haut de la page.
 

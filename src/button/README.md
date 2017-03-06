@@ -1,4 +1,4 @@
-# Titre du component
+# Button
 
 Ce composant permet d'afficher un bouton.
 

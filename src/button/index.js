@@ -130,14 +130,15 @@ class Button extends Component {
     render() {
         // attribute doc : https://developer.mozilla.org/fr/docs/Web/HTML/Element/Button
         // be careful the way you declare your attribute names : https://developer.mozilla.org/fr/docs/Web/HTML/Element/Button
-        const {className, disabled, formNoValidate, handleOnClick, icon, id, onClick, type, label, style, hasRipple, isJs, iconLibrary, saving, ...otherProps } = this.props;
-        const otherInputProps = { disabled, formNoValidate, onClick: handleOnClick ? handleOnClick : onClick, style, type, ...otherProps}; //on click for legacy. Remove handleOnClick in v2
+        const {className, disabled, formNoValidate, handleOnClick, icon, id, onClick, type, label, style, hasRipple, isJs, iconLibrary, saving, shape, ...otherProps } = this.props;
+        const otherInputProps = { formNoValidate, onClick: handleOnClick ? handleOnClick : onClick, style, type, ...otherProps}; //on click for legacy. Remove handleOnClick in v2
         const renderedClassName = `${className ? className : ''} ${::this._getComponentClassName()}`.trim();
+        const showSpinner = (saving && (shape === 'fab' || shape === 'mini-fab' || shape === 'icon')) || !saving ? false : true;
         return (
             <button alt={i18next.t(label)} className={renderedClassName} data-focus='button-action' data-saving={saving} disabled={saving} id={id} title={i18next.t(label)} {...otherInputProps} ref='materialButton'>
                 {icon && ::this._renderIcon()}
                 {::this._renderLabel()}
-                {saving && <Spinner className='double-action-button-spinner' />}
+                {showSpinner && <Spinner className='double-action-button-spinner' />}
             </button>
         );
     }

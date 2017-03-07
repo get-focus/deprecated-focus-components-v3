@@ -18,7 +18,6 @@ $fill-height-modal-margin: 200px;
     // Full modal type
     @if $type == 'full' {
       min-width: #{$width}vw;
-      min-height: #{$width}vh;
     }
 
     // From menu modal type

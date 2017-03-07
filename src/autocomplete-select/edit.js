@@ -161,7 +161,7 @@ class Autocomplete extends Component {
     };
 
     _handleQueryFocus = () => {
-        this.refs.options.scrollTop = 0;
+        (this.refs.options || {}).scrollTop = 0;
         if (this.props.onFocus) {
             this.props.onFocus.call(this);
         }
@@ -229,9 +229,7 @@ class Autocomplete extends Component {
             );
         }
         return (
-            <ul data-focus='options' ref='options' data-focussed={focus}>
-                {renderedOptions}
-            </ul>
+            focus && <ul data-focus='options' ref='options'> {renderedOptions} </ul>
         );
     };
 

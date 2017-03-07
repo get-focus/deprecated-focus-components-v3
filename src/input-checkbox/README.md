@@ -12,6 +12,6 @@ Ce composant permet d'afficher une case à cocher.
 | Props | Type | Default props | Description |
 |---|---|---|---|
 | label | string | | Label de la checkbox |
-| disabled | bool | false | Si la checkbox est clicable |
+| disabled | bool | false | Si la checkbox est cliquable |
 | onChange | func | | Fonction au clic sur la checkbox |
 | rawInputValue | bool | false | Valeur de la checkbox |

@@ -1,24 +1,28 @@
-const ProgressBar = FocusComponents.components.ProgressBar;
+import React, {PropTypes, Component} from 'react';
+import ProgressBar from 'focus-components/progress-bar';
 
-const ProgressBarExample = React.createClass({
-    getInitialState() {
-        return {
-            loading: 0
-        };
-    },
+class ProgressBarExample extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {loading: 0};
+        this.updateLoading = this.updateLoading.bind(this);
+    }
+
     updateLoading() {
         let {loading} = this.state;
         if(loading < 100) {
             this.setState({loading: loading+5});
             setInterval(this.updateLoading, 500);
         }
-    },
+    }
+
     componentDidMount() {
         const {loading} = this.state;
         if (loading < 100) {
             this.updateLoading();
         }
-    },
+    }
+
     render() {
         const {loading} = this.state;
         return(
@@ -31,6 +35,6 @@ const ProgressBarExample = React.createClass({
             </div>
         );
     }
-});
+}
 
-module.exports = ProgressBarExample;
+export default ProgressBarExample;

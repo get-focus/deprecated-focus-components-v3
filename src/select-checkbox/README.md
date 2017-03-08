@@ -1,57 +1,22 @@
-## Configuration Technique
-Affichage d'une liste de selection multiple en mode checkbox.
+# Title
+
+Ce composant permet d'afficher une liste de sélection multiple en mode checkbox.
+
+![Image](https://github.com/get-focus/focus-components/blob/doc-input-radio/src/select-checkbox/example/capture.png?raw=true)
+
 
 ## Attributs
-<table>
-	<thead>
-        <tr>
-            <th>Attribut</th>
-            <th>Type</th>
-            <th>Valeurs possibles</th>
-            <th>Valeur par default</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>value</code></td>
-            <td><i>array</i></td>
-            <td></td>
-            <td><code>[]</code></td>
-            <td>La liste des valeurs sélectionnées.</td>
-        </tr>
-        <tr>
-            <td><code>values</code></td>
-            <td><i>array</i></td>
-            <td></td>
-            <td><code>[]</code></td>
-            <td>Valeurs de selection possibles pour la liste.</td>
-        </tr>
-        <tr>
-            <td><code>valueKey</code></td>
-            <td><i>string</i></td>
-            <td><code>text</code></td>
-            <td><code>value</code></td>
-            <td>Nom de l'attribut correspondant à la valeur dans la liste.</td>
-        </tr>
-        <tr>
-            <td><code>labelKey</code></td>
-            <td><i>string</i></td>
-            <td></td>
-            <td><code>label</code></td>
-            <td>Nom de l'attribut correspondant au libellé dans la liste.</td>
-        </tr>
-        <tr>
-            <td><code>style</code></td>
-            <td><i>object</i></td>
-            <td><code>{className:"radio"}</code></td>
-            <td><code>{}</code></td>
-            <td>Style à appliquer sur la liste de sélection.</td>
-        </tr>
-   </tbody>
-</table>
+
+| Props | Type | Default props | Description |
+|---|---|---|---|
+| labelKey | string | 'label' | Nom de l'attribut correspondant au libellé dans la liste |
+| rawInputValue | array | [] | |
+| value | array | | La liste des valeurs sélectionnées |
+| values | array | [] | Valeurs de sélection possibles pour la liste |
+| valueKey | array | [] | Nom de l'attribut correspondant à la valeur dans la liste |
 
 ## Méthodes
+
 <table>
 	<thead>
 		<tr>
@@ -86,9 +51,3 @@ Affichage d'une liste de selection multiple en mode checkbox.
       </tr>
    </tbody>
 </table>
-
-## Structure
-- div
-	- input checkbox
-		- label
-

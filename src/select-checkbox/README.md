@@ -1,4 +1,4 @@
-# Title
+# SelectCheckbox
 
 Ce composant permet d'afficher une liste de sélection multiple en mode checkbox.
 

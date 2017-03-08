@@ -32,7 +32,6 @@ class Select extends PureComponent {
     componentDidMount() {
         const selectMenu = ReactDOM.findDOMNode(this.refs["selectMenu"]);
         componentHandler.upgradeElement(selectMenu);
-
     }
 
     /**
@@ -76,7 +75,7 @@ class Select extends PureComponent {
     * @override
     */
     render() {
-        const { autoFocus, error, labelKey, name, placeholder, hasUndefined, style, rawInputValue, valueKey, disabled, onChange,index, size, valid, unSelectedLabel,  defaultValue } = this.props;
+        const { autoFocus, error, labelKey, name, placeholder, hasUndefined, style, rawInputValue, valueKey, disabled, onChange,index, size, valid, unSelectedLabel, defaultValue } = this.props;
         const selectProps = { autoFocus, disabled, size };
         const currentValue = find(this.props.values, (o) => o[valueKey] === rawInputValue) || {};
         const currentLabel = rawInputValue ? i18next.t(currentValue[labelKey]) : i18next.t(unSelectedLabel)
@@ -110,7 +109,6 @@ Select.defaultProps = {
     isActiveProperty: 'isActive',
     isRequired: false,
     labelKey: 'label',
-    multiple: false,
     unSelectedLabel: 'select.unSelected',
     valid: true,
     values: [],

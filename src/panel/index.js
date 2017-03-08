@@ -66,6 +66,7 @@ Panel.propTypes = {
     getUserInput: PropTypes.func,
     save: PropTypes.func,
     showHelp: PropTypes.bool,
+    saving: PropTypes.bool,
     Spinner: PropTypes.func,
     title: PropTypes.string,
     toggleEdit: PropTypes.func

@@ -27,7 +27,7 @@ Ce composant permet d'afficher un menu dont les éléments sont automatiquement 
 
 | Props | Type | Default props | Description |
 |---|---|---|---|
-| hasMenu | bool | true | Niveau de complétion de la barre |
-| hasBackToTop | bool | true | Mode complétion indéterminée |
+| hasMenu | bool | true | Active la présence du composant de navigation |
+| hasBackToTop | bool | true | Active la présence du bouton BackToTop |
 | offset | number | 100 | Mode complétion indéterminée |
-| scrollDelay | number | 10 | Mode complétion indéterminée |
+| scrollDelay | number | 10 | Délai de déclenchement par défaut pour l'appel du scrollspy |

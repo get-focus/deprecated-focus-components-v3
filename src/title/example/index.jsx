@@ -1,11 +1,14 @@
-const Title = FocusComponents.components.Title;
+import React, {PropTypes, Component} from 'react';
+import Title from 'focus-components/title';
 
-function TitleExample() {
-    return(
-        <div>
-            <Title label='hello'/>
-        </div>
-    );
+class TitleExample extends Component {
+    render() {
+        return(
+            <div>
+                <Title label='hello'/>
+            </div>
+        );
+    }
 }
 
-module.exports = TitleExample;
+export default TitleExample;

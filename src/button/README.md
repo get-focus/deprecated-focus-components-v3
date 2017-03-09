@@ -14,11 +14,11 @@ Découvrir le composant sur le [showcase](http://kleegroup.github.io/focus-showc
 | Props | Type | Default props | Description |
 |---|---|---|---|
 | className | string |  | Classe CSS |
-| color | oneOf([undefined,'colored', 'primary', 'accent']) | | Couleur prédéfini du bouton |
-| handleOnClick | func |  | |
+| color | oneOf([undefined, 'colored', 'primary', 'accent']) | | Couleur prédéfini du bouton |
+| handleOnClick | func |  | Fonction au clic sur le bouton |
 | hasRipple | bool | true | Active l'effet ripple sur le bouton |
 | id | string | '' | id du bouton |
-| isJs | bool | true | |
+| isJs | bool | true | Ajoute la classe mdl-js-button |
 | icon | string | null | Icone du bouton |
 | iconLibrary | oneOf(['material', 'font-awesome', 'font-custom']) | 'material' | Librairie d'icones |
 | label | string | '' | Label du bouton |
@@ -26,4 +26,4 @@ Découvrir le composant sur le [showcase](http://kleegroup.github.io/focus-showc
 | processingLabel | string | | |
 | saving | bool | | |
 | shape | oneOf([undefined, 'raised', 'fab', 'icon', 'mini-fab']) | 'raised' | Forme du bouton |
-| type | oneOf(['submit', 'button']) | 'submit' | |
+| type | oneOf(['submit', 'button']) | 'submit' | Type de bouton |

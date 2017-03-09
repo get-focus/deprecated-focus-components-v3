@@ -1,4 +1,5 @@
-const {AutocompleteText} = FocusComponents.components.input;
+import React, {PropTypes, PureComponent} from 'react';
+import AutocompleteText from 'focus-components/autocomplete-text/edit';
 
 const _querySearcher = query => {
     let data = [
@@ -61,7 +62,7 @@ const _querySearcher3 = query => {
     });
 };
 
-class AutocompleteTextExample extends React.Component {
+class AutocompleteTextExample extends PureComponent {
     state = {isEdit: true};
     render() {
         const {isEdit} = this.state;
@@ -81,7 +82,7 @@ class AutocompleteTextExample extends React.Component {
                 <br/>
                 <AutocompleteText
                     isEdit={isEdit}
-                    querySearcher={_querySearcher}
+                    querySearcher={_querySearcher3}
                     placeholder={'Error in the field...'}
                     error='This field is required'
                     />
@@ -91,4 +92,4 @@ class AutocompleteTextExample extends React.Component {
     }
 }
 
-module.exports = AutocompleteTextExample;
+export default AutocompleteTextExample;

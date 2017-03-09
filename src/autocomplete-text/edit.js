@@ -132,15 +132,15 @@ class AutocompleteTextEdit extends Component {
 
 AutocompleteTextEdit.displayName = 'AutocompleteTextEdit';
 AutocompleteTextEdit.defaultProps = {
-    placeholder: 'Search here...',
-    showAtFocus: false,
     emptyShowAll: false,
-    inputTimeout: 200
+    inputTimeout: 200,
+    placeholder: 'Search here...',
+    showAtFocus: false
 };
 AutocompleteTextEdit.propTypes = {
     emptyShowAll: PropTypes.bool, //Defines if it shows suggestions on focus when the input is empty.
-    inputTimeout : PropTypes.number.isRequired, //Timeout to execute the debounce function.
     error: PropTypes.string, //Error showed message.
+    inputTimeout : PropTypes.number.isRequired, //Timeout to execute the debounce function.
     onChange: PropTypes.func, //Launches the querySearcher.
     placeholder: PropTypes.string, //Placeholder field.
     querySearcher: PropTypes.func.isRequired, //Returns a promise which is connected to the web service.

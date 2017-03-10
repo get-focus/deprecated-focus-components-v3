@@ -1,5 +1,7 @@
-const {SelectCheckbox} = FocusComponents.components.input;
-const {Button} = FocusComponents.components;
+import React, {PropTypes, Component} from 'react';
+import SelectCheckbox from 'focus-components/select-checkbox';
+import Button from 'focus-components/button';
+
 const {pull} = _;
 
 const possibleValues = [
@@ -9,14 +11,15 @@ const possibleValues = [
     {value: 'D', label: 'Value D'}
 ];
 
-const SelectCheckboxSample = React.createClass({
-
-    /** @inheritdoc */
-    getInitialState() {
-        return {
+class SelectCheckboxSample extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             selectedValues: ['A','B','D']
         };
-    },
+        this.getValueClick = this.getValueClick.bind(this);
+        this.customGetValueClick = this.customGetValueClick.bind(this);
+    }
 
     /**
     * Handle click action to get check value.
@@ -24,7 +27,7 @@ const SelectCheckboxSample = React.createClass({
     getValueClick() {
         const values = this.refs.mySelectCheckbox.getValue();
         alert('Selected values IDs: ' + values);
-    },
+    }
 
     /**
     * Handle click action to get check value.
@@ -38,7 +41,7 @@ const SelectCheckboxSample = React.createClass({
         }
         this.setState({value: selectedValues});
         console.log('Selected values IDs: ' + this.state.selectedValues);
-    },
+    }
 
     /**
     * Render the component.
@@ -64,6 +67,6 @@ const SelectCheckboxSample = React.createClass({
             </div>
         );
     }
-});
+}
 
-module.exports = SelectCheckboxSample;
+export default SelectCheckboxSample;

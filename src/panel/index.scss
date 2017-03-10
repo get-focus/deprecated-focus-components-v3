@@ -1,5 +1,9 @@
 $panel-title-color:#36b7b9;
 
+.mdl-card__supporting-text{
+   overflow: visible !important;
+}
+
 @mixin busy {
     &::after {
         content: '';
@@ -66,15 +70,9 @@ $panel-title-color:#36b7b9;
     }
 
     .buttons {
-        [data-focus='panel-save-action'] {
-            display: inline-block;
-        }
-
-        [data-focus='panel-cancel-action'] {
-            display: inline-block;
-            [data-focus='button-action'] {
-                color: #949494;
-            }
+        text-align: right;
+        button {
+            margin: inherit 10px;
         }
     }
 

@@ -1,19 +1,19 @@
-const ScrollspyContainer = FocusComponents.components.ScrollspyContainer;
-const Panel = FocusComponents.components.Panel;
+import React, {PropTypes, Component} from 'react';
+import ScrollspyContainer from 'focus-components/scrollspy-container';
+import Panel from 'focus-components/panel';
 
-const ScrollspyContainerSample = React.createClass({
-
-    getInitialState() {
-        return {
-            isConditionalBlock: false
-        };
-    },
+class ScrollspyContainerSample extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {isConditionalBlock: false};
+    }
 
     componentDidMount() {
         setTimeout(() => {
-                this.setState({isConditionalBlock: true});
+            this.setState({isConditionalBlock: true});
         }, 3 * 1000);
-    },
+    }
+
     /**
     * Render the component.
     * @return {object} React node
@@ -23,7 +23,7 @@ const ScrollspyContainerSample = React.createClass({
 
         return (
             <div>
-                <ScrollspyContainer offset={100}>
+                <ScrollspyContainer offset={1000} >
                     <Panel title='Sports'>
                         <img alt='lorempixel' src='http://lorempixel.com/800/600/sports' title='lorempixel' />
                     </Panel>
@@ -85,6 +85,6 @@ const ScrollspyContainerSample = React.createClass({
             </div>
         );
     }
-});
+}
 
-module.exports = ScrollspyContainerSample;
+export default ScrollspyContainerSample;

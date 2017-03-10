@@ -27,12 +27,13 @@ class Panel extends PureComponent {
         const shouldDisplayActionsTop = Buttons && includes(['both', 'top'], buttonsPosition);
         const shouldDisplayActionsBottom = Buttons && includes(['both', 'bottom'], buttonsPosition);
         const displaySpinner = Spinner && (loading || saving);
+
         return (
             <div className='mdl-card mdl-card--border mdl-shadow--4dp' data-spy={this.spyId} data-focus='panel' data-loading={loading} data-saving={saving} data-editing={editing}>
                 {displaySpinner && <Spinner />}
                 <div className='mdl-card__title mdl-card--border' data-focus='panel-title'>
                     {title && <h3 data-spy-title>{i18next.t(title)}</h3>}
-                    {shouldDisplayActionsTop && <div className='buttons'><Buttons editing={editing} toggleEdit={toggleEdit} getUserInput={getUserInput} save={save}/></div>}
+                    {shouldDisplayActionsTop && <div className='buttons'><Buttons saving={saving} editing={editing} toggleEdit={toggleEdit} getUserInput={getUserInput} save={save}/></div>}
                     {showHelp && <ButtonHelp blockName={blockName || snakeCase(i18next.t(title)).split('_')[0]} />}
                 </div>
                 <div className='mdl-card__supporting-text' data-focus='panel-content'>
@@ -40,7 +41,7 @@ class Panel extends PureComponent {
                 </div>
                 {shouldDisplayActionsBottom &&
                     <div className='mdl-card__actions mdl-card--border' data-focus='panel-actions'>
-                        <div className='buttons'><Buttons editing={editing} toggleEdit={toggleEdit} getUserInput={getUserInput} save={save}/></div>
+                        <div className='buttons'><Buttons saving={saving} editing={editing} toggleEdit={toggleEdit} getUserInput={getUserInput} save={save}/></div>
                     </div>
                 }
             </div>
@@ -65,6 +66,7 @@ Panel.propTypes = {
     getUserInput: PropTypes.func,
     save: PropTypes.func,
     showHelp: PropTypes.bool,
+    saving: PropTypes.bool,
     Spinner: PropTypes.func,
     title: PropTypes.string,
     toggleEdit: PropTypes.func

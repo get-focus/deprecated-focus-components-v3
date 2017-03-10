@@ -4,8 +4,10 @@ import MDBehaviour from '../behaviours/material';
 @MDBehaviour('mdlSpinner')
 class MdlSpinner extends PureComponent {
     render() {
+        const {className} = this.props;
+        const renderedClassName = `${className ? className : ''} mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active`
         return (
-            <div data-focus='mdl-spinner' ref='mdlSpinner' class='mdl-spinner mdl-js-spinner is-active'></div>
+            <div data-focus='mdl-spinner' ref='mdlSpinner' className={renderedClassName}></div>
         );
     }
 }

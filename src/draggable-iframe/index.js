@@ -81,7 +81,7 @@ DraggableIframe.propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
-    toggleFunctionName: PropTypes.string,
+    toggleFunctionName: PropTypes.string.isRequired,
     queryUrl: PropTypes.array
 };
 export default DraggableIframe;

@@ -20,6 +20,8 @@
 /empty
 /form
 /grid
+/list-timeline
+/thumbnail
 /header-actions
 /icon
 /input
@@ -46,4 +48,5 @@
 /spinner
 /style
 /title
+/tooltip
 /translation

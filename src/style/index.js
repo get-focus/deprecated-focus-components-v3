@@ -20,6 +20,7 @@ import '../label/style/label.scss';
 import '../modal/index.scss';
 import '../menu/index.scss';
 import '../panel/index.scss';
+import '../list-timeline/style/timeline.scss';
 import '../progress-bar/style/progress-bar.scss';
 import '../scrollspy-container/style/scrollspy-container.scss';
 import '../scrollspy-container/style/sticky-menu.scss';

@@ -236,15 +236,13 @@ class Autocomplete extends Component {
     };
 
     render () {
-
-        const {inputValue, isLoading} = this.state;
+        const {resolvedValue, isLoading, inputValue} = this.state;
         const validInputProps = this._checkProps(this.props);
-
-
-        const { name, placeholder, value: valueToFormat, customError, renderOptions  } = this.props;
+        const { customError, inputTimeout, keyName, keyResolver, hasResolved, labelName, placeholder, querySearcher, renderOptions, valid  } = this.props;
 
         validInputProps.value = hasResolved ? resolvedValue: inputValue;
-      validInputProps.value = validInputProps.value === undefined || validInputProps.value === null ? '' : validInputProps.value;
+        validInputProps.value = validInputProps.value === undefined || validInputProps.value === null ? '' : validInputProps.value;
+        const cssClass = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
 
         return (
             <div data-focus='autocomplete' data-id={this.autocompleteId}>
@@ -271,6 +269,7 @@ Autocomplete.propTypes = {
         PropTypes.string,
         PropTypes.bool
     ]),
+    hasResolved: PropTypes.bool,
     inputTimeout: PropTypes.number.isRequired,
     keyName: PropTypes.string.isRequired,
     keyResolver: PropTypes.func.isRequired,

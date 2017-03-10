@@ -2,7 +2,7 @@
 
 Ce composant permet d'afficher une case à cocher.
 
-![Image](https://github.com/get-focus/focus-components/blob/doc-button/src/input-checkbox/example/capture.png?raw=true)
+![Image](https://github.com/get-focus/focus-components/blob/develop/src/input-checkbox/example/capture.png?raw=true)
 
 ```javascript
 <Checkbox label='My awsome checkbox' value={standardCheckbox} onChange={this.onChangeInput('standardCheckbox')} />

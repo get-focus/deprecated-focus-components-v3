@@ -1,7 +1,6 @@
 # AutocompleteSelect
 
 Ce composant permet de créer un champ de text proposant de l'autocomplétion. Il n'est pas obligatoire de sélectionner une des propositions d'autocomplétion.
-Selon l'état du champ on affiche AutocompleteSelectConsult  ou AutocompleteSelectEdit
 
 ![Image](https://github.com/get-focus/focus-components/blob/develop/src/autocomplete-select/example/capture.png?raw=true)
 

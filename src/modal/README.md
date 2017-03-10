@@ -2,7 +2,7 @@
 
 Ce composant permet d'afficher une vue modale.
 
-![Image](https://github.com/get-focus/focus-components/blob/doc-input-radio/src/modal/example/capture.png?raw=true)
+![Image](https://github.com/get-focus/focus-components/blob/develop/src/modal/example/capture.png?raw=true)
 
 ```jsx
 <Modal ref='thirdModal' size='small' type='from-right'>
@@ -26,8 +26,8 @@ Ce composant permet d'afficher une vue modale.
 | confirmFunction | func | | |
 | level | number | 0 | |
 | modal | bool | false | Si un clic à l'extèrieure de la modale la ferme |
-| onModalClose | func |  | |
-| open | bool | false | |
-| overlay | bool | true | |
+| onModalClose | func |  | Fonction à la fermeture de la modale |
+| open | bool | false | Si la modale est affichée ou non |
+| overlay | bool | true | Affiche un overlay sous la modale |
 | size | oneOf(['small', 'medium', 'large']) | 'medium' | Hauteur de la modale |
 | type | oneOf(['full', 'from-menu', 'from-right']) | 'full' | Type de modale|

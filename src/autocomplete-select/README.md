@@ -42,6 +42,7 @@ const _querySearcher = query => {
 | Props | Type | Default props | Description |
 |---|---|---|---|
 | editing | bool |  | Si on est en mode édition |
+
 | formattedInputValue | oneOfType([PropTypes.string, PropTypes.number]) |  | Formatage du champ |
 | keyResolver | func |  |  |
 | onChange | func |  | Action au changement dans le champ |
@@ -62,7 +63,8 @@ const _querySearcher = query => {
 
 
 ## AutocompleteSelectEdit
-
+| Props | Type | Default props | Description | 
+|---|---|---|---| 
 | customError | string |  |  |
 | inputTimeout | number | 200 |  |
 | keyName | string | 'key' |  |
@@ -74,6 +76,7 @@ const _querySearcher = query => {
 | querySearcher | func |  |  |
 | renderOptions | func |  |  |
 | rawInputValue | string |  |  |
+
 
 ```javascript
 

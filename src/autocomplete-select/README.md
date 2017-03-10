@@ -42,7 +42,6 @@ const _querySearcher = query => {
 | Props | Type | Default props | Description |
 |---|---|---|---|
 | editing | bool |  | Si on est en mode édition |
-
 | formattedInputValue | oneOfType([PropTypes.string, PropTypes.number]) |  | Formatage du champ |
 | keyResolver | func |  |  |
 | onChange | func |  | Action au changement dans le champ |

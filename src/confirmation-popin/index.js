@@ -73,6 +73,7 @@ class ConfirmationModal extends Component {
 
 ConfirmationModal.displayName = 'ConfirmationModal';
 ConfirmationModal.propTypes = {
+    open: PropTypes.boolean,
     cancelButtonLabel: PropTypes.string,
     cancelHandler: PropTypes.func,
     confirmButtonLabel: PropTypes.string,

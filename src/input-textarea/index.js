@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 import identity from 'lodash/identity';
 import i18next from 'i18next';
 import MDBehaviour from '../behaviours/material';
-
+import {InputBehaviour} from '../behaviours/input-component';
 
 /**
 * Component standing for an HTML input.
 */
 @MDBehaviour('inputTextarea')
+@InputBehaviour
 class InputTextarea extends PureComponent {
 
     /**
@@ -33,7 +34,7 @@ class InputTextarea extends PureComponent {
     * @param  {object} evt - The react DOM event.
     * @return {object} - The function onChannge from the props, called.
     */
-    _handleInputChange = (evt) => {
+    _handleonChange = (evt) => {
         const {onChange} = this.props;
         const {value} = evt.target;
         return onChange(value);
@@ -43,11 +44,18 @@ class InputTextarea extends PureComponent {
     * @override
     */
     render() {
-        const { autoFocus, disabled, formatter, maxLength, onBlur, onFocus, onClick, onKeyPress, error, name, placeholder, style, rawInputValue, size, type, valid} = this.props;
-        const value = formatter(rawInputValue === undefined || rawInputValue === null ? '' : rawInputValue);
+        const validInputProps = this._checkProps(this.props);
+
+
+        const {error, formatter, rawInputValue, valid, name, style, placeholder} = this.props;
+
         const pattern = valid ? null : 'hasError'; //add pattern to overide mdl error style when displaying an focus error.
-        const inputProps =  { autoFocus, disabled, onBlur, onKeyPress, maxLength, onFocus, onClick, id: name, onChange: this._handleInputChange, pattern, size, type, value };
         const mdlClasses = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
+
+        validInputProps.value = formatter(rawInputValue === undefined || rawInputValue === null ? '' : rawInputValue);
+        validInputProps.id = name;
+        const inputProps = {...validInputProps, pattern};
+
         return (
             <div data-error={!!error} data-focus='input-textarea'>
                 <div className={mdlClasses} ref='inputTextarea' style={style}>

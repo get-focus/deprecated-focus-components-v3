@@ -1,8 +1,8 @@
-// Components
+import React, {PureComponent, PropTypes} from 'react';
+import moment from 'moment';
+import InputDate from 'focus-components/input-date';
 
-const InputDate = FocusComponents.components.input.Date;
-
-class InputDateSample extends React.Component {
+class InputDateSample extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,4 +32,4 @@ class InputDateSample extends React.Component {
     }
 }
 
-module.exports = InputDateSample;
+export default InputDateSample;

@@ -2,17 +2,19 @@ import React, {Component, PropTypes} from 'react';
 import i18next from 'i18next';
 import GridBehaviour from '../behaviours/grid';
 import MaterialBehaviour from '../behaviours/material';
+import {InputBehaviour} from '../behaviours/input-component';
 import isUndefined from 'lodash/isUndefined';
 
 @GridBehaviour
 @MaterialBehaviour('inputMdl')
+@InputBehaviour
 class Radio extends Component {
     constructor(props){
         super(props)
         this.state = {
             isChecked: isUndefined(this.props.rawInputValue) ? false : this.props.rawInputValue
         };
-        this._onChange = this._onChange.bind(this);
+        this._handleonChange = this._handleonChange.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
@@ -33,7 +35,7 @@ class Radio extends Component {
     * Executed actions on change event.
     * @param  {event} event
     */
-    _onChange() {
+    _handleonChange() {
         this.setState({isChecked: !this.state.isChecked}, () => {
             if(this.props.onChange) {
                 this.props.onChange(this.state.isChecked);
@@ -55,13 +57,17 @@ class Radio extends Component {
     */
     render() {
         const {isChecked} = this.state;
-        const {label, name, rawInputValue} = this.props;
+
+        const validInputProps = this._checkProps(this.props);
+
+        const {label, onChange, rawInputValue} = this.props;
+
         // we use inputProps to be able to display 'checked' property. it is required to be able to use MDL.
-        const checkedProps = isChecked ? {checked: 'checked'} : {};
+        validInputProps.checked = isChecked ? 'checked' : undefined;
 
         return (
             <label className='mdl-radio mdl-js-radio mdl-js-ripple-effect' data-focus="input-radio" ref='inputMdl'>
-                <input className='mdl-radio__button' name={name} onChange={this._onChange} type='radio' {...checkedProps} value={rawInputValue} ref='inputRadio'/>
+                <input className='mdl-radio__button' type='radio' ref='inputRadio' {...validInputProps}/>
                 <span className='mdl-radio__label'>{i18next.t(label)}</span>
             </label>
         );

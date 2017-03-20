@@ -16,9 +16,9 @@ Ce composant permet d'afficher un champ de sélection de date.
 | locale | string | 'en' | Localisation |
 | name | string | | Nom de l'input |
 | onChange | func | | Action au changement de valeur |
-| beforeValueGetter | func | false | Action avant la récupérationde la valeur |
+| beforeValueGetter | func | false | Action avant la récupération de la valeur |
 | placeholder | string | | Texte de l'input |
 | showDropdowns | bool | false | Valeur de la checkbox |
-| rawInputValue | (props, propName, componentName) => {const prop = props[propName]; if (prop && !isISOString(prop)) {throw new Error(`The date ${prop} provided to the component ${componentName} is not an ISO date. Please provide a valid date string.`);}} | | |
+| rawInputValue | (props, propName, componentName) => {const prop = props[propName]; if (prop && !isISOString(prop)) {throw new Error(`The date ${prop} provided to the component ${componentName} is not an ISO date. Please provide a valid date string.`);}} | | Valeur du champ |
 | valid | bool | true | Si le champ est valide |
 | validate | func | isISOString | Fonction de validation |

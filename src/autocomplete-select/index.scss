@@ -1,14 +1,6 @@
 [data-focus='autocomplete'] {
     position: relative;
 
-    [data-focussed='true'] {
-        visibility: visible;
-        max-height: 300px;
-    }
-    [data-focussed='false'] {
-        visibility: hidden;
-        max-height: 0;
-    }
     [data-active='true'] {
         background-color: #EEE;
     }
@@ -26,6 +18,7 @@
         list-style-type: none;
         padding: 0;
         z-index: 10;
+        max-height: 300px;
 
         [data-focus='option'] {
             padding: 10px;

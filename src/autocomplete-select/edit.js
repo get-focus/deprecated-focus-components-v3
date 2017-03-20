@@ -229,7 +229,7 @@ class Autocomplete extends Component {
             );
         }
         return (
-            focus && <ul data-focus='options' ref='options'> {renderedOptions} </ul>
+            focus && <ul data-focus='options' ref='options'>{renderedOptions}</ul>
         );
     };
 

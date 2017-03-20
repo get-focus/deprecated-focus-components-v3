@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import MDBehaviour from '../behaviours/material';
+import {InputBehaviour} from '../behaviours/input-component';
 import i18next from 'i18next';
 
 import closest from 'closest';
@@ -13,6 +14,7 @@ const UP_ARROW_KEY_CODE = 38;
 const DOWN_ARROW_KEY_CODE = 40;
 
 @MDBehaviour('inputText')
+@InputBehaviour
 class Autocomplete extends Component {
     constructor(props) {
         super(props);
@@ -111,7 +113,7 @@ class Autocomplete extends Component {
         }
     };
 
-    _handleQueryBlur = () => {
+    _handleonBlur = () => {
         const {onChange, onBadInput, onBlurError} = this.props;
         const {suggestions, options, rawInputValue, resolvedValue, selected, resolvedLabel} = this.state;
         if(this.allowBlur) {
@@ -133,7 +135,7 @@ class Autocomplete extends Component {
         }
     };
 
-    _handleQueryChange = ({target: {value}}) => {
+    _handleonChange = ({target: {value}}) => {
         // the user cleared the input, don't call the querySearcher
         if (value === '') {
             const {onChange} = this.props;
@@ -160,7 +162,7 @@ class Autocomplete extends Component {
         }).catch(error => this.setState({customError: error.message}));
     };
 
-    _handleQueryFocus = () => {
+    _handleonFocus = () => {
         (this.refs.options || {}).scrollTop = 0;
         if (this.props.onFocus) {
             this.props.onFocus.call(this);
@@ -168,7 +170,7 @@ class Autocomplete extends Component {
         this.setState({active: '', focus: true});
     };
 
-    _handleQueryKeyDown = (event) => {
+    _handleonKeyDown = (event) => {
         event.stopPropagation();
         const {which} = event;
         const {active, options} = this.state;
@@ -234,27 +236,24 @@ class Autocomplete extends Component {
     };
 
     render () {
-        const {customError, inputTimeout, keyName, keyResolver, hasResolved, labelName, placeholder, querySearcher, renderOptions, valid, ...inputProps} = this.props;
         const {resolvedValue, isLoading, inputValue} = this.state;
-        const {_handleQueryFocus, _handleQueryKeyDown, _handleQueryChange, _handleQueryBlur} = this;
-        const isValid = !valid ? ' is-invalid' : '';
+        const validInputProps = this._checkProps(this.props);
+        const { customError, inputTimeout, keyName, keyResolver, hasResolved, labelName, placeholder, querySearcher, renderOptions, valid  } = this.props;
+
+        validInputProps.value = hasResolved ? resolvedValue: inputValue;
+        validInputProps.value = validInputProps.value === undefined || validInputProps.value === null ? '' : validInputProps.value;
         const cssClass = `mdl-textfield mdl-js-textfield${!valid ? ' is-invalid' : ''}`;
-        const value = hasResolved ? resolvedValue: inputValue;
+
         return (
             <div data-focus='autocomplete' data-id={this.autocompleteId}>
                 <div className={cssClass} data-focus='input-text' ref='inputText'>
                     <div data-focus='loading' data-loading={isLoading} className='mdl-progress mdl-js-progress mdl-progress__indeterminate' ref='loader'></div>
                     <input
                         className='mdl-textfield__input'
-                        {...inputProps}
-                        onChange={_handleQueryChange}
-                        onFocus={_handleQueryFocus}
-                        onBlur={_handleQueryBlur}
-                        onKeyDown={_handleQueryKeyDown}
                         ref='htmlInput'
                         type='text'
-                        value={value === undefined || value === null ? '' : value}
-                        />
+                        {...validInputProps}
+                    />
                     <label className='mdl-textfield__label'>{i18next.t(placeholder)}</label>
                     {!valid && <span className='mdl-textfield__error'>{i18next.t(customError)}</span>}
                 </div>
@@ -266,7 +265,11 @@ class Autocomplete extends Component {
 
 Autocomplete.displayName = 'Autocomplete';
 Autocomplete.propTypes = {
-    customError: PropTypes.string,
+    customError: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool
+    ]),
+    hasResolved: PropTypes.bool,
     inputTimeout: PropTypes.number.isRequired,
     keyName: PropTypes.string.isRequired,
     keyResolver: PropTypes.func.isRequired,

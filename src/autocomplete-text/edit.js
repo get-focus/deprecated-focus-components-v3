@@ -2,9 +2,11 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import i18next from 'i18next';
 import MDBehaviour from '../behaviours/material';
+import {InputBehaviour} from '../behaviours/input-component';
 import debounce from 'lodash/debounce';
 
 @MDBehaviour('materialInput')
+@InputBehaviour
 class AutocompleteTextEdit extends Component {
     constructor(props) {
         super(props);
@@ -60,7 +62,7 @@ class AutocompleteTextEdit extends Component {
     };
 
     // Sets the state's inputValue when the user is typing
-    onQueryChange = ({target: {value}}) => {
+    _handleonChange = ({target: {value}}) => {
         const {onChange} = this.props;
         this.setState({inputValue: value});
         if(value.trim() == '') {
@@ -95,7 +97,7 @@ class AutocompleteTextEdit extends Component {
     };
 
     // Behaviour when onFocus and onBlur are triggered
-    toggleHasFocus = e => {
+    _handleonFocus = e => {
         const {hasSuggestions, hasFocus} = this.state;
         const {showAtFocus, emptyShowAll} = this.props;
         this.setState({hasFocus: !this.state.hasFocus});
@@ -112,13 +114,20 @@ class AutocompleteTextEdit extends Component {
 
     // Maybe give the option for the floating label
     render() {
-        const {inputValue, hasSuggestions, hasFocus, isLoading, ...otherProps} = this.state;
-        const {placeholder, inputTimeout, showAtFocus, emptyShowAll, error} = this.props
+        const {inputValue, hasSuggestions, hasFocus, isLoading} = this.state;
+
+        const validInputProps = this._checkProps(this.props);
+
+        const {inputTimeout, error, placeholder} = this.props;
+
+        validInputProps.value = inputValue === undefined || inputValue === null  ? '' : inputValue;
+        validInputProps.onBlur = this._handleonFocus;
+        const inputProps = {...validInputProps};
         return(
             <div data-focus='autocompleteText'>
                 <div className={`mdl-textfield mdl-js-textfield${error ? ' is-invalid' : ''}`} ref='materialInput'>
                     <div data-focus='loading' data-loading={isLoading} className='mdl-progress mdl-js-progress' ref='loader'/>
-                    <input onFocus={this.toggleHasFocus} onBlur={this.toggleHasFocus} className='mdl-textfield__input' type='text' value={inputValue === undefined || inputValue === null  ? '' : inputValue} ref='inputText' onChange={::this.onQueryChange} showAtFocus={showAtFocus} emptyShowAll={emptyShowAll} {...otherProps} />
+                    <input className='mdl-textfield__input' type='text' ref='inputText' {...inputProps}/>
                     <label className="mdl-textfield__label">{i18next.t(placeholder)}</label>
                     <span className="mdl-textfield__error" ref='errorMessage'>{i18next.t(error)}</span>
                 </div>

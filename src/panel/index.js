@@ -2,6 +2,7 @@ import React, {PropTypes, PureComponent} from 'react';
 import i18next from 'i18next';
 import includes from 'lodash/includes';
 import uniqueId from 'lodash/uniqueId';
+import omit from 'lodash/omit';
 import snakeCase from 'lodash/snakeCase';
 
 import ButtonHelp from '../button-help';
@@ -23,13 +24,15 @@ class Panel extends PureComponent {
     * @return {DOM} React DOM element
     */
     render() {
-        const {blockName, Buttons, buttonsPosition, children, loading, saving, Spinner, title, showHelp, editing, toggleEdit, getUserInput, save} = this.props;
+        const {blockName, Buttons, buttonsPosition, children, loading, saving, Spinner, title, showHelp, editing, toggleEdit, getUserInput, save, hideOnScrollspy} = this.props;
         const shouldDisplayActionsTop = Buttons && includes(['both', 'top'], buttonsPosition);
         const shouldDisplayActionsBottom = Buttons && includes(['both', 'bottom'], buttonsPosition);
         const displaySpinner = Spinner && (loading || saving);
+        const panelDivProps = {className: 'mdl-card mdl-card--border mdl-shadow--4dp', 'data-spy': this.spyId, 'data-focus': 'panel', 'data-loading': loading, 'data-saving': saving, 'data-editing': editing};
+        const divProps = !hideOnScrollspy ? omit(panelDivProps, ['data-spy']) : panelDivProps;
 
         return (
-            <div className='mdl-card mdl-card--border mdl-shadow--4dp' data-spy={this.spyId} data-focus='panel' data-loading={loading} data-saving={saving} data-editing={editing}>
+            <div {...divProps}>
                 {displaySpinner && <Spinner />}
                 <div className='mdl-card__title mdl-card--border' data-focus='panel-title'>
                     {title && <h3 data-spy-title>{i18next.t(title)}</h3>}
@@ -53,6 +56,7 @@ Panel.defaultProps = {
     Buttons: Buttons,
     buttonsPosition: 'top',
     editing: false,
+    hideOnScrollspy: true,
     save: () => alert('please define a save action'),
     showHelp: false,
     Spinner: MdlProgress,
@@ -64,6 +68,7 @@ Panel.propTypes = {
     buttonsPosition: PropTypes.oneOf(['both', 'bottom', 'top']).isRequired,
     editing: PropTypes.bool,
     getUserInput: PropTypes.func,
+    hideOnScrollspy: PropTypes.bool,
     save: PropTypes.func,
     showHelp: PropTypes.bool,
     saving: PropTypes.bool,

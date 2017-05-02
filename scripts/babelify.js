@@ -26,7 +26,7 @@ const babelify = (sourceDir, outputDir) => {
 
     var filterFiles = function(files) {
         return files.filter(function(file) {
-            return (!file.match(/(example|__tests__)/) && file.match(/\.js$/));
+            return !file.match(/(example|__tests__)/) && (file.match(/\.js$/) || file.match(/\.d.ts$/));
         });
     };
 
@@ -41,15 +41,21 @@ const babelify = (sourceDir, outputDir) => {
 
     var files = filterFiles(walk(sourceDir));
     files.forEach(function(file) {
-        babel.transformFile(file, babelOptions, function(err, result) {
-            if (err) console.error(err);
-            var newFile = file.replace(sourceDir, outputDir);
+        if (file.match(/\.d.ts$/)) {
+            var newFile = file.replace('./src', '.');
             ensureDirectoryExistence(newFile);
-            fs.writeFile(newFile, result.code, function(err) {
+            fs.createReadStream(file).pipe(fs.createWriteStream(newFile));
+        } else {
+            babel.transformFile(file, babelOptions, function(err, result) {
                 if (err) console.error(err);
-                console.log('Babelified ' + file);
+                var newFile = file.replace(sourceDir, outputDir);
+                ensureDirectoryExistence(newFile);
+                fs.writeFile(newFile, result.code, function(err) {
+                    if (err) console.error(err);
+                    console.log('Babelified ' + file);
+                });
             });
-        });
+        }
     });
 };
 

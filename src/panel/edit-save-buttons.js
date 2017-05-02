@@ -2,9 +2,9 @@ import React, {Component, PropTypes} from 'react';
 import Button from '../button';
 
 const renderEditingButtons = (toggleEdit, getUserInput, save, saving) => (
-    <span>
+    <span style={{display: "flex"}}>
         <Button className='panel-button-save' icon='save' label='focus.components.button.save' processLabel='focus.components.button.save' saving={saving} color='primary' onClick={() => save(getUserInput())} shape={null} type='button' />
-        <Button className='panel-button-cancel'icon='clear' label='focus.components.button.cancel' onClick={() => toggleEdit(false)} shape={null} type='button' />
+        <Button className='panel-button-cancel' icon='clear' label='focus.components.button.cancel' onClick={() => toggleEdit(false)} disabled={saving} shape={null} type='button' />
     </span>
 );
 

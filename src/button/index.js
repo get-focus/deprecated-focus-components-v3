@@ -18,9 +18,10 @@ const propTypes = {
     isJs: PropTypes.bool,
     icon: PropTypes.string,
     iconLibrary: PropTypes.oneOf(['material', 'font-awesome', 'font-custom']),
+    iconPosition: PropTypes.oneOf(['left', 'right']),
     label: PropTypes.string,
     onClick: PropTypes.func,
-    processingLabel: PropTypes.string,
+    processLabel: PropTypes.string,
     saving: PropTypes.bool,
     shape: PropTypes.oneOf([undefined, 'raised', 'fab', 'icon', 'mini-fab']),
     type: PropTypes.oneOf(['submit', 'button'])
@@ -30,6 +31,7 @@ const defaultProps = {
     hasRipple: true,
     icon: null,
     iconLibrary: 'material',
+    iconPosition: 'left',
     id: '',
     isJs: true,
     label: '',
@@ -130,12 +132,12 @@ class Button extends Component {
     render() {
         // attribute doc : https://developer.mozilla.org/fr/docs/Web/HTML/Element/Button
         // be careful the way you declare your attribute names : https://developer.mozilla.org/fr/docs/Web/HTML/Element/Button
-        const {className, disabled, formNoValidate, handleOnClick, icon, id, onClick, type, label, style, hasRipple, isJs, iconLibrary, saving, shape, ...otherProps } = this.props;
+        const {className, disabled, formNoValidate, handleOnClick, icon, iconPosition, id, onClick, type, label, style, hasRipple, isJs, iconLibrary, saving, shape, route, processLabel, ...otherProps } = this.props;
         const otherInputProps = { formNoValidate, onClick: handleOnClick ? handleOnClick : onClick, style, type, ...otherProps}; //on click for legacy. Remove handleOnClick in v2
         const renderedClassName = `${className ? className : ''} ${::this._getComponentClassName()}`.trim();
         const showSpinner = (saving && (shape === 'fab' || shape === 'mini-fab' || shape === 'icon')) || !saving ? false : true;
         return (
-            <button alt={i18next.t(label)} className={renderedClassName} data-focus='button-action' data-saving={saving} disabled={saving} id={id} title={i18next.t(label)} {...otherInputProps} ref='materialButton'>
+            <button alt={i18next.t(label)} className={renderedClassName} data-focus='button-action' data-icon={icon && iconPosition || "none"} data-saving={saving} disabled={disabled || saving} id={id} title={i18next.t(label)} {...otherInputProps} ref='materialButton'>
                 {icon && ::this._renderIcon()}
                 {::this._renderLabel()}
                 {showSpinner && <Spinner className='double-action-button-spinner' />}

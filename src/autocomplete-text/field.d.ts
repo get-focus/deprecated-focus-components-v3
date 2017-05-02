@@ -8,19 +8,18 @@ export interface AutoCompleteResult {
     totalCount: number;
 }
 
-export default class AutocompleteSelectField extends React.Component<{
-    editing: boolean;
+export default class AutocompleteTextField extends React.Component<{
+    emptyShowAll?: boolean;
     error?: string;
-    formattedInputValue?: string | number;
     inputTimeout?: number;
-    keyName?: string;
-    keyResolver: (code: string | number) => Promise<string>;
+    isEdit: boolean;
     label?: string;
-    labelName?: string;
     name?: string;
-    onChange: (code: string) => void;
+    onChange?: (code: string) => void;
     placeholder?: string;
     querySearcher: (text: string) => Promise<AutoCompleteResult>;
-    rawInputValue?: string | number;
+    rawInputValue?: string;
+    showAtFocus?: boolean;
     type?: string;
+    value?: string;
 }, {}> {}

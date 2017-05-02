@@ -35,13 +35,19 @@ $panel-title-color:#36b7b9;
     z-index: auto !important;
     border: 0;
 
+    [data-focus="mdl-progress"] {
+        width: inherit;
+        margin-top: inherit;
+        position: absolute;
+    }
+
     &.mdl-card {
         overflow: inherit;
     }
 
     [data-focus='panel-title'] {
         display: flex;
-        justify-content:space-between;
+        justify-content: space-between;
     }
     &[data-loading='true'] {
         @include busy;

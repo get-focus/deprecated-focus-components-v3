@@ -1,8 +1,8 @@
-export default class Date extends React.Component<{
+export interface DateProps {
     beforeValueGetter?: (date: string) => string;
     disabled?: boolean;
     drops?: "up" | "down";
-    error?: string;
+    error?: string | null;
     format: string | string[];
     locale?: string;
     name: string;
@@ -12,6 +12,8 @@ export default class Date extends React.Component<{
     showDropdowns?: boolean;
     valid?: boolean;
     validate?: (date: string) => boolean;
-}, {}> {
+}
+
+export default class Date extends React.Component<DateProps, {}> {
     getValue(): string
 }

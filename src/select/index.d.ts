@@ -1,7 +1,7 @@
 export interface SelectProps {
     autoFocus?: boolean;
     disabled?: boolean;
-    error?: string;
+    error?: string | null;
     hasUndefined?: boolean;
     isActiveProperty?: string;
     isRequired?: boolean;

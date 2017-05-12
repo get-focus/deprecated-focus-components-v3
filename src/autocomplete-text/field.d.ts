@@ -10,7 +10,7 @@ export interface AutoCompleteResult {
 
 export interface AutocompleteTextProps {
     emptyShowAll?: boolean;
-    error?: string;
+    error?: string | null;
     inputTimeout?: number;
     isEdit: boolean;
     label?: string;

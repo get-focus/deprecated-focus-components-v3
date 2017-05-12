@@ -10,7 +10,7 @@ export interface AutoCompleteResult {
 
 export interface AutocompleteSelectProps {
     editing: boolean;
-    error?: string;
+    error?: string | null;
     formattedInputValue?: string | number;
     inputTimeout?: number;
     keyName?: string;

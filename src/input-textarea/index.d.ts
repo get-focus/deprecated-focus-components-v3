@@ -1,8 +1,8 @@
-export default class InputTextarea extends React.Component<{
+export interface InputTextareaProps {
     autoFocus?: boolean;
     cols?: number;
     disabled?: boolean;
-    error?: string;
+    error?: string | null;
     formatter?: (text: string) => string;
     maxLength?: number;
     minLength?: number;
@@ -17,6 +17,8 @@ export default class InputTextarea extends React.Component<{
     size?: number;
     type?: string;
     wrap?: string;
-}, {}> {
+}
+
+export default class InputTextarea extends React.Component<InputTextareaProps, {}> {
     getValue(): string;
 }

@@ -1,7 +1,7 @@
 export interface InputTextProps {
     autoFocus?: boolean;
     disabled?: boolean;
-    error?: string;
+    error?: string | null;
     formatter?: (text: string | number) => string;
     maxLength?: number;
     name: string;

@@ -1,4 +1,4 @@
-export default class Select extends React.Component<{
+export interface SelectProps {
     autoFocus?: boolean;
     disabled?: boolean;
     error?: string;
@@ -17,6 +17,8 @@ export default class Select extends React.Component<{
     valid?: boolean;
     valueKey?: string;
     values: {}[];
-}, {}> {
+}
+
+export default class Select extends React.Component<SelectProps, {}> {
     getValue(): string | number;
 }

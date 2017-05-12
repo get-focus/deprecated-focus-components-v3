@@ -1,4 +1,6 @@
-export default function Label(props: {
+export interface LabelProps {
     name: string;
     text?: string;
-}): React.ReactElement<any>
+}
+
+export default function Label(props: LabelProps): React.ReactElement<any>

@@ -8,7 +8,7 @@ export interface AutoCompleteResult {
     totalCount: number;
 }
 
-export default class AutocompleteSelectField extends React.Component<{
+export interface AutocompleteSelectProps {
     editing: boolean;
     error?: string;
     formattedInputValue?: string | number;
@@ -23,4 +23,6 @@ export default class AutocompleteSelectField extends React.Component<{
     querySearcher: (text: string) => Promise<AutoCompleteResult>;
     rawInputValue?: string | number;
     type?: string;
-}, {}> {}
+}
+
+export default class AutocompleteSelectField extends React.Component<AutocompleteSelectProps, {}> {}

@@ -1,4 +1,6 @@
-export default function DisplayText(props: {
+export interface DisplayTextProps {
     className?: string;
     formattedInputValue?: string | number;
-}): React.ReactElement<any>
+}
+
+export default function DisplayText(props: DisplayTextProps): React.ReactElement<any>

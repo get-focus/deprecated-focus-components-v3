@@ -8,7 +8,7 @@ export interface AutoCompleteResult {
     totalCount: number;
 }
 
-export default class AutocompleteTextField extends React.Component<{
+export interface AutocompleteTextProps {
     emptyShowAll?: boolean;
     error?: string;
     inputTimeout?: number;
@@ -22,4 +22,6 @@ export default class AutocompleteTextField extends React.Component<{
     showAtFocus?: boolean;
     type?: string;
     value?: string;
-}, {}> {}
+}
+
+export default class AutocompleteTextField extends React.Component<AutocompleteTextProps, {}> {}

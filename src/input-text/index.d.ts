@@ -1,4 +1,4 @@
-export default class InputText extends React.Component<{
+export interface InputTextProps {
     autoFocus?: boolean;
     disabled?: boolean;
     error?: string;
@@ -15,7 +15,9 @@ export default class InputText extends React.Component<{
     size?: number;
     type?: string;
     valid?: boolean;
-}, {}> {
+}
+
+export default class InputText extends React.Component<InputTextProps, {}> {
     refs: {
         inputText: HTMLDivElement;
         htmlInput: HTMLInputElement;

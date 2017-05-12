@@ -3,6 +3,7 @@ export default class Date extends React.Component<{
     disabled?: boolean;
     drops?: "up" | "down";
     error?: string;
+    format: string | string[];
     locale?: string;
     name: string;
     onChange: (date: string) => void;

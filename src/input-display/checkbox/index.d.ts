@@ -1,5 +1,7 @@
-export default function DisplayCheckbox(props: {
+interface DisplayCheckboxProps {
     className?: string;
     name?: string;
     rawInputValue?: boolean;
-}): React.ReactElement<any>
+}
+
+export default function DisplayCheckbox(props: DisplayCheckboxProps): React.ReactElement<any>

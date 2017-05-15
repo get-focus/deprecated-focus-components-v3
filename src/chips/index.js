@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 
@@ -9,7 +10,7 @@ const Chips = ({label, letter, onDeleteClick}) => {
     return (
         <span data-focus='chips' className={className}>
             {letter && <span className='mdl-chip__contact mdl-color--teal mdl-color-text--white'>{letter}</span>}
-            <span className='mdl-chip__text'>{label}</span>
+            <span className='mdl-chip__text'>{i18next.t(label)}</span>
             {onDeleteClick &&
                 <button type='button' className='mdl-chip__action' onClick={() => (onDeleteClick())}><i className='material-icons'>cancel</i></button>
             }

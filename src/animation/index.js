@@ -1,6 +1,6 @@
 //dependencies
 import React, {PropTypes} from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import {CSSTransitionGroup} from 'react-transition-group';
 
 const propTypes = {
     //If you want to use a custom css class
@@ -61,7 +61,7 @@ function Animation({customClasses, appear, enter, leave, appearName,
         }
     }
     return (
-      <ReactCSSTransitionGroup
+      <CSSTransitionGroup
           transitionAppear={appear}
           transitionAppearTimeout={enter}
           transitionEnter={leave}
@@ -73,7 +73,7 @@ function Animation({customClasses, appear, enter, leave, appearName,
           <div className='animated'>
             {otherProps.children}
           </div>
-      </ReactCSSTransitionGroup>
+      </CSSTransitionGroup>
     );
 }
 

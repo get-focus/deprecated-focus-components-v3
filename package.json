@@ -1,6 +1,6 @@
 {
   "name": "focus-components",
-  "version": "3.3.3-preview4",
+  "version": "3.3.3",
   "description": "Focus web components to build applications (based on Material Design)",
   "main": "index.js",
   "scripts": {
@@ -78,8 +78,9 @@
   "homepage": "https://github.com/KleeGroup/focus-components",
   "dependencies": {
     "@types/react": "15.0.1",
+    "@types/react-transition-group": "1.1.0",
     "closest": "0.0.1",
-    "react-addons-css-transition-group": "^15.4.1",
+    "react-transition-group": "1.1.3",
     "react-date-picker": "^3.1.6"
   },
   "peerDependencies": {

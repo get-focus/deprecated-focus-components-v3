@@ -15,7 +15,7 @@ import '../src/style/storybook.scss'
 import 'brace';
 import 'brace/mode/jsx'
 import 'brace/theme/github'
-
+ 
 
 import material from '../src/behaviours/material';
 import compStr from './test';
@@ -41,7 +41,7 @@ function onChangeEval(isWhatFunction, type, subElement, isFunction = false) {
                 this.setState({ [subElement]: eval(value), ['onChange' + type + subElement]: value, ['onChangeError' + type + subElement]: null, ['isOnChange' + type + subElement]: true })
             }
         } catch (ex) {
-            this.setState({ ['onChange' + type + subElement]: value, ['isOnChange' + type + subElement]: false, ['onChangeError' + type + subElement]: "Pas une fonction" })
+            this.setState({ ['onChange' + type + subElement]: value, ['isOnChange' + type + subElement]: false, ['onChangeError' + type + subElement]: 'Pas une fonction' })
             return;
         }
         if (isFunction) {
@@ -49,7 +49,7 @@ function onChangeEval(isWhatFunction, type, subElement, isFunction = false) {
                 eval(value)('test')
                 this.setState({ [subElement]: eval(value), ['onChange' + type + subElement]: value, ['onChangeError' + type + subElement]: null, ['isOnChange' + type + subElement]: true })
             } catch (t) {
-                this.setState({ ['onChange' + type + subElement]: value, ['isOnChange' + type + subElement]: false, ['onChangeError' + type + subElement]: "Votre fonction génère une erreur :" + t })
+                this.setState({ ['onChange' + type + subElement]: value, ['isOnChange' + type + subElement]: false, ['onChangeError' + type + subElement]: 'Votre fonction génère une erreur :' + t })
             }
         }
     }
@@ -57,23 +57,21 @@ function onChangeEval(isWhatFunction, type, subElement, isFunction = false) {
 
 function renderCodeForEditor(list, state, Composant, defaultType) {
     const preCode = reduce(Object.keys(list), (acc, element) => {
-        if (state[element] !== undefined && state[element] !== null && state[element] !== "") {
+        if (state[element] !== undefined && state[element] !== null && state[element] !== '') {
             if ((verifTabObject.indexOf(defaultType[element]) !== -1 || isObject(defaultType[element]) && !isString(state[element]))) {
-                return acc + ` \n \t \t \t \t ${element}={${'{' + Object.keys(state[element]).reduce((acc, elm) => acc + `${elm}: '${state[element][elm]}',`, "") + "}"}}`
+                return acc + ` \n \t \t \t \t ${element}={${'{' + Object.keys(state[element]).reduce((acc, elm) => acc + `${elm}: '${state[element][elm]}',`, '') + '}'}}`
             }
             return acc + ` \n \t \t \t \t ${element}={${state[element]}}`
-        }
-        else return acc;
+        } else return acc;
     }, `import React, {Component, PropTypes} from 'react';  \nimport ${Composant.displayName} from 'focus-components/${Composant.displayName}' \n class YourClass extends Component { \n \t render() { \n \t \treturn ( \n \t \t \t<${Composant.displayName}`)
-    const code = preCode + "\n \t \t \t/> \n \t \t); \n \t} \n}"
+    const code = preCode + '\n \t \t \t/> \n \t \t); \n \t} \n}'
     return code;
 }
 
 ComposantComposant.propTypes = {
     Composant: React.PropTypes.func,
-    propsComposant: React.PropTypes.object,
+    propsComposant: React.PropTypes.object
 };
-
 
 
 import i18next from 'i18next';
@@ -100,120 +98,8 @@ class SurComposantCompose extends Component {
         };
         onChangeEval = onChangeEval.bind(this);
         this.onChange = this.onChange.bind(this);
-    };
-    toBuffer(ab) {
-        var buf = new Buffer(ab.byteLength);
-        var view = new Uint8Array(ab);
-        for (var i = 0; i < buf.length; ++i) {
-            buf[i] = view[i];
-        }
-        return buf;
     }
-    componentDidMount() {
-        // const exports = {};
-        // const require = (toRequire) => {
-        //     console.log('require', toRequire);
-        //     switch (toRequire) {
-        //         case 'react':
-        //             return React;
-        //         case 'react-dom':
-        //             return ReactDOM;
-        //         case '../behaviours/material':
-        //             return material;
-        //         case 'i18next':
-        //             return i18next;
-        //         default:
-        //             console.warn(toRequire);
-        //             return null;
-
-        //     }
-        // }
-        // eval(compStr);
-        // console.log(exports)
-
-
-        // Streams
-        // var read = request.get('https://registry.npmjs.org/focus-components/-/focus-components-2.1.7-1.tgz');
-        // var parse = targz().createParseStream();
-
-        // parse.on('entry', function (entry) {
-        //     console.log(entry.path);
-        // });
-
-        // read.pipe(parse);
-        // var oReq = new XMLHttpRequest();
-        // oReq.open("GET", "https://registry.npmjs.org/focus-components/-/focus-components-2.1.7-1.tgz", true);
-        // oReq.responseType = "arraybuffer";
-
-        // oReq.onload = function (oEvent) {
-        //     var blob = new Blob([oReq.response], { type: "application/gzip" });
-        //     console.log('response', blob);
-        // };
-
-        // oReq.send();
-        console.time('whole');
-        console.time('fetch');
-        fetch('https://registry.npmjs.org/focus-components/-/focus-components-2.1.7-1.tgz')
-            .then((response) => {
-                console.timeEnd('fetch');
-                console.time('conversion');
-
-                return response.arrayBuffer();
-            }).then((response) => {
-                console.timeEnd('conversion');
-
-                // console.log('response', response);
-
-                var extract = tar.extract()
-
-                extract.on('entry', function (header, stream, next) {
-                    // header is the tar header
-                    // stream is the content body (might be an empty stream)
-                    // call next when you are done with this entry
-                    console.log(header.name);
-                    // console.groupCollapsed();
-                    let strContent = '';
-                    stream.on('data', function (data) {
-                        strContent += data;
-                    })
-
-
-                    stream.on('end', function () {
-                        // console.log(strContent)
-                        // console.groupEnd();
-                        strContent = '';
-                        next() // ready for next entry
-                        // console.log('end');
-
-                    })
-
-                    stream.resume() // just auto drain the stream
-                })
-
-                extract.on('finish', function () {
-                    // all entries read
-                    // console.log('finish');
-                    console.timeEnd('unzip');
-                    console.timeEnd('whole');
-
-                })
-                console.time('toStream');
-
-                var s = new Readable();
-                s._read = function noop() { }; // redundant? see update below
-                s.push(this.toBuffer(response));
-                s.push(null);
-                console.timeEnd('toStream');
-                console.time('unzip');
-
-                s.pipe(gunzip()).pipe(extract);
-
-            });
-
-
-    }
-
-
+  
     onChange(element) {
         const tab = element.slice(element.indexOf('<'), element.indexOf('/>'))
         const newNewTab = tab.split('\n').map(el => el.trim())
@@ -228,23 +114,24 @@ class SurComposantCompose extends Component {
                 let evalElementOfState = elementOfState
                 if (verifTab.indexOf(this.props.defaultType[stateName]) !== -1) {
                     evalElementOfState = eval(elementOfState)
-                    this.setState({ [stateName]: evalElementOfState === "" ? " " : evalElementOfState, ['onChange' + capitalize(this.props.defaultType[stateName]) + stateName]: elementOfState })
+                    this.setState({ [stateName]: evalElementOfState === '' ? ' ' : evalElementOfState, ['onChange' + capitalize(this.props.defaultType[stateName]) + stateName]: elementOfState })
                 } else {
-                    this.setState({ [stateName]: evalElementOfState === "" ? " " : evalElementOfState })
+                    this.setState({ [stateName]: evalElementOfState === '' ? ' ' : evalElementOfState })
 
                 }
             } catch (t) {
 
                 console.log(t)
-                this.setState({ [stateName]: elementOfState === "" ? " " : elementOfState, ['onChangeFunc' + stateName]: elementOfState })
+                this.setState({ [stateName]: elementOfState === '' ? ' ' : elementOfState, ['onChangeFunc' + stateName]: elementOfState })
             }
         })
-    };
+    }
     renderInputComposant(subElement) {
         return (
             <InputText
                 onChange={(value) => this.setState({ [subElement]: value })}
-                rawInputValue={this.state[subElement]} />
+                rawInputValue={this.state[subElement]}
+            />
         )
     }
     renderBoolComposant(subElement) {
@@ -252,7 +139,8 @@ class SurComposantCompose extends Component {
             <SelectRadio
                 onChange={(value) => this.setState({ [subElement]: !this.state[subElement] })}
                 rawInputValue={this.state[subElement]}
-                values={[{ code: true, label: 'True' }, { code: false, label: 'False' }]} />
+                values={[{ code: true, label: 'True' }, { code: false, label: 'False' }]}
+            />
 
         )
     }
@@ -264,19 +152,19 @@ class SurComposantCompose extends Component {
             <div data-focus='documentation-input-text'><InputText
                 onChange={onChangeEval(isFunction, 'Func', subElement, true)}
                 rawInputValue={onChangeValue}
-            />
-                {isOnChangeFunc && <i className="material-icons">check</i>}
+                                                       />
+                {isOnChangeFunc && <i className='material-icons'>check</i>}
                 <div data-focus='documentation-error'>{onChangeErrorFunc && <span style={{ color: 'red' }}>{onChangeErrorFunc}</span>}</div>
             </div>
         )
     }
     renderObjectComposant(subElement) {
-        const test = this.state['onChangeObject' + subElement] ? this.state['onChangeObject' + subElement] : isString(this.state[subElement]) ? this.state[subElement] : '{' + Object.keys(this.state[subElement]).reduce((acc, elm) => acc + `${elm}: '${this.state[subElement][elm]}', `, "") + "}"
+        const test = this.state['onChangeObject' + subElement] ? this.state['onChangeObject' + subElement] : isString(this.state[subElement]) ? this.state[subElement] : '{' + Object.keys(this.state[subElement]).reduce((acc, elm) => acc + `${elm}: '${this.state[subElement][elm]}', `, '') + '}'
         return (
             <div><InputText
                 onChange={onChangeEval(isObject, 'Object', subElement)}
-                rawInputValue={test !== "" ? test : undefined}
-            />
+                rawInputValue={test !== '' ? test : undefined}
+                 />
             </div>
         )
     }
@@ -285,8 +173,8 @@ class SurComposantCompose extends Component {
             <div><InputText
                 onChange={onChangeEval(isArray, 'arraywithobject', subElement)}
                 rawInputValue={this.state['onChangeArraywithobject' + subElement]}
-            />
-                {this.state['isOnChangeArraywithobject' + subElement] && <i className="material-icons">check</i>}
+                 />
+                {this.state['isOnChangeArraywithobject' + subElement] && <i className='material-icons'>check</i>}
             </div>
         )
     }
@@ -295,7 +183,8 @@ class SurComposantCompose extends Component {
             <SelectRadio
                 onChange={(value) => this.setState({ [subElement]: value })}
                 rawInputValue={this.state[subElement]}
-                values={defaultType.map(el => ({ code: el, label: el || 'undefined' }))} />
+                values={defaultType.map(el => ({ code: el, label: el || 'undefined' }))}
+            />
 
         )
     }
@@ -328,12 +217,12 @@ class SurComposantCompose extends Component {
                 <div data-focus='documentation-props'>
                     <div data-focus='documentation-props-title'>Les props</div>
                     {list && map(Object.keys(list), (element) => {
-                        return <div data-focus='documentation-props-content' >
+                        return (<div data-focus='documentation-props-content' >
                             <div data-focus='documentation-label'>{element}</div>
                             <div data-focus='documentation-input'>
                                 {this.renderAllComposant(element)}
                             </div>
-                        </div>
+                        </div>)
                     })}
 
                 </div>
@@ -354,8 +243,8 @@ class SurComposantCompose extends Component {
                 </div>
             </div>
         );
-    };
-};
+    }
+}
 
 SurComposantCompose.displayName = 'SurComposantCompose';
 // SurComposantCompose.propTypes = {

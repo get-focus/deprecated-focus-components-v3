@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes as oldProptypes } from 'react'
 import { render } from 'react-dom'
 // import material from '../src/behaviours/material';
 // import compStr from './test';
@@ -12,6 +12,8 @@ import i18next from 'i18next';
 import tar from 'tar-stream';
 import gunzip from 'gunzip-maybe';
 import { Readable } from 'stream';
+
+import Frame from './frame';
 
 // console.log(discoverChildModuleId(pieces, module));
 
@@ -28,7 +30,12 @@ class MyTestApp extends Component {
 
     }
 
-    state = {}
+    state = {
+        packageName: 'focus-components',
+        version: '3.3.3',
+        scope: null
+    }
+    timer = {}
 
     toBuffer(ab) {
         let buf = new Buffer(ab.byteLength);
@@ -113,7 +120,7 @@ class MyTestApp extends Component {
                 code = this.compiledSources[newFilename];
                 correctedFilename = newFilename;
             } else {
-                ['', '.js', '.jsx', '/index.js', 'index.jsx'].forEach(ext => {
+                ['', '.js', '.jsx', '/index.js', '/index.jsx'].forEach(ext => {
                     if (!code) {
                         code = this.compiledSources[newFilename + ext];
                         correctedFilename = newFilename + ext;
@@ -135,7 +142,6 @@ class MyTestApp extends Component {
 
     isClassComponent(component) {
         return typeof component === 'function' && !!component.prototype.isReactComponent;
-
     }
 
     isFunctionComponent(component) {
@@ -145,6 +151,7 @@ class MyTestApp extends Component {
     isReactComponent(component) {
         return this.isClassComponent(component) || this.isFunctionComponent(component);
     }
+
     getAbsolutePath(base, relative) {
         let stack = base.split('/'),
             parts = relative.split('/');
@@ -162,11 +169,23 @@ class MyTestApp extends Component {
     }
 
     buildReadableProptypes(component) {
-        const test = React.PropTypes;
-        console.log('propTypes', component.propTypes);
+        const propTypes = component.propTypes || {};
+        return Object.keys(propTypes).reduce((acc, name) => {
+            acc[name] = Object.keys(oldProptypes).reduce((acc, propName) => {
+                return oldProptypes[propName] === propTypes[name] ? propName : oldProptypes[propName].isRequired === propTypes[name] ? propName + '.isRequired' : acc;
+            }, 'not found');
+            return acc;
+        }, {});
+        // [oldProptypes].forEach(propTypes => {
+        //     for (let name in propTypes) {
+        //         console.log(name, propTypes[name]);
+        //     }
+        // });
+        // console.log('propTypes', component.propTypes);
     }
 
     makeRepo(sources, compiledSources) {
+        this.time('makingRepo');
         const repository = {};
         //TODO to correct
         this.compiledSources = compiledSources;
@@ -177,7 +196,7 @@ class MyTestApp extends Component {
                     const EvalComponent = (this.customEval(name, code) || {}).default;
                     if (this.isReactComponent(EvalComponent)) {
                         const compName = EvalComponent.displayName || EvalComponent.name || name;
-                        repository[compName] = { name: compName, source: sources[name], EvalComponent, propTypes: this.buildReadableProptypes(EvalComponent) };
+                        repository[compName] = { name: compName, source: sources[name], EvalComponent, propTypes: this.buildReadableProptypes(EvalComponent), defaultProps: EvalComponent.defaultProps };
 
                     }
                 } catch (e) {
@@ -185,6 +204,7 @@ class MyTestApp extends Component {
                 }
             }
         });
+        this.timeEnd('makingRepo');
         return repository
     }
 
@@ -195,21 +215,33 @@ class MyTestApp extends Component {
         return exports;
     }
 
-    process(packageName, version) {
+    time(name) {
+        this.timer[name] = +new Date();
+    }
 
-        console.time('whole');
-        console.time('fetch');
+    timeEnd(name) {
+        let duration = +new Date() - this.timer[name];
+        this.setState({ [name]: duration })
+    }
+
+    process(packageName, version, scope = null) {
+
+        this.time('whole');
+        this.time('fetch');
         const compiledSources = {};
         const sources = {};
+        const stylesheets = {};
 
-        fetch(`https://registry.npmjs.org/${packageName}/-/${packageName}-${version}.tgz`)
+        const url = scope ? `https://registry.npmjs.org/@${scope}/${packageName}/-/${packageName}-${version}.tgz` : `https://registry.npmjs.org/${packageName}/-/${packageName}-${version}.tgz`
+
+        fetch(url)
             .then((response) => {
-                console.timeEnd('fetch');
-                console.time('conversion');
+                this.timeEnd('fetch');
+                this.time('conversion');
 
                 return response.arrayBuffer();
             }).then((response) => {
-                console.timeEnd('conversion');
+                this.timeEnd('conversion');
 
                 // console.log('response', response);
 
@@ -252,10 +284,15 @@ class MyTestApp extends Component {
                         } else if (isCompiledFile) {
                             compiledSources[radical] = strContent;
                         } else if (isCss) {
+                            // TODO make repo and on-demand loading
                             let css = document.createElement('style');
                             css.type = 'text/css';
                             css.innerHTML = strContent;
                             document.body.appendChild(css);
+                            let sheet = css.sheet || css.stylesheet // IE; 
+                            sheet.disabled = true;
+                            // stylesheets[header.name] = { sheet, disabled: true };
+                            stylesheets[header.name] = { sheet, sheetStr: strContent, disabled: true };
                         }
                         strContent = '';
                         isSourceFile = false;
@@ -271,19 +308,19 @@ class MyTestApp extends Component {
                 extract.on('finish', () => {
                     // all entries read
                     // console.log('finish');
-                    console.timeEnd('unzip');
-                    console.timeEnd('whole');
+                    this.timeEnd('unzip');
+                    this.timeEnd('whole');
 
-                    this.setState({ repo: this.makeRepo(sources, compiledSources) });
+                    this.setState({ repo: this.makeRepo(sources, compiledSources), stylesheets, processing: false });
                 })
-                console.time('toStream');
+                this.time('toStream');
 
                 let s = new Readable();
-                s._read = function noop() { }; // redundant? see update below
+                s._read = function noop() { };
                 s.push(this.toBuffer(response));
                 s.push(null);
-                console.timeEnd('toStream');
-                console.time('unzip');
+                this.timeEnd('toStream');
+                this.time('unzip');
 
                 s.pipe(gunzip()).pipe(extract);
 
@@ -303,26 +340,83 @@ class MyTestApp extends Component {
         return !filename.startsWith('package/src/') && filename.endsWith('.js');
     }
 
+    launch() {
+        const { scope, version, packageName } = this.state;
+        this.setState({
+            repo: null,
+            stylesheets: null,
+            processing: true,
+            whole: null,
+            fetch: null,
+            conversion: null,
+            toStream: null,
+            unzip: null
+        }, () => {
+            document.querySelectorAll('style').forEach(item => item.remove());
+            this.process(packageName, version, scope);
+        })
+    }
+
     render() {
+        const { whole, fetch, conversion, toStream, unzip, makingRepo } = this.state;
+        const styles = Object.keys(this.state.stylesheets || {}).filter(key => !this.state.stylesheets[key].disabled).map(key => this.state.stylesheets[key].sheetStr);
         return (
             <div>
-                <button onClick={() => { this.process('focus-components', '3.3.3') }}>Launch</button>
-                {this.state.repo && <ul>{Object.keys(this.state.repo).map(name => {
-                    const { source, EvalComponent } = this.state.repo[name];
+                <div><h2>{'Config'}</h2>
+                    <label>{'Package Name'}</label>
+                    <input value={this.state.packageName || ''} onChange={({ target: { value } }) => this.setState({ packageName: value !== '' ? value : null })} />
+                    <label>{'Version'}</label>
+                    <input value={this.state.version || ''} onChange={({ target: { value } }) => this.setState({ version: value !== '' ? value : null })} />
+                    <label>{'Scope'}</label>
+                    <input value={this.state.scope || ''} onChange={({ target: { value } }) => this.setState({ scope: value !== '' ? value : null })} />
+                </div>
+                {!this.state.processing && <button onClick={() => this.launch()}>{'Launch'}</button>}
+                {this.state.processing && <div>{'Processing...'}</div>}
+                <div><h2>{'Stats'}</h2>
+                    {fetch && <div>{`Fetching time:${fetch}ms`}</div>}
+                    {conversion && <div>{`conversion time:${conversion}ms`}</div>}
+                    {toStream && <div>{`toStream time:${toStream}ms`}</div>}
+                    {makingRepo && <div>{`makingRepo time:${makingRepo}ms`}</div>}
+                    {unzip && <div>{`unzip+makingRepo time:${unzip}ms`}</div>}
+                    {unzip && makingRepo && <div>{`unzip time:${unzip - makingRepo}ms`}</div>}
+                    {whole && <div>{`whole time:${whole}ms`}</div>}
+                </div>
+                {this.state.stylesheets && <div><h2>{'CSS stylesheets (check the box to toggle)'}</h2><ul>{Object.keys(this.state.stylesheets).map(name => {
+                    return (
+                        <li key={name}>
+                            <input type='checkbox' checked={!this.state.stylesheets[name].disabled} onChange={() => {
+                                this.setState(({ stylesheets }) => {
+                                    stylesheets[name].sheet.disabled = stylesheets[name].disabled = !stylesheets[name].disabled;
+                                    return { stylesheets };
+                                });
+                            }}
+                            />
+                            {name}
+                        </li>)
+                })}</ul></div>}
+                {this.state.repo && <div><h2>{'Component list'}</h2><ul>{Object.keys(this.state.repo).map(name => {
+                    const { source, EvalComponent, propTypes, defaultProps } = this.state.repo[name];
                     if (['Title', 'AutocompleteSelectConsult', 'AutocompleteSelectField'].includes(name)) {
                         return null;
                     }
                     return (
-                        <li>
+                        <li key={name}>
                             <div>
-                                <div>{name}</div>
-                                <div><EvalComponent /></div>
-                            </div>
+                                <h3>{name}</h3>
+                                <h4>{'PropTypes'}</h4>
+                                {propTypes && <ul>{Object.keys(propTypes).map(key => <li>{`${key}:${propTypes[key]}`}</li>)}</ul>}
+                                <h4>{'Default Props'}</h4>
+                                {defaultProps && <ul>{Object.keys(defaultProps).map(key => <li>{`${key}:${defaultProps[key]}`}</li>)}</ul>}
+                                <h4>{'Component'}</h4>
+                                <Frame styles={styles}><EvalComponent /></Frame>
+                                <EvalComponent />
 
+                            </div>
                         </li>
                     );
                 })}
-                </ul>}
+                </ul></div>
+                }
             </div>
         );
     }

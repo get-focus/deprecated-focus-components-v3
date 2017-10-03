@@ -117,7 +117,7 @@ class Autocomplete extends Component {
         const {onChange, onBadInput, onBlurError} = this.props;
         const {suggestions, options, rawInputValue, resolvedValue, selected, resolvedLabel} = this.state;
         if(this.allowBlur) {
-            if(suggestions.length === 0 && options.size === 1 && resolvedValue !== '') {
+            if(suggestions.length === 0 && options.size === 1 && resolvedValue !== '' && rawInputValue) {
                 this.setState({selected: rawInputValue, focus: false, resolvedValue: options.get(rawInputValue)}, () => {
                     if(onChange) onChange(rawInputValue);
                 });
